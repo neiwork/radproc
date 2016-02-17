@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="write.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="read.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="injection.cpp" />
+    <ClCompile Include="radiativeLosses.cpp">
+      <Filter>losses</Filter>
+    </ClCompile>
+    <ClCompile Include="losses.cpp">
+      <Filter>losses</Filter>
+    </ClCompile>
+    <ClCompile Include="distribution.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
+    <ClCompile Include="timeDistribution.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
+    <ClCompile Include="checks.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="timeDistribution_old.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="write.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="read.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="injection.h" />
+    <ClInclude Include="radiativeLosses.h">
+      <Filter>losses</Filter>
+    </ClInclude>
+    <ClInclude Include="losses.h">
+      <Filter>losses</Filter>
+    </ClInclude>
+    <ClInclude Include="distribution.h">
+      <Filter>distribution</Filter>
+    </ClInclude>
+    <ClInclude Include="timeDistribution.h">
+      <Filter>distribution</Filter>
+    </ClInclude>
+    <ClInclude Include="checks.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="extras">
+      <UniqueIdentifier>{dcd04507-cc62-4441-a6ee-33f1369a3c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="losses">
+      <UniqueIdentifier>{7f848142-748d-450c-b655-5856d11e1bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="distribution">
+      <UniqueIdentifier>{f99518b5-f746-4a79-8cf8-f4424f9a89de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
