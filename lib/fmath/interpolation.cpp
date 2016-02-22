@@ -64,7 +64,7 @@ double interpol(double& E, const Vector& key, const Vector& val, const int size,
 	int last = base+size-1;
 
 	//binarySearch(const Vector& array, int lowerbound, int upperbound, int key)
-	int s = binarySearch(key, 0, last, E); //VER si esta bien
+	//int s = binarySearch(key, 0, last, E); //VER si esta bien
 	
 		// TODO binary search here.
 	while (E > key[i] && i < (size-1))

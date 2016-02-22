@@ -12,9 +12,9 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax);
 /* change_parameters changes the values of some parameters for the iteration on variable r*/
 void derive_parameters_r(double E, double R, double T);
 
-double vWind(double r, double starR);
+double blackBody(double E, double r);
 
-double starBlackBody(double E, double r);
+//double vWind(double r, double starR);
 
 /* coronaLuminosity transforms the termic photon distribution into luminosity. */ 
 double coronaLuminosity(double E);

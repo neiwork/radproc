@@ -29,6 +29,9 @@
     <ClCompile Include="timeDistribution_old.cpp">
       <Filter>distribution</Filter>
     </ClCompile>
+    <ClCompile Include="lossesAnisotropicIC.cpp">
+      <Filter>losses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -54,6 +57,9 @@
     </ClInclude>
     <ClInclude Include="checks.h">
       <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="lossesAnisotropicIC.h">
+      <Filter>losses</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

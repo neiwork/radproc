@@ -25,17 +25,21 @@ void distribution(Particle& p, State& st)
 
 		double Eeff = 0.0;
 
-		timeDistribution(p, st, z_position, Eeff); 
+	//	timeDistribution(p, st, z_position, Eeff);  //descomentar
 
 		//bloque 2 
 
 		ParamSpaceValues Nprevt(p.ps), Naux(p.ps);
 		//genero dos psv auxiliares para el siguiente iterate
 		p.ps.iterate([&p, &Nprevt, &Naux](const SpaceIterator& i){
-			SpaceCoord prevt = i.moved({ 0, 0, -1 });
-				
-			Nprevt.set(i, p.distribution.get(prevt));  //N evaluado en t-1
-			Naux.set(i, p.distribution.get(i)); //copia del N
+						
+//			if (i.its[2].canPeek(-1))     //descomentar el bloque
+//			{
+//				SpaceCoord prevt = i.moved({ 0, 0, -1 });
+//				Nprevt.set(i, p.distribution.get(prevt));  //N evaluado en t-1
+//			}
+			Naux.set(i, p.distribution.get(i)); //copia del N  //aca se rompe
+		
 		}, { -1, z_position, -1 }); //fijo z //copio el iterador que sigue asi los aux se completan bien
 
 
@@ -43,11 +47,18 @@ void distribution(Particle& p, State& st)
 
 			double E = i.par.E;
 			double ratioLosses = losses(Eeff, p, st) / losses(E, p, st);
-						
-			//dist = N1(Eeff, t[i - 1]);  
-			double dist = Nprevt.dimInterpolator(0)(Eeff); //interpola en la dimension 0, y evalua en Eeff
-				
-			double Ntot = Naux.get(i)  +  dist*ratioLosses; 
+
+			double dist;
+			if (i.its[2].canPeek(-1))
+			{
+				//dist = N1(Eeff, t[i - 1]);  
+				dist = Nprevt.dimInterpolator(0)(Eeff); //interpola en la dimension 0, y evalua en Eeff
+			}
+			else{
+				dist = 0.0; //ver que pasa aca, sería en t[0]
+			}
+
+			double  Ntot = Naux.get(i) + dist*ratioLosses;
 			/*Naux.get(i)      = N1
 			  dist*ratioLosses = N2 == N2(E[l], t[i]) = N1(Eeff, t[i - 1])*losses(Eeff, p, st) / losses(E[l], p, st);
 			  distribution(E[l], z[k], t[i]) = N1(E[l], z[k], t[i]) + N2(E[l], z[k], t[i]);*/

@@ -42,7 +42,9 @@ void setParameters(void )
 
 	B0 = sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
 
+	double inc = 10.0*pi / 180; //ang obs del jet
 	Gamma = 10;
+	Dlorentz = 1.0 / (Gamma*(1.0 - cos(inc)));
 
 	accEfficiency = 0.1; 
 
@@ -54,7 +56,7 @@ void setParameters(void )
 	//factor_qrel   = 3.0; 
 
 	electronLogEmin = 6.0;
-	electronLogEmax = 12.0;  
+	electronLogEmax = 14.0;  
 
 
 //Data of photons
@@ -74,7 +76,7 @@ void setParameters(void )
 	nTimes = 2;
 
 	nEnergies = 20;        //massive particles
-	nPhotonEnergies = 100;  //259;  //photons
+	nPhotonEnergies = 20;  //259;  //photons
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)
@@ -90,6 +92,20 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax)
 		v[i] = v[i - 1] * R_int;
 	}
 
+}
+
+
+double blackBody(double E, double r)
+{
+	double starT = 1.0e5; //VER
+	double starR = 1.0e-3*pc;
+
+	double Epeak = boltzmann*starT;
+	double Ephmin = Epeak / 100.0;
+	//double Ephmax = Epeak*10.0;
+
+	return 8.0*pi*P2(E)*exp(-Ephmin / E) / ((P3(planck*cLight))*
+		(exp(E / Epeak) - 1))*P2(starR / r);
 }
 
 //double photonPowerLaw(double E)

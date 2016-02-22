@@ -36,22 +36,27 @@ int main ()
 
 	State model;
 
-	/*model.photon.iterate([&model](const SpaceIterator& i){
-		
-		model.nph.set(i, starBlackBody(i.par.E,i.par.R));
-	});*/
+	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
+		double nph = blackBody(i.par.E, i.par.R);
+		model.nph.set(i, nph);
+	});
 
 
 	radiativeLosses(model);
 
-	injection(model.electron, model);
-	writeAllSpaceParam("electronInj.txt", model.electron.injection);
-	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 2, 0); //escribe Q(E), para r(0) y t(0)
+//	injection(model.electron, model);
+//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
+//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 2, 0); //escribe Q(E), para r(0) y t(0)
 	
-	distribution(model.electron, model);
+//	distribution(model.electron, model);
 
 
 	//injection(model.photon, model);  //aca calculo las luminosidades
+
+	return 0;
+}
+
+
 
 
 
@@ -79,7 +84,6 @@ int main ()
 
 	//show_message(msgEnd, Module_Main);
 
-	return 0;
-}
+
 
 

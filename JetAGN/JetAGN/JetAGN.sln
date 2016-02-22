@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flosses", "..\..\lib\flosse
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fmath", "..\..\lib\fmath\fmath.vcxproj", "{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fluminosities", "..\..\lib\fluminosities\fluminosities.vcxproj", "{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -48,6 +50,10 @@ Global
 		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Debug|Win32.Build.0 = Debug|Win32
 		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Release|Win32.ActiveCfg = Release|Win32
 		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Release|Win32.Build.0 = Release|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Debug|Win32.Build.0 = Debug|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Release|Win32.ActiveCfg = Release|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

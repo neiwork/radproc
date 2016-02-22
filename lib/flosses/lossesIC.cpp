@@ -32,9 +32,9 @@ double fIC(double u,double t, double E, double mass, fun1 tpf)   //funcion a int
 	double r    = t*P2(Erep)/(4*u*E*(E-t));
 	double pepe = tpf(u);
 
-	double Nterm = tpf(u); //state.targetPhotonField(Ep);
-	double logE  = log10(u*6.25e11);
-	double logsalida = log10(Nterm);
+//	double Nterm = tpf(u); //state.targetPhotonField(Ep);
+//	double logE  = log10(u*6.25e11);
+//	double logsalida = log10(Nterm);
 //	std::cout << logE << "\t" << Nterm << std::endl;  //<< log10(E*6.25e11) << "\t"  
 
 	double result = (pepe/u)*(t-u)*(2*r*log(r)+
