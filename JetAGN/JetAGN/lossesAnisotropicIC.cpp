@@ -8,48 +8,49 @@
 
 
 
+void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R);
 
-double b_theta(double theta, double eps_0, double E)
+double intTriple(double E, double eps_min, double eps_max, double r);
+
+
+
+double b_theta(double theta, double w0, double E)
 {
 	//corregido es 1.0 - cos(theta') escrito en funcion de theta sin primar
 	double Dstar = 1.0 / (Gamma - 1.0);
-	double corregido = (1.0 - cos(theta))*Dlorentz*Dstar;
-	double b = 2.0 * (corregido)*eps_0*E / P2(electronMass*cLight2);
+	double corregido = (1.0 - cos(theta));// *Dlorentz*Dstar;
+	double b = 2.0 * (corregido)*w0*E / P2(electronMass*cLight2);
 	return b;
 }
 
 
-double cAniIC(double u)   //limite inferior
+double cAniIC(double w0)   //limite inferior
 {
-	return u;
+	return w0;
 }
 
-double dAniIC(double u, double E, double theta)   //limite superior     
+double dAniIC(double w0, double E, double theta)   //limite superior     
 {
-	// u = epsilon
-	// t = epsilon_1 -> primera integral
 
-	double s = 4 * u*E / P2(electronMass*cLight2);// b_theta(theta, u, E);  //reemplazo el Gamma = 4*u*E / P2(mass*cLight2), para incuir la dep theta
+	double s = b_theta(theta, w0, E);  //reemplazo el Gamma = 4*u*E / P2(mass*cLight2), para incuir la dep theta
 	return s*E/(1+s);
 }
 
 
 
-double difN(double theta, double eps, double eps_0, double E, double r)   //funcion a integrar
+double difN(double theta, double w, double w0, double E, double r)   //funcion a integrar
 {
 	// eps -> variable de afuera
 	// eps_0 -> variable integracion
-
-	// t = epsilon_1 -> primera integral
-
-	double b = 4.0*eps_0*E / P2(electronMass*cLight2);// b_theta(theta, eps_0, E);
-	double z = eps / E;
+	
+	double b = b_theta(theta, w0, E);
+	double z = w / E;
 
 	//defino F(z)
 	double F = 1.0 + P2(z) / (2.0*(1.0 - z)) - 2.0*z / (b*(1.0 - z)) + 2.0*P2(z) / P2(b*(1.0 - z));
 
-	double nph_0 = blackBody(eps_0, r); 
-	double invariant = nph_0 / eps_0; //definir nph
+	double nph_0 = blackBody(w, r); 
+	double invariant = nph_0 / w; //VER y chequear que se evalue en w0 y no w
 
 	double result = (3.0*thomson / (16.0*pi)) * P2(electronMass*cLight2/E) * invariant * F;
 
@@ -60,7 +61,6 @@ double difN(double theta, double eps, double eps_0, double E, double r)   //func
 
 }
 
-double intTriple(double E, double eps_min, double eps_max, double r);
 
 double lossesAnisotropicIC(double E, Particle& particle, double r)
 {
@@ -81,32 +81,12 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 	return integral*cLight;
 
 	}
-  					
-
-
-
-
-namespace {
-	void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)
-	{
-		double floaT = entero;
-		double aux = fmod(floaT, 2.0);
-
-		if (entero == left || entero == right) //si el entero coincide con los extremos
-		{A1 += R;}
-		else if (aux == 0)				//si el entero es par
-		{A2 += R;}
-		else
-		{A3 += R;}    //si el entero es impar
-
-	}
-}
 
 
 //para losses(Ee)  -> intTriple(E, photon_Emin, photon_Emax, cAnimin, dAnimax)
 double intTriple(double E, double eps_min, double eps_max, double r)  
 {
-	int n = 100;
+	int n = 30;
 
 	double x_int = pow((eps_max / eps_min), (1.0 / n));
 
@@ -120,8 +100,8 @@ double intTriple(double E, double eps_min, double eps_max, double r)
 		{
 			double dx = x*(x_int - 1);
 
-			double t_min = 1.0e-6;  //t_min=0.0
-			double t_max = pi;
+			double t_min =  pi / 2;//   //t_min=0.0
+			double t_max =  pi;
 
 			//	if (t_min < t_max)
 			//	{
@@ -157,7 +137,7 @@ double intTriple(double E, double eps_min, double eps_max, double r)
 						// eps -> variable de afuera = x
 						// eps_0 -> variable integracion =y
 						//difN(double theta, double eps, double eps_0, double E, double r);
-						double Q = (y-x)*difN(t, x, y, E, r);
+						double Q = (y - x)*difN(t, x, y, E, r);//
 						//double Q = 1.0;
 							 
 						////////////////////////////
@@ -171,6 +151,7 @@ double intTriple(double E, double eps_min, double eps_max, double r)
 					}
 
 					double L2 = (Y1 + 2.0 * Y2 + 4.0 * Y3) *(0.5*sin(t))*dt / 3.0; //agregue int sobre ang solido
+					//double L2 = (Y1 + 2.0 * Y2 + 4.0 * Y3) *(E*t)*dt / 3.0; //prube de usar b variable int
 
 //					//if (L2 > 0.0) { 
 						incremento(i_t, 0, n - 1, T1, T2, T3, L2); //}			
@@ -203,3 +184,22 @@ double intTriple(double E, double eps_min, double eps_max, double r)
 }
 
 
+void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)
+{
+	double floaT = entero;
+	double aux = fmod(floaT, 2.0);
+
+	if (entero == left || entero == right) //si el entero coincide con los extremos
+	{
+		A1 += R;
+	}
+	else if (aux == 0)				//si el entero es par
+	{
+		A2 += R;
+	}
+	else
+	{
+		A3 += R;
+	}    //si el entero es impar
+
+}
