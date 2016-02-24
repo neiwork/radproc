@@ -13,7 +13,7 @@
 #include <fstream>
 
 //void timeDistribution(Particle& particle, State& state)
-void timeDistribution(Particle& p, State& st, int z, double& Eeff)
+void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 { //Vector& Ee, Vector& Time, 
 
 	//Vector Ee = particle.energyPoints;
@@ -26,7 +26,7 @@ void timeDistribution(Particle& p, State& st, int z, double& Eeff)
 	//int nt = Time.size()-1;
 
 
-	p.ps.iterate([&p, &st, &z, &Eeff](const SpaceIterator& i){
+	p.ps.iterate([&p, &st, &z_position, &Eeff](const SpaceIterator& i){
 
 		//	for (j=0; j < (int) Time.size() ; ++j)	{   //VER QUE PASA CON EL ULTIMO!!!!!!!!!
 		//	state.setTime(j);  
@@ -57,7 +57,7 @@ void timeDistribution(Particle& p, State& st, int z, double& Eeff)
 
 			//comento el siguiente if porque Tesc-> inf 
 			//por lo que las perdidas siempre dominan
-			//if (t_cool <= t){//  (t_cool <= t_esc)){ //| (t_cool <= Time[j]) )	{   //perdidas importantes
+			if (t_cool <= t){//  (t_cool <= t_esc)){ //| (t_cool <= Time[j]) )	{   //perdidas importantes
 
 ///////////////BUSCO EL Eeff/////////////////////////////////////////////
 				Eeffmin = Ee;
@@ -89,7 +89,7 @@ void timeDistribution(Particle& p, State& st, int z, double& Eeff)
 
 				sum_Ep = 0.0;
 
-				for (size_t l=0; l <= 100; ++l)	{ //1000
+				for (size_t l=0; l <= 10; ++l)	{ //100
 
 					dEp = Ep*(Ep_int-1.0);
 					
@@ -106,7 +106,7 @@ void timeDistribution(Particle& p, State& st, int z, double& Eeff)
 
 					if (EppMax > EppMin){
 
-						for (size_t n=0; n <= 100; ++n)	{
+						for (size_t n=0; n <= 10; ++n)	{ //100
 
 							dEpp = Epp*(Epp_int-1.0);
 
@@ -122,8 +122,11 @@ void timeDistribution(Particle& p, State& st, int z, double& Eeff)
 					}
 
 					tau = sum_Epp;
-	/////////////////// ya calcule el tau ////////////////////////////
-					inj = 1.0;//interpolDoble(Ep, Time[j]-tau, Ee, Time, injection);  //VER como obtengo esto!
+					/////////////////// ya calcule el tau ////////////////////////////
+					inj = p.injection.interpolate({ Ep, p.ps[1][z_position], t - tau }); //paso los valores E,r,t en donde quiero evaluar Q
+					//t = i.par.T;
+					//p.ps[1][z] da el valor de la dim r en la posicion z (que le pase)		
+					//interpolDoble(Ep, Time[j]-tau, Ee, Time, injection);  //chequear que ande!
 
 					dist = inj;  //*exp(-sum_dexp);lo comento por lo del Tesc //tau/escapeTime(Ep,particle));
 
@@ -136,25 +139,25 @@ void timeDistribution(Particle& p, State& st, int z, double& Eeff)
 				double total = sum_Ep / perdidas;
 				p.distribution.set(i, total); //VER
 
-			//} //aca termina la parte del if en donde las perdidas son importantes
+			} //aca termina la parte del if en donde tcool < T //las perdidas son importantes
 
 			//el que sigue no es mi caso porque Tesc -> inf
 
-			/* else {  //t_cool > t_esc or t_cool > t  
+			 else {  //t_cool > t_esc or t_cool > t  
 
-				t_carac = min(t_cool,t_esc); //min(t_esc, Time[j]));
+				 t_carac = min(t_cool, t); // min(t_cool, t_esc); //min(t_esc, Time[j]));
 
-				inj = p.injection.get(i);// injection[j*(ne + 1) + i];  VER
+				 inj = p.injection.get(i);// injection[j*(ne + 1) + i];  VER
 	
-				dist = inj*t_esc;  //t_carac;  //exp(-tau*escapeTime(Ep,particle));
+				 dist = inj*t_carac; // t_esc;  //t_carac;  //exp(-tau*escapeTime(Ep,particle));
 
 				//particle.distribution[j*(ne+1)+i] = dist;
 				p.distribution.set(i, dist);
 
-			}*/
+			}
 
 		//} //cierra el de E	
 	//} //cierra el de t
 
-	}, { -1, z, -1 }); //el z esta fijo en el que le pase
+	}, { -1, z_position, -1 }); //el z esta fijo en el que le pase
 }

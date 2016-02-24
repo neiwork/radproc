@@ -45,7 +45,7 @@ void injection(Particle& p, State& st)
 
 double nonThermalLuminosity(double z, double t)  //esta es la función que depende del número de estrellas a tiempo t
 {
-	return 1.0e43 / z;   //ingrese esto de prueba
+	return 1.0e43 / z;   //VER ingrese esto de prueba
 }
 
 

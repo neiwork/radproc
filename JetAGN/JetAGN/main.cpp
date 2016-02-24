@@ -44,11 +44,11 @@ int main ()
 
 	radiativeLosses(model);
 
-//	injection(model.electron, model);
+	injection(model.electron, model);
 //	writeAllSpaceParam("electronInj.txt", model.electron.injection);
 //	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 2, 0); //escribe Q(E), para r(0) y t(0)
 	
-//	distribution(model.electron, model);
+	distribution(model.electron, model);
 
 
 	//injection(model.photon, model);  //aca calculo las luminosidades

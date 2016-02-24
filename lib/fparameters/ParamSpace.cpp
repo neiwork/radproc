@@ -275,21 +275,21 @@ double ParamSpaceValues::interpolate(std::initializer_list<double> dimValues) co
 	}
 	
 	// DEBUG: print upper and lower bounds (indexes)
-	for (size_t i = 0; i < D; ++i) {
+/*	for (size_t i = 0; i < D; ++i) {
 		std::cout << lower[i] << " < ";
 		std::cout << values_idx[i] << " < ";
 		std::cout << upper[i] << std::endl;
-	}
+	}*/
 	double value = 0.0;
 	
 	// iterate all possible hyperquadrants defined by values, compute area(weight) and add to value
 	double dbg_total_area = 0;
 	for (size_t i = 0; i < std::pow(2, D); ++i) {
 		SpaceCoord corner(ps), opposite(ps);
-		std::cout << "quadrant ";
+//		std::cout << "quadrant ";
 		size_t quads = i;
 		for (size_t j = 0; j < D; ++j, quads /= 2) {
-			std::cout << quads % 2;
+//			std::cout << quads % 2;
 			corner[j] = quads % 2 ? lower[j] : upper[j];
 			opposite[j] = quads % 2 ? upper[j] : lower[j];
 		}
@@ -306,11 +306,11 @@ double ParamSpaceValues::interpolate(std::initializer_list<double> dimValues) co
 		}
 		dbg_total_area += area;
 		value += area * get(corner);
-		std::cout << " w:" << area << ", v:" << get(corner) << std::endl;
+//		std::cout << " w:" << area << ", v:" << get(corner) << std::endl;
 	}
 
-	std::cout << "dbgarea:" << dbg_total_area << std::endl;
-	std::cout << "value:" << value << std::endl;
+//	std::cout << "dbgarea:" << dbg_total_area << std::endl;
+//	std::cout << "value:" << value << std::endl;
 
 	return value;
 }

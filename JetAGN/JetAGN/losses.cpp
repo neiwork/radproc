@@ -3,6 +3,7 @@
 #include <flosses\dataLosses.h>
 #include <fparameters\parameters.h>
 #include <flosses\lossesSyn.h>
+#include "lossesAnisotropicIC.h"
 #include <flosses\nonThermalLosses.h>
 //#include <flosses\lossesIC.h>
 //#include <flosses\lossesBrem.h>
@@ -11,18 +12,29 @@
 #include <map>
 
 
-double losses(double E, Particle& particle, State& state)
+double losses(double E, Particle& p, State& st)
 {
-//	switch (particle.type)	{
-//	case PT_electron:
+	double r = p.ps[1][0]; //no quiero el 0, quiero el actual
 	
-	//particle.ps.
+	SpaceIterator* i = p.ps.current;
+
+	//p.ps.dimensions[1]->values[i];// por que no??
+	//p.ps[1][i];
+
+	//p.ps[1].par->R;
+
 	
-	//double z = state.electron.  R;// Cómo hago para saber el z ?
-	//return  lossesSyn(E, particle) + adiabaticLosses(E, z, vel);// +lossesIC(E, particle, state.tpf);
-	return 0.0;
-//		break;
-//	case PT_proton:
+	switch (p.type)	{
+	case PT_electron:
+
+		//double z = state.electron.  R;// Cómo hago para saber el z ?
+		return  lossesSyn(E, p) +
+				adiabaticLosses(E, r, cLight) +
+				lossesAnisotropicIC(E, st.electron, r);
+			break;
+	}
+
+	//	case PT_proton:
 //		return  lossesSyn(E, particle) + lossesHadronics(E, particle)
 //			+ lossesPhotoHadronic(E,particle,state.tpf);
 //		break;
