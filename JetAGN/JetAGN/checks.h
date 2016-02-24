@@ -16,4 +16,4 @@ void test3DPrint();
 
 void testBinarySearch();
 
-void testGenericBinarySearch();
+void testMultiDimensionalInterpolate();

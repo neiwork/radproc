@@ -242,7 +242,7 @@ void testBinarySearch(){
 
 }
 
-void testGenericBinarySearch(){
+void testMultiDimensionalInterpolate(){
 
 	ParamSpace ps;
 	ps.add(new Dimension(2, &Parameters::E, zeroToN));
