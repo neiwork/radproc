@@ -15,3 +15,5 @@ void testCanPeek();
 void test3DPrint();
 
 void testBinarySearch();
+
+void testMultiDimensionalInterpolate();
