@@ -241,3 +241,39 @@ void testBinarySearch(){
 
 
 }
+
+void testGenericBinarySearch(){
+
+	ParamSpace ps;
+	ps.add(new Dimension(2, &Parameters::E, zeroToN));
+	ps.add(new Dimension(3, &Parameters::magneticField, zeroToN));
+	ps.add(new Dimension(2, &Parameters::density, zeroToN));
+
+	// create the PSVs
+	ParamSpaceValues m(ps); // some PSV
+
+	m.initialize();
+
+
+	// iterate the dimensions, and for each combination of values; 
+	// compute a value and store it appropriate location in PSV
+	int c = 0;
+	m.fill([&c](const SpaceIterator& i){
+		return c++;
+	});
+
+	ps.iterate([&m, &c](const SpaceIterator& i){
+		for (auto coord : i.coord.dims) {
+			std::cout << coord;
+		}
+		std::cout << ":" << m.get(i) << std::endl;
+	});
+
+	std::cout << std::endl;
+	
+	m.interpolate({0.1,0.5,0});
+
+
+
+
+}

@@ -232,9 +232,93 @@ ParamSpaceValues::ParamSpaceValues(const ParamSpace& ps, std::function<double(co
 	fill(initializer);
 }
 
+double ParamSpaceValues::interpolate(std::initializer_list<double> dimValues) const {
+	std::vector<double> values(dimValues), values_idx;
+	const size_t D = ps.dimensions.size();
+	if (dimValues.size() != D) {
+		std::cout << "ERROR: Invalid number of coordinate for this ParamSpaceValues." << std::endl;
+		throw;
+	}
+	
+	// Calculo upper y lower que son las esquinas del cubo alrededor del punto a interpolar
+	std::vector<size_t> lower, upper;
+	for (size_t i = 0; i < D; ++i) {
+		auto& dimv = ps[i].values;
+		{	
+			auto v = values[i];
+
+			auto lb = std::lower_bound(dimv.begin(), dimv.end(), v);
+			// {  { *(ub-1) < v && v <= *ub }
+
+			size_t u = lb - dimv.begin(); // truco de C++ convierte de std::iterator a indice
+			if (lb != dimv.end()) {
+				int l;
+				if (*lb != v) {
+					l = u - 1;
+				} else {
+					l = u;
+				}
+				lower.push_back(l);
+				upper.push_back(u);
+				
+				if (u != l) {
+					values_idx.push_back((v - dimv[l]) / (dimv[u] - dimv[l]) + l); // values in 'index space'
+				} else {
+					values_idx.push_back(l); // values in 'index space'
+				}
+			}
+			else {
+				std::cout << " out of range" << std::endl;
+				throw;
+			}
+		}
+	}
+	
+	// DEBUG: print upper and lower bounds (indexes)
+	for (size_t i = 0; i < D; ++i) {
+		std::cout << lower[i] << " < ";
+		std::cout << values_idx[i] << " < ";
+		std::cout << upper[i] << std::endl;
+	}
+	double value = 0.0;
+	
+	// iterate all possible hyperquadrants defined by values, compute area(weight) and add to value
+	double dbg_total_area = 0;
+	for (size_t i = 0; i < std::pow(2, D); ++i) {
+		SpaceCoord corner(ps), opposite(ps);
+		std::cout << "quadrant ";
+		size_t quads = i;
+		for (size_t j = 0; j < D; ++j, quads /= 2) {
+			std::cout << quads % 2;
+			corner[j] = quads % 2 ? lower[j] : upper[j];
+			opposite[j] = quads % 2 ? upper[j] : lower[j];
+		}
+		// {corner now is the space coordinate corresponding to the current corner of the hypercube}
+
+		// now, compute the area of the hyperquadrant opposite to this corner
+		double area = 1;
+		for (size_t j = 0; j < D; j++) {
+			if (opposite[j] != corner[j]) {
+				area *= std::abs(values_idx[j] - opposite[j]);
+			} else {
+				area /= 2;
+			}
+		}
+		dbg_total_area += area;
+		value += area * get(corner);
+		std::cout << " w:" << area << ", v:" << get(corner) << std::endl;
+	}
+
+	std::cout << "dbgarea:" << dbg_total_area << std::endl;
+	std::cout << "value:" << value << std::endl;
+
+	return value;
+}
+
+
 double ParamSpaceValues::get(const SpaceCoord& si) const
 {
-	return values[ps.dim2ix(si)];
+		return values[ps.dim2ix(si)];
 }
 
 double ParamSpaceValues::set(const SpaceCoord& si, double v)

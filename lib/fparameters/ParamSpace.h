@@ -120,6 +120,8 @@ public:
 
 	std::function<double(double)> dimInterpolator(int dimIx);
 
+	double interpolate(std::initializer_list<double> dimValues) const;
+
 	// debug:
 		void debug_dump();
 		void dump(std::ostream& o, DumpFun dumper);
