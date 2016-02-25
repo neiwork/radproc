@@ -37,7 +37,7 @@ void radiativeLosses(State& st)
 
 		double eSyn  = lossesSyn(i.par.E, st.electron) / i.par.E;		
 		double eIC =  lossesAnisotropicIC(i.par.E, st.electron, i.par.R) / i.par.E;
-	//	double eIC2 = lossesIC(i.par.E, st.electron, st.tpf) / i.par.E;
+		//double eIC2 = lossesIC(i.par.E, st.electron, st.tpf) / i.par.E;
 	
 		double eDif  = diffusionRate(i.par.E, i.par.R);//, magneticField); // (double E, double radius, double));
 		double eAcc  = accelerationRate(i.par.E);//, magneticField, accEfficiency);

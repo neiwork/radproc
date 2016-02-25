@@ -30,7 +30,10 @@
       <Filter>distribution</Filter>
     </ClCompile>
     <ClCompile Include="lossesAnisotropicIC.cpp">
-      <Filter>losses</Filter>
+      <Filter>AnisotropicIC</Filter>
+    </ClCompile>
+    <ClCompile Include="luminosityAnisotropicIC.cpp">
+      <Filter>AnisotropicIC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,7 +62,10 @@
       <Filter>extras</Filter>
     </ClInclude>
     <ClInclude Include="lossesAnisotropicIC.h">
-      <Filter>losses</Filter>
+      <Filter>AnisotropicIC</Filter>
+    </ClInclude>
+    <ClInclude Include="luminosityAnisotropicIC.h">
+      <Filter>AnisotropicIC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +77,9 @@
     </Filter>
     <Filter Include="distribution">
       <UniqueIdentifier>{f99518b5-f746-4a79-8cf8-f4424f9a89de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AnisotropicIC">
+      <UniqueIdentifier>{889e5101-cff2-4a56-bc50-8a7dbb95ae7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

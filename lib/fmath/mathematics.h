@@ -16,7 +16,7 @@
 
 	typedef std::function<double(double)> fun1;
 	typedef std::function<double(double, double)> fun2;
-	typedef std::function<double(double, double, double, double, double)> fun5;
+	typedef std::function<double(double, double, double)> fun3;
 
 class Fun {
 public:

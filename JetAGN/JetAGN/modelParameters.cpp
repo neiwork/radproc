@@ -18,14 +18,23 @@ double jetRadius(double z, double openingAngle)
 	return z*openingAngle;
 }
 
+double eEmax(double z, double B)
+{
+	double vel = cLight;
+	double Emax_ad = accEfficiency*3.0*z*cLight*electronCharge*B / vel;
+	double Emax_syn = accEfficiency*6.0*pi*electronCharge*electronMass*cLight2/(thomson*B);
+	return std::min(Emax_syn, Emax_syn);
+}
 
 
 
 void derive_parameters_r(double E, double z, double t)
 {
 	radius = jetRadius(z, openingAngle);
-	magneticField = fmagneticField(z, B0);  
-//	density = nWindDensity(r, starR); //el primero lo calculo en r = Rc ?
+	magneticField = fmagneticField(z, B0); 
+	//electronLogEmax = log10(eEmax(z, magneticField));
+
+	//	density = nWindDensity(r, starR); //el primero lo calculo en r = Rc ?
 }
 
 

@@ -36,10 +36,11 @@ void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 		//aca declaro las variables del bucle
 		//double Eeff este no lo declaro porque lo paso como argumento
 		double Eeffmin, Eeffmax, Eeff_int, sum_Eeff, dEeff, dtau_eff;
-		double dtau, dexp, tau;
+		double dtau, tau;
 		double EpMin, EpMax, Ep, Ep_int, sum_Ep, dEp;
-		double EppMin, EppMax, Epp, Epp_int, sum_Epp, dEpp, sum_dexp;
-		double perdidas, inj, dist, t_cool, t_esc, t_carac;
+		double EppMin, EppMax, Epp, Epp_int, sum_Epp, dEpp;
+		double perdidas, inj, dist, t_cool, t_carac;
+		//double t_esc, sum_dexp, dexp;
 
 		double Emax = pow(10.0, p.logEmax)*1.6e-12;
 

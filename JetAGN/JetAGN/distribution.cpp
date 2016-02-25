@@ -16,7 +16,7 @@ void distribution(Particle& p, State& st)
 	Naux.initialize();
 
 
-	for (int z_i = 0; z_i < p.ps[1].values.size(); z_i++) {
+	for (size_t z_i = 0; z_i < p.ps[1].values.size(); z_i++) {
 		
 	//	double z = p.ps[1][z_i]; //valor de la variable, lo comento porque con el z_position lo puedo calcular
 		int z_position = z_i; // posicion en la dimension z 
@@ -72,7 +72,7 @@ void distribution(Particle& p, State& st)
 
 /*******************bloque 3*************************/
 
-	p.ps.iterate([&p, &st](const SpaceIterator& j){
+	p.ps.iterate([&p, &st](const SpaceIterator& j){  //VER el doble iterate
 
 		int E_position = j.coord[0];
 		int t_position = j.coord[2];
