@@ -13,22 +13,16 @@
 
 
 double losses(double E, Particle& p, State& st)
-{
-	double r = p.ps[1][0]; //no quiero el 0, quiero el actual
-	
+{	
 	SpaceIterator* i = p.ps.current;
-
-	//p.ps.dimensions[1]->values[i];// por que no??
-	//p.ps[1][i];
-
-	//p.ps[1].par->R;
-
+	
+	double r = i->par.R;
+	double B = i->par.magneticField;
 	
 	switch (p.type)	{
 	case PT_electron:
 
-		//double z = state.electron.  R;// Cómo hago para saber el z ?
-		return  lossesSyn(E, p) +
+		return  lossesSyn(E, B, p) +
 				adiabaticLosses(E, r, cLight) +
 				lossesAnisotropicIC(E, st.electron, r);
 			break;

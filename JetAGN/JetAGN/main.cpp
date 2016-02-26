@@ -46,10 +46,11 @@ int main ()
 
 	injection(model.electron, model);
 //	writeAllSpaceParam("electronInj.txt", model.electron.injection);
-	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
+	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
 	
 	distribution(model.electron, model);
-	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 0, 0);
+	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, 1);
 
 
 	//injection(model.photon, model);  //aca calculo las luminosidades

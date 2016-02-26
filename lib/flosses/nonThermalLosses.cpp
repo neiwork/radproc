@@ -12,7 +12,7 @@ double adiabaticLosses(double E, double z, double vel)  //en [erg/s]
 }
 
 
-double diffusionRate(double E, double radius)//, double magneticField)   //en [s]^-1
+double diffusionRate(double E, double radius, double magneticField)   //en [s]^-1
 {
 	double D = cLight*E / (3.0*electronCharge*magneticField);  //cLight=v; D(E) in the Bohm regime
 
@@ -20,7 +20,7 @@ double diffusionRate(double E, double radius)//, double magneticField)   //en [s
 }
 
 
-double accelerationRate(double E)//, double magneticField, double accEfficiency) //en [s]^-1
+double accelerationRate(double E, double magneticField, double accEfficiency) //en [s]^-1
 {
 	return accEfficiency*cLight*electronCharge*magneticField / E;
 }

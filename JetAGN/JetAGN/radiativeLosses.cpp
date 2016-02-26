@@ -32,15 +32,16 @@ void radiativeLosses(State& st)
 		double logR = log10(i.par.R);
 		//double logT = log10(i.par.T);
 
+		double B = i.par.magneticField;
+
 		double Reff = 10.0*(i.par.R*openingAngle); //revisar porque esto deberia ser el stagnation point
 
 
-		double eSyn  = lossesSyn(i.par.E, st.electron) / i.par.E;		
+		double eSyn  = lossesSyn(i.par.E, B, st.electron) / i.par.E;		
 		double eIC =  lossesAnisotropicIC(i.par.E, st.electron, i.par.R) / i.par.E;
 		//double eIC2 = lossesIC(i.par.E, st.electron, st.tpf) / i.par.E;
-	
-		double eDif  = diffusionRate(i.par.E, i.par.R);//, magneticField); // (double E, double radius, double));
-		double eAcc  = accelerationRate(i.par.E);//, magneticField, accEfficiency);
+		double eDif  = diffusionRate(i.par.E, i.par.R, B);
+		double eAcc = accelerationRate(i.par.E, B, accEfficiency);
 		double eAdia = adiabaticLosses(i.par.E, i.par.R, cLight) / i.par.E;
 		
 	out["electronLosses"]->file << fmtE << "\t" << logR 

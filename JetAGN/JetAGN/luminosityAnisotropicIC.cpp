@@ -24,6 +24,7 @@ double dAniLum(double w0, double theta, double E)   //limite superior
 
 double fLumi(double x, double theta, double y, double E, double r, const Particle& p)
 {
+	//p.ps.dimensions[2]->values[])
 	double distCreator = p.distribution.interpolate({ x, r, p.ps[2][0] });//p.ps[2].par.T;// VER
 
 //	double distCreator = p.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);

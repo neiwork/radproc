@@ -14,19 +14,11 @@
 
 //void timeDistribution(Particle& particle, State& state)
 void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
-{ //Vector& Ee, Vector& Time, 
-
-	//Vector Ee = particle.energyPoints;
-	//Vector Time = particle.timePoints;
-
-	//double Emax = pow(10.0, particle.logEmax);
-	//Vector injection = particle.injection;
-
-	//int ne = Ee.size()-1;    //el -1 es para que sea el nEnergyPoints y 
-	//int nt = Time.size()-1;
+{ 
 
 
-	p.ps.iterate([&p, &st, &z_position, &Eeff](const SpaceIterator& i){
+	p.ps.iterate([&p, &st, &z_position, &Eeff](const SpaceIterator& i){ //en este iterate fijo el r[z_position]
+
 
 		//	for (j=0; j < (int) Time.size() ; ++j)	{   //VER QUE PASA CON EL ULTIMO!!!!!!!!!
 		//	state.setTime(j);  
@@ -58,28 +50,31 @@ void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 
 			//comento el siguiente if porque Tesc-> inf 
 			//por lo que las perdidas siempre dominan
-			if (t_cool <= t){//  (t_cool <= t_esc)){ //| (t_cool <= Time[j]) )	{   //perdidas importantes
+			//if (t_cool <= t){//  (t_cool <= t_esc)){ //| (t_cool <= Time[j]) )	{   //perdidas importantes
 
 ///////////////BUSCO EL Eeff/////////////////////////////////////////////
-				Eeffmin = Ee;
-				Eeffmax = Emax;
-				Eeff = Eeffmin;
+			Eeffmin = Ee;
+			Eeffmax = Emax;
+			Eeff = Eeffmin;
 
-				Eeff_int = pow((Eeffmax / Eeffmin), 0.01);  //0.00001
-				sum_Eeff = 0.0;
+			Eeff_int = pow((Eeffmax / Eeffmin), 0.01);  //0.00001
+			sum_Eeff = 0.0;
 
-				while ( (sum_Eeff <= t) && (Eeff <= Eeffmax) )	{// for (int k=0; k<=100000; ++k)	{
+			while ( (sum_Eeff <= t) && (Eeff <= Eeffmax) )	{// for (int k=0; k<=100000; ++k)	{
 
-					dEeff = Eeff*(Eeff_int - 1.0);
-					dtau_eff = dEeff / losses(Eeff, p, st);
-					sum_Eeff = sum_Eeff + dtau_eff;
+				dEeff = Eeff*(Eeff_int - 1.0);
+				dtau_eff = dEeff / losses(Eeff, p, st);
+				sum_Eeff = sum_Eeff + dtau_eff;
 
-				//	if (sum_Eeff > times[j]) goto
+			//	if (sum_Eeff > times[j]) goto
 
-					Eeff = Eeff*Eeff_int;
+				Eeff = Eeff*Eeff_int;
 
-				}	
+			}	
 	///////////////////YA ENCONTRE EL Eeff/////////////////////////////////////
+				//lo calculo para todo t porque lo necesito independientemente del siguiente if
+
+			if (t_cool <= t){
 
 	///////////////////AHORA CALCULO LA INTEGRAL "DOBLE" QUE DA N(E,t)/////////////////////////////////////
 				EpMin = Ee;   //Ep = Eprima
@@ -141,9 +136,7 @@ void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 				p.distribution.set(i, total); //VER
 
 			} //aca termina la parte del if en donde tcool < T //las perdidas son importantes
-
-			//el que sigue no es mi caso porque Tesc -> inf
-
+			
 			 else {  //t_cool > t_esc or t_cool > t  
 
 				 t_carac = min(t_cool, t); // min(t_cool, t_esc); //min(t_esc, Time[j]));
