@@ -13,10 +13,8 @@ void distribution(Particle& p, State& st)
 {
 
 	ParamSpaceValues Naux(p.ps);
-	Naux.initialize();
 
-
-	for (size_t z_i = 0; z_i < p.ps[1].values.size(); z_i++) {
+	for (size_t z_i = 0; z_i < p.ps[1].size(); z_i++) {
 		
 	//	double z = p.ps[1][z_i]; //valor de la variable, lo comento porque con el z_position lo puedo calcular
 		int z_position = z_i; // posicion en la dimension z 
@@ -34,10 +32,8 @@ void distribution(Particle& p, State& st)
 /*******************bloque 2*************************/
 
 		//genero el psv auxiliar para el siguiente iterate
-		p.ps.iterate([&p, &Naux](const SpaceIterator& i){
-						
-			Naux.set(i, p.distribution.get(i)); //copia del N  //aca se rompe
-
+		Naux.fill([&p](const SpaceIterator& i){
+			return p.distribution.get(i); //copia del N  //aca se rompe
 		}, { -1, z_position, -1 }); //fijo z //copio el iterador que sigue asi los aux se completan bien
 
 		p.ps.iterate([&p, &st, &z_position, &Eeff, &Naux](const SpaceIterator& i){
@@ -99,7 +95,7 @@ void distribution(Particle& p, State& st)
 
 	//las interpolaciones en el siguiente paso las hago todas sobre Naux, asi no interpolo con lo que se va cambiando
 
-	for (int t_position = 0; t_position < p.ps[2].values.size(); t_position++) {
+	for (int t_position = 0; t_position < (int)p.ps[2].size(); t_position++) {
 
 		double delta_t;
 
@@ -110,7 +106,7 @@ void distribution(Particle& p, State& st)
 			delta_t = (p.ps[2][t_position + 1] - p.ps[2][t_position]) / Gamma;
 		}
 
-		for (int E_position = 0; E_position < p.ps[0].values.size(); E_position++) {
+		for (int E_position = 0; E_position < (int)p.ps[0].size(); E_position++) {
 
 			p.ps.iterate([&p, &st, &delta_t, &E_position, &t_position, &Naux](const SpaceIterator& i){
 

@@ -15,9 +15,7 @@
 //void timeDistribution(Particle& particle, State& state)
 void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 { 
-
-
-	p.ps.iterate([&p, &st, &z_position, &Eeff](const SpaceIterator& i){ //en este iterate fijo el r[z_position]
+	p.distribution.fill([&p, &st, &z_position, &Eeff](const SpaceIterator& i){ //en este iterate fijo el r[z_position]
 
 
 		//	for (j=0; j < (int) Time.size() ; ++j)	{   //VER QUE PASA CON EL ULTIMO!!!!!!!!!
@@ -133,7 +131,8 @@ void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 				}
 				//particle.distribution[j*(ne+1)+i] = sum_Ep/perdidas;
 				double total = sum_Ep / perdidas;
-				p.distribution.set(i, total); //VER
+				
+				return total; //VER
 
 			} //aca termina la parte del if en donde tcool < T //las perdidas son importantes
 			
@@ -146,7 +145,7 @@ void timeDistribution(Particle& p, State& st, int z_position, double& Eeff)
 				 dist = inj*t_carac; // t_esc;  //t_carac;  //exp(-tau*escapeTime(Ep,particle));
 
 				//particle.distribution[j*(ne+1)+i] = dist;
-				p.distribution.set(i, dist);
+				return dist;
 
 			}
 

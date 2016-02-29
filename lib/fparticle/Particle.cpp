@@ -9,8 +9,8 @@ namespace {
 }
 //si la inicializo asi entonces el modelo NO depende del tiempo
 Particle::Particle(ParticleType t, double m, double emin, double emax, int nE)
-	:injection(ps),
-	distribution(ps)
+	:injection(ps,false), // these PSVs are not initialized immediately, only after this PS has been constructed
+	distribution(ps,false)
 {
 	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 

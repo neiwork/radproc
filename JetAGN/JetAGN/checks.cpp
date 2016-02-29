@@ -55,9 +55,6 @@ void testFillAndDump() {
 	// create the PSVs
 	ParamSpaceValues m(ps); // some PSV
 
-	m.initialize();
-
-
 	// iterate the dimensions, and for each combination of values; 
 	// compute a value and store it appropriate location in PSV
 	int c = 0;
@@ -110,7 +107,6 @@ void testIteratePlane() {
 	// create the PSV
 	int c = 0;
 	ParamSpaceValues m(ps);
-	m.initialize();
 
 	/*
 		El tercer parametro opcional de iterate() es una lista de 
@@ -192,8 +188,6 @@ void testSpaceIterator2() {
 
 	ParamSpaceValues m(electron.ps); // some PSV
 
-	m.initialize();
-
 	// iterate the dimensions, and for each combination of values; 
 	// compute a value and store it appropriate location in PSV
 	electron.ps.iterate([&m](const SpaceIterator& i){
@@ -251,9 +245,6 @@ void testMultiDimensionalInterpolate(){
 
 	// create the PSVs
 	ParamSpaceValues m(ps); // some PSV
-
-	m.initialize();
-
 
 	// iterate the dimensions, and for each combination of values; 
 	// compute a value and store it appropriate location in PSV

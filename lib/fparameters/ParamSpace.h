@@ -108,12 +108,15 @@ public:
 
 	Vector values;
 
-	ParamSpaceValues(const ParamSpace& ps);
+	ParamSpaceValues(const ParamSpace& ps, bool initialize = true);
 	ParamSpaceValues(const ParamSpace& ps, std::function<double(const SpaceIterator& i)> initializer);
+	ParamSpaceValues(const ParamSpaceValues& ps);
+
+	ParamSpaceValues& operator =(const ParamSpaceValues& ps);
 
 	void initialize();
 
-	void fill(const std::function<double(const SpaceIterator& i)>& f);
+	void fill(const std::function<double(const SpaceIterator& i)>& f, std::initializer_list<int> fixed = {});
 
 	double set(const SpaceCoord& si, double v);
 	double get(const SpaceCoord& si) const;

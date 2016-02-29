@@ -221,8 +221,11 @@ void ParamSpaceValues::initialize()
 	values.resize(ps.size());
 }
 
-ParamSpaceValues::ParamSpaceValues(const ParamSpace& ps) :ps(ps)
+ParamSpaceValues::ParamSpaceValues(const ParamSpace& ps, bool initialize):ps(ps)
 {
+	if (initialize) {
+		this->initialize();
+	}
 }
 
 
@@ -315,6 +318,16 @@ double ParamSpaceValues::interpolate(std::initializer_list<double> dimValues) co
 	return value;
 }
 
+ParamSpaceValues::ParamSpaceValues(const ParamSpaceValues& psv):ps(psv.ps),values(psv.values) {
+	
+}
+
+ParamSpaceValues& ParamSpaceValues::operator =(const ParamSpaceValues& psv) {
+	// solo funciona bien si el PS actual es igual al PS del psv q se quiere asignar
+	values = psv.values;
+	return *this;
+}
+
 
 double ParamSpaceValues::get(const SpaceCoord& si) const
 {
@@ -326,11 +339,11 @@ double ParamSpaceValues::set(const SpaceCoord& si, double v)
 	return values[ps.dim2ix(si)] = v;
 }
 
-void ParamSpaceValues::fill(const std::function<double(const SpaceIterator& i)>& f)
+void ParamSpaceValues::fill(const std::function<double(const SpaceIterator& i)>& f, std::initializer_list<int> fixed)
 {
 	ps.iterate([&f, this](const SpaceIterator& i){
 		this->set(i, f(i));
-	});
+	},fixed);
 }
 
 void ParamSpaceValues::dump(std::ostream& o, DumpFun dumper)

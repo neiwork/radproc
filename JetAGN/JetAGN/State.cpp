@@ -1,7 +1,7 @@
 #include "State.h"
 
 State::State() :
-	nph(photon.ps)
+	nph(photon.ps,false)
 {
 	particles.push_back(&electron);
 	//particles.push_back(&proton);
