@@ -13,6 +13,7 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax);
 void derive_parameters_r(double E, double R, double T);
 
 double blackBody(double E, double r);
+double jetRadius(double z, double openingAngle);
 
 //double vWind(double r, double starR);
 

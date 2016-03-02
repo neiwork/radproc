@@ -76,7 +76,9 @@
     <ClCompile Include="lossesAnisotropicIC.cpp" />
     <ClCompile Include="luminosityAnisotropicIC.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="processes.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="read.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -103,7 +105,9 @@
     <ClInclude Include="losses.h" />
     <ClInclude Include="lossesAnisotropicIC.h" />
     <ClInclude Include="luminosityAnisotropicIC.h" />
+    <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="processes.h" />
     <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="read.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

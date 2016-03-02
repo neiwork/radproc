@@ -1,8 +1,8 @@
 #include "injection.h"
 
+#include "messages.h"
 #include <fparameters\parameters.h>
 #include <fmath\RungeKutta.h>
-
 #include <fmath\physics.h>
 
 //#include <fluminosities\luminositySynchrotron.h>
@@ -12,10 +12,13 @@
 double primaryInjection(double E, double z, double t, Particle& particle);
 
 
+
 void injection(Particle& p, State& st)
 {
-	double total = 0.0;
-	p.ps.iterate([&p, &st, &total](const SpaceIterator& i){
+	show_message(msgStart, Module_electronInjection);
+	
+	//p.ps.iterate([&p, &st, &total](const SpaceIterator& i){
+	p.injection.fill([&p, &st](const SpaceIterator& i){
 		double factor = 0.0, E = i.par.E, z = i.par.R, t = i.par.T;
 		switch (p.type)	{
 		/*	case PT_photon:
@@ -34,12 +37,15 @@ void injection(Particle& p, State& st)
 
 			case PT_electron:
 			//case PT_proton:
-				total = primaryInjection(E, z, t, p);
+				double total = primaryInjection(E, z, t, p);
+				return total;
 				break;
 
 		}
-		p.injection.set(i, total);
+	//	p.injection.set(i, total);
 	});
+
+	show_message(msgEnd, Module_electronInjection);
 }
 
 

@@ -10,7 +10,6 @@
     <ClCompile Include="read.cpp">
       <Filter>extras</Filter>
     </ClCompile>
-    <ClCompile Include="injection.cpp" />
     <ClCompile Include="radiativeLosses.cpp">
       <Filter>losses</Filter>
     </ClCompile>
@@ -34,6 +33,13 @@
     </ClCompile>
     <ClCompile Include="luminosityAnisotropicIC.cpp">
       <Filter>AnisotropicIC</Filter>
+    </ClCompile>
+    <ClCompile Include="processes.cpp" />
+    <ClCompile Include="messages.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="injection.cpp">
+      <Filter>losses</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +72,10 @@
     </ClInclude>
     <ClInclude Include="luminosityAnisotropicIC.h">
       <Filter>AnisotropicIC</Filter>
+    </ClInclude>
+    <ClInclude Include="processes.h" />
+    <ClInclude Include="messages.h">
+      <Filter>extras</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

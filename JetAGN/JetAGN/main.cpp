@@ -6,33 +6,26 @@
 #include "injection.h"
 ////#include "photonInjection.h"
 #include "distribution.h"
-//#include "processes.h"
+#include "processes.h"
 ////#include "photonDistribution.h"
 
 #include "write.h"
-//#include "messages.h"
 #include "checks.h"
 
-//#include <fmath\matrixInit.h>
 
 #include <fparticle\Particle.h>
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
 
-//void injectionAndDistribution(Particle& p, State& st)
-//{
-//	injection(p, st);
-//	distribution(p, st);
-//}
+
 
 int main ()
 {
 	//testBinarySearch();
 
-
 	setParameters();
 
-	//show_message(msgStart, Module_Main);
+	
 
 	State model;
 
@@ -54,6 +47,11 @@ int main ()
 
 
 	//injection(model.photon, model);  //aca calculo las luminosidades
+
+	////writeLum("finalLuminosityDis.txt", st.photon.injection, st.photon);
+	////writeFlux("finalFlux.txt", st.photon.injection, st.photon);
+
+	processes(model);
 
 	return 0;
 }
@@ -79,10 +77,7 @@ int main ()
 	//// Distribucion fotones
 	////photondistribution(model);
 
-	////writeLum("finalLuminosityDis.txt", st.photon.injection, st.photon);
-	////writeFlux("finalFlux.txt", st.photon.injection, st.photon);
-
-	//processes(model);
+	
 
 	//show_message(msgEnd, Module_Main);
 
