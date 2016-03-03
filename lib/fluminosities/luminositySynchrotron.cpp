@@ -1,19 +1,24 @@
 #include "luminositySynchrotron.h"
 
-#include "packageData.h"
+//#include "packageData.h"
 #include "opticalDepthSSA.h"
 #include <fparameters\parameters.h>
 #include <fmath\RungeKutta.h>
-#include <fmath\interpolation.h>
+//#include <fmath\interpolation.h>
 #include <fmath\physics.h>
-#include <algorithm>
-
-
+//#include <algorithm>
 
 
 
 double fSyn(double x, double E, const Particle& creator)         //funcion a integrar   x=Ee; L=L(Ega)
 {
+
+	//double r = creator.ps.current->par.R;
+	//double t = creator.ps.current->par.T;
+
+//	double distCreator = creator.distribution.interpolate({ x, r, r, t });//p.ps[2].par.T;// VER
+
+
 	double distCreator = creator.dist(x);// interpol(x, Ecreator, Ncreator, Ncreator.size() - 1);
 
 	double cte	= pow(3.0,0.5)*P3(electronCharge)*magneticField/(planck*creator.mass*cLight2);
@@ -28,9 +33,23 @@ double fSyn(double x, double E, const Particle& creator)         //funcion a int
 }
 
 
-double luminositySynchrotron(double E, const Particle& creator)
+double luminositySynchrotron(double E, const Particle& c)
 {
-	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
+	double integralS = RungeKuttaSimple(c.emin(), c.emax(), [&E, &c](double e){
+		return fSyn(e, E, c);
+	});
+
+	double luminosityS = integralS*E; //multiplico por E asi obtengo luminosidad
+
+	if (luminosityS > 0.0){ return luminosityS; }
+	else { return 0.0; }
+
+}
+
+
+double luminositySynchrotron_conSSA(double E, const Particle& creator)
+{
+	//using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 
 	double Emax = creator.emax();// 1.6e-12*pow(10.0, creator.logEmax);
 	double Emin = creator.emin();// 1.6e-12*pow(10.0, creator.logEmin);
@@ -42,18 +61,27 @@ double luminositySynchrotron(double E, const Particle& creator)
 	if (factorSSA > 1.0 || factorSSA == 0.0) //1.0e-3)  //lo cambio solo en el caso que interesa
 	{ factorSSA = 1.0; }	
 	
+	//double integralS = RungeKuttaSimple(Emin, Emax, bind(fSyn,_1,E,creator));
 
-	double integralS = RungeKuttaSimple(Emin, Emax, bind(fSyn,_1,E,creator));
+	double integralS = RungeKuttaSimple(creator.emin(), creator.emax(),   //RungeKuttaSimple(double a, double b, fun1 f)
+		[E, &creator](double x){
+		return fSyn(x, E, creator);  //double fSyn(double x, double E, const Particle& creator)
+	});
 
-	double luminosityS = factorSSA*integralS*E*volume; //multiplico por E asi obtengo luminosidad
+
+	double luminosityS = factorSSA*integralS*E; //multiplico por E asi obtengo luminosidad
 
 	if (luminosityS > 0.0){return luminosityS ; }
 	else {return 0.0;} 
 	 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 double fSynS(double x, double E, const Particle& creator)         //funcion a integrar   x=Ee; L=L(Ega)
 {
 	double distCreator = creator.dist(x);//interpol(x,Ecreator,Ncreator,Ncreator.size()-1);
@@ -69,6 +97,7 @@ double fSynS(double x, double E, const Particle& creator)         //funcion a in
 
 	return result;    // esta condicion la puse en el limite inferior tau<1 ? result : 0.0;
 }
+
 
 
 double luminositySynchrotronSec(double E, const Particle& c)
@@ -95,16 +124,4 @@ double luminositySynchrotronSec(double E, const Particle& c)
 
 }
 
-
-double luminositySynchrotron_sinSSA(double E, const Particle& c)
-{
-	double integralS = RungeKuttaSimple(c.emin(), c.emax(), [&E,&c](double e){
-		return fSyn(e,E,c);
-	});
-
-	double luminosityS = integralS*E*volume; //multiplico por E asi obtengo luminosidad
-
-	if (luminosityS > 0.0){return luminosityS ; }
-	else {return 0.0;} 
-	 
-}
+*/

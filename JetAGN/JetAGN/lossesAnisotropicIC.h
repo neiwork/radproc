@@ -13,6 +13,6 @@ double lossesAnisotropicIC(double E, Particle& particle, double r);
 /*these three functions are used by luminosityAniIC*/
 double b_theta(double theta, double w0, double E);
 
-double difN(double theta, double w, double w0, double E, double r);
+//double difN(double theta, double w, double w0, double E, double r);
 
 double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f);

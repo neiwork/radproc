@@ -1,35 +1,22 @@
 #include "opticalDepthSSA.h"
 
 #include <fparameters\parameters.h>
-#include <fmath\interpolation.h>
+//#include <fmath\interpolation.h>
 
 
-namespace {
-	void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)
-	{
-			double floaT = entero;
-			double aux = fmod(floaT,2.0);
-			
-			if(entero==left || entero==right) //si el entero coincide con los extremos
-				{A1 += R ;}
-			else if(aux==0)				//si el entero es par
-				{A2 += R ;}
-			else 
-				{A3 += R ;}    //si el entero es impar
 
-	}
-}
 
 double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Particle& creator)  //E=Eph
 {
 	
 	double cte	= pow(3.0,0.5)*P3(electronCharge)*magneticField/(planck*mass*cLight2);
 	
-	int n = 200;
+	int n = 100;
 
 	double x_int = pow((Emax/Emin),(1.0/n)) ;
 
-	double J1(0.0), J2(0.0), J3(0.0);
+	//double J1(0.0), J2(0.0), J3(0.0);
+	double L1 = 0.0;
 
 	if(Emin<Emax)
 	{
@@ -57,16 +44,16 @@ double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Pa
 
 			double fSyn = P2(x)*Psyn*deriv;  // funcion a integrar
 
-			double L1   = fSyn*dx;
+			L1   = L1 + fSyn*dx;
 
-			incremento(i,0,n-1,J1,J2,J3,L1);  //if (L1 > 0.0) 
+			//incremento(i,0,n-1,J1,J2,J3,L1);  //if (L1 > 0.0) 
 
 			x = x*x_int ;
 
 		}
 	}
 
-	double integral = (J1+2.0*J2+4.0*J3)/3.0;
+	double integral = L1;// (J1 + 2.0*J2 + 4.0*J3) / 3.0;
 
 	double absorptionCoefficient = - P3(planck)*cLight2*integral/(8*pi*P2(E));
 

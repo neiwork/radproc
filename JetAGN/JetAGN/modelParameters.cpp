@@ -70,8 +70,8 @@ void setParameters(void )
 
 //Data of photons
 
-	photonLogEmin = 0.0;
-	photonLogEmax = 15.0;
+	photonLogEmin = -2.0;
+	photonLogEmax = 12.0;
 
 	targetPhotonEmin = pow(10.0,photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
 	targetPhotonEmax = pow(10.0,photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV

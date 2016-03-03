@@ -42,14 +42,22 @@ void show_message(MessageType message, ProgramModule module)
 // Imprime la hora %H:%M:%S en pantalla.
 void show_time(void)
 {
+	
     time_t rawTime;
-    struct tm *timeInfo;
+  //  struct tm *timeInfo;
     char buffer[MAX_BUFFER_SIZE];
     
-    time(&rawTime);     
-    timeInfo = localtime(&rawTime);
+	struct tm timeInfo;
+
+
+	time(&rawTime);
+	localtime_s(&timeInfo, &rawTime);
+
+
+ //   time(&rawTime);     
+ //   timeInfo = localtime(&rawTime);
     
-    strftime(buffer, MAX_BUFFER_SIZE, "%H:%M:%S ", timeInfo);
+    strftime(buffer, MAX_BUFFER_SIZE, "%H:%M:%S ", &timeInfo);
     printf("%s", buffer);
     
     return;
@@ -63,44 +71,32 @@ void show_module(ProgramModule module)
         case Module_Main:
             printf("main ");
             break;
-
-        case Module_primaryInjection:
-            printf("Injection of primary electrons, protons, pions and muons");
-            break;
-
-		case Module_primaryLuminosity:
-			printf("Intrinsic injection of photons");
+	
+        case Module_electronInjection:
+            printf("Injection of electrons");
             break;
       
         case Module_Message:
             printf("message ");
             break;
 
-		case Module_ElectronDistribution:
+		case Module_electronDistribution:
             printf("Calculating Electron Distribution ");
             break;
 
-		case Module_positronDistribution:
-            printf("Calculating Positron Distribution ");
-            break;
 
-		case Module_primaryElectronDistribution:
-            printf("Calculating the primary Electron Distribution");
-            break;
+		case Module_luminosities:
+			printf("Calculating non-thermal SEDs");
+			break;
 
-		case Module_PhotonDistribution:
-            printf("Calculating Photon Distribution  ");
-            break;
  
   /*      default:
             printf("\n");
             show_error(Invalid_Module, Module_Message);
             break;*/ 
+	}
 
-			 
-		}
-
-    return;
+//    return;
 }
 
 double diff_seconds(clock_t timeStart, clock_t timeEnd)

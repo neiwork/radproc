@@ -1,17 +1,19 @@
 #include "processes.h"
 
-#include "State.h"
+//#include "State.h"
 
 #include "write.h"
 #include "messages.h"
 #include "luminosityAnisotropicIC.h"
-#include <fluminosities/luminositySynchrotron.h>
+#include <fluminosities\luminositySynchrotron.h>
+
+//#include <fparticle\Particle.h>
 //#include <fluminosities/luminosityHadronic.h>
 //#include <fluminosities/luminosityPhotoHadronic.h>
 #include <fmath\physics.h>
-#include <map>
+//#include <map>
 
-class File;
+//class File;
 
 double emiToLumi(State& st, ParamSpaceValues& psv, int E_position, int t_position);
 
@@ -24,15 +26,15 @@ void processes(State& st)
 
 
 	ParamSpaceValues Qsyn(st.photon.ps);
-	Qsyn.fill([&st](const SpaceIterator &i){
-		double eSyn = luminositySynchrotron(i.par.E, st.electron); //estos devuelven erg/s/cm^3, integrar!
-		return eSyn;
-	});
-
 	ParamSpaceValues Qic(st.photon.ps);
-	Qic.fill([&st](const SpaceIterator &i){
+
+	st.photon.ps.iterate([&st,&Qsyn,&Qic](const SpaceIterator &i){
+
+		double eSyn = luminositySynchrotron(i.par.E, st.electron); //estos devuelven erg/s/cm^3, integrar!
 		double eIC = luminosityAnisotropicIC(i.par.E, st.electron, i.par.R);
-		return eIC;
+
+		Qsyn.set(i,eSyn);
+		Qic.set(i, eIC);
 	});
 
 
@@ -64,7 +66,6 @@ void processes(State& st)
 
 			double Elab = E*Dlorentz; //Dlorentz=delta
 
-
 			double Lsyn = emiToLumi(st, Qsyn, E_position, t_position);
 			double Lic = emiToLumi(st, Qic, E_position, t_position);
 
@@ -82,23 +83,22 @@ void processes(State& st)
 
 	}
 	file.close();
+
+	show_message(msgEnd, Module_luminosities);
 }
 
 
 
-	show_message(msgEnd, Module_luminosities);
-
-
 double emiToLumi(State& st, ParamSpaceValues& psv, int E_position, int t_position) 
 {
-	double sum;
+	double sum = 0.0;
 			
 
 	Vector& z = st.photon.ps.dimensions[1]->values; 
 
 	for (size_t i = 0; i < z.size()-1; ++i) { //no llego al ultimo
 	//for (int i = 0; i < n; ++i)
-		{
+		//{
 //				double dx = x*(x_int - 1);
 			double dz = z[i+1] - z[i];
 

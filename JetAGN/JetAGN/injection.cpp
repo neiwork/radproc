@@ -20,7 +20,14 @@ void injection(Particle& p, State& st)
 	//p.ps.iterate([&p, &st, &total](const SpaceIterator& i){
 	p.injection.fill([&p, &st](const SpaceIterator& i){
 		double factor = 0.0, E = i.par.E, z = i.par.R, t = i.par.T;
-		switch (p.type)	{
+		
+		//case PT_electron:
+		//case PT_proton:
+		double total = primaryInjection(E, z, t, p);
+		return total;
+		//break;
+		
+		//switch (p.type)	{
 		/*	case PT_photon:
 				factor = radius / (volume*P2(E)*cLight); //este factor pasa de luminosidad a densidad de fotones [ 1/erg cm^3]
 
@@ -35,13 +42,7 @@ void injection(Particle& p, State& st)
 
 			    break; */ 
 
-			case PT_electron:
-			//case PT_proton:
-				double total = primaryInjection(E, z, t, p);
-				return total;
-				break;
-
-		}
+		//}
 	//	p.injection.set(i, total);
 	});
 

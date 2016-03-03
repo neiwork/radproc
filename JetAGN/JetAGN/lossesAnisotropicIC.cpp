@@ -8,7 +8,7 @@
 
 
 
-void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R);
+//void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R);
 
 
 
@@ -88,13 +88,16 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 }
 
 
+//esta integral no es un runge Kutta; directamente hice la suma de todas las contribuciones
+
 double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f)
 {
-	int n = 30;
+	int n = 20;
 
 	double x_int = pow((eps_max / eps_min), (1.0 / n));
 
-	double X1(0.0), X2(0.0), X3(0.0);
+//	double X1(0.0), X2(0.0), X3(0.0);
+	double L3 = 0.0;
 
 	if (eps_min < eps_max)
 	{
@@ -112,7 +115,8 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 			double t_int = pow((t_max / t_min), (1.0 / n));
 
-			double T1(0.0), T2(0.0), T3(0.0);
+//			double T1(0.0), T2(0.0), T3(0.0);
+			double L2 = 0.0;
 
 			double t = t_min;
 
@@ -128,7 +132,9 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 					double y_int = pow((sup / inf), (1.0 / n));
 
-					double Y1(0.0), Y2(0.0), Y3(0.0);
+//					double Y1(0.0), Y2(0.0), Y3(0.0);
+
+					double L1 = 0.0;
 
 					double y = inf;
 
@@ -146,18 +152,19 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 						////////////////////////////
 
-						double L1 = Q*dy;
+						L1 = L1 + Q*dy;
 
 						//if (L1 > 0.0) { 
-						incremento(i_y, 0, n - 1, Y1, Y2, Y3, L1);// }
+						//incremento(i_y, 0, n - 1, Y1, Y2, Y3, L1);// }
 
 						y = y*y_int;
 					}
 
-					double L2 = (Y1 + 2.0 * Y2 + 4.0 * Y3) *dt / 3.0;
+					//double L2 = (Y1 + 2.0 * Y2 + 4.0 * Y3) *dt / 3.0;
+					L2 = L2 + L1*dt;
 
-					//					//if (L2 > 0.0) { 
-					incremento(i_t, 0, n - 1, T1, T2, T3, L2); //}			
+					//if (L2 > 0.0) { 
+					//incremento(i_t, 0, n - 1, T1, T2, T3, L2); //}			
 				}
 
 
@@ -167,16 +174,18 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 			//			//}
 			//
-			double L3 = (T1 + 2.0 * T2 + 4.0 * T3)*dx / 3.0;
+			//double L3 = (T1 + 2.0 * T2 + 4.0 * T3)*dx / 3.0;
+			L3 = L3 + L2*dx;
 
 			//if (L3 > 0.0) { 
-			incremento(i_x, 0, n - 1, X1, X2, X3, L3); //}
+			//incremento(i_x, 0, n - 1, X1, X2, X3, L3); //}
 
 			x = x*x_int;
 		}
 
-		double L4 = (X1 + 2.0 * X2 + 4.0 * X3) / 3.0;
-		return L4;
+		//double L4 = (X1 + 2.0 * X2 + 4.0 * X3) / 3.0;
+		//return L4;
+		return L3;
 
 	}//cierra el primer if
 	else

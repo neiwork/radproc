@@ -92,8 +92,8 @@
     </ClCompile>
     <ClCompile Include="luminositySynchrotron.cpp" />
     <ClCompile Include="opticalDepthSSA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,8 +119,8 @@
     </ClInclude>
     <ClInclude Include="luminositySynchrotron.h" />
     <ClInclude Include="opticalDepthSSA.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="packageData.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -128,10 +128,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\finjection\finjection.vcxproj">
-      <Project>{8a249133-b6d6-4561-8c79-e889cae5e634}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\flosses\flosses.vcxproj">
       <Project>{c85692b2-ca76-4fa7-ae5a-4bfb381513af}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

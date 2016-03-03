@@ -1,6 +1,7 @@
 #include "luminosityAnisotropicIC.h"
 
 #include "lossesAnisotropicIC.h"
+#include "modelParameters.h"
 
 
 
@@ -21,15 +22,40 @@ double dAniLum(double w0, double theta, double E)   //limite superior
 	return E;  //esta es la condicion epsilon < Ega	= E
 }
 
+//f(x, y) en intTriple, x la de afuera, y la de adentro
+
+double difNlum(double theta, double w, double w0, double E, double r)   //funcion a integrar
+{
+	// E -> energía del foton
+	// w -> variable de afuera
+	// w0 -> variable interna
+
+	double b = b_theta(theta, w0, E);
+	double z = E / w; 
+
+	//defino F(z)
+	double F = 1.0 + P2(z) / (2.0*(1.0 - z)) - 2.0*z / (b*(1.0 - z)) + 2.0*P2(z) / P2(b*(1.0 - z));
+
+	double nph = blackBody(w0, r);
+	double invariant = nph / w0;
+
+	double result = (3.0*thomson / (16.0*pi)) * P2(electronMass*cLight2 / w) * invariant * F;
+
+	return result;
+
+}
+
 
 double fLumi(double x, double theta, double y, double E, double r, const Particle& p)
 {
-	//p.ps.dimensions[2]->values[])
-	double distCreator = p.distribution.interpolate({ x, r, p.ps[2][0] });//p.ps[2].par.T;// VER
+	double t = p.ps.current->par.T;
+
+	double distCreator = p.distribution.interpolate({ x, r, t});// VER
 
 //	double distCreator = p.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);
 
-	return distCreator*difN(theta, x, y, E, r)*(0.5*sin(theta));
+	double result = distCreator*difNlum(theta, x, y, E, r)*(0.5*sin(theta));
+	return result;
 }
 
 

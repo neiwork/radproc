@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\lib;D:\projects\Doctorado\Calculos 3\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -57,7 +57,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\lib;D:\projects\Doctorado\Calculos 3\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -123,6 +123,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\lib\flosses\flosses.vcxproj">
       <Project>{c85692b2-ca76-4fa7-ae5a-4bfb381513af}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\fluminosities\fluminosities.vcxproj">
+      <Project>{f3d01362-4e4b-4f3f-9f1b-a5ba28df9db7}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\lib\fmath\fmath.vcxproj">
       <Project>{6d9ae1eb-3467-4970-a4ef-4b19236fbd4b}</Project>

@@ -32,10 +32,9 @@ void radiativeLosses(State& st)
 		double logR = log10(i.par.R);
 		//double logT = log10(i.par.T);
 
-		double B = i.par.magneticField;
+		double B = magneticField; // i.par.magneticField; VER por qué no funciona
 
 		double Reff = 10.0*(i.par.R*openingAngle); //revisar porque esto deberia ser el stagnation point
-
 
 		double eSyn  = lossesSyn(i.par.E, B, st.electron) / i.par.E;		
 		double eIC =  lossesAnisotropicIC(i.par.E, st.electron, i.par.R) / i.par.E;
