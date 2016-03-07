@@ -41,6 +41,9 @@
     <ClCompile Include="injection.cpp">
       <Filter>losses</Filter>
     </ClCompile>
+    <ClCompile Include="distribution_old.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
