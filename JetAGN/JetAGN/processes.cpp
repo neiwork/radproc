@@ -18,7 +18,7 @@
 
 //class File;
 
-double emiToLumi(State& st, ParamSpaceValues& psv, int E_position, int t_position);
+double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_position, int t_position);
 
 
 
@@ -26,32 +26,51 @@ void processes(State& st)
 {
 	show_message(msgStart, Module_luminosities);
 
-
-
 	ParamSpaceValues Qsyn(st.photon.ps);
 	ParamSpaceValues Qic(st.photon.ps);
 
-	/////////////////////
-	#   pragma omp parallel for \
-		private(i,eSyn,eIC) \
-		shared(st,Qsyn,Qic) \
-		default(none) \
-		schedule(static, 1) \
-		num_threads(2)
+	std::ofstream file;
+	file.open("ntLuminosity_omp.txt", std::ios::out);
+	timestamp_stream(file);
 
-	st.photon.ps.iterate([&st,&Qsyn,&Qic](const SpaceIterator &i){
+	/////////////////////
+	//#   pragma omp parallel for \
+		//	private(i, eSyn, eIC) \
+		//	shared(st, Qsyn, Qic) \
+		//	default(none) \
+		//	schedule(static, 1) \
+		//	num_threads(2)
+
+	st.photon.ps.iterate([&st, &Qsyn, &Qic](const SpaceIterator &i){
 
 		double eSyn = luminositySynchrotron(i.par.E, st.electron); //estos devuelven erg/s/cm^3, integrar!
 		double eIC = luminosityAnisotropicIC(i.par.E, st.electron, i.par.R);
 
-		Qsyn.set(i,eSyn);
+		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
 	});
 
 
+	//#pragma omp parallel sections
+	//{
+	//#pragma omp section
+	//	{
+	//		Qsyn.fill([&st](const SpaceIterator &i){
+	//			return luminositySynchrotron(i.par.E, st.electron); //estos devuelven erg/s/cm^3, integrar!
+	//		});
+	//	}
 
-	std::ofstream file;
-	file.open("ntLuminosity.txt", std::ios::out);
+	//#pragma omp section
+	//	{
+	//		Qic.fill([&st](const SpaceIterator &i){
+	//			return luminosityAnisotropicIC(i.par.E, st.electron, i.par.R);
+	//		});
+	//	}
+	//}
+
+	const ParamSpace& pps = st.photon.ps;
+
+	timestamp_stream(file);
 
 	file << "log(E/eV)"
 		<< '\t' << "log(t/s)"
@@ -59,12 +78,12 @@ void processes(State& st)
 		<< '\t' << "log(Lic/erg s-1)"
 		<< std::endl;
 
-	for (size_t t_position = 0; t_position < st.photon.ps[2].size(); t_position++) {
+	for (size_t t_ix = 0; t_ix < pps[2].size(); t_ix++) {
 
 
 		//st.photon.ps.iterate([&st, &Qsyn, &Qic, &file, t_position](const SpaceIterator& i){
 
-		for (size_t E_position = 0; E_position < st.photon.ps[0].size(); E_position++) {
+		for (size_t E_ix = 0; E_ix < pps[0].size(); E_ix++) {
 
 			//E*L(E) = delta^4 E'*L'(E') and E=delta*E'
 			//variables primadas ->FF
@@ -72,13 +91,13 @@ void processes(State& st)
 
 			//		int E_position = i.its[0].peek; //NO ESTA BIEN ESTO
 
-			double E = st.photon.ps[0][E_position];
-			double t = st.photon.ps[2][t_position];
+			double E = pps[0][E_ix];
+			double t = pps[2][t_ix];
 
 			double Elab = E*Dlorentz; //Dlorentz=delta
 
-			double Lsyn = emiToLumi(st, Qsyn, E_position, t_position);
-			double Lic = emiToLumi(st, Qic, E_position, t_position);
+			double Lsyn = emiToLumi(pps, Qsyn, E_ix, t_ix);
+			double Lic = emiToLumi(pps, Qic, E_ix, t_ix);
 
 			double LsynLab = Lsyn*pow(Dlorentz, 4.0);
 			double LicLab = Lic*pow(Dlorentz, 4.0);
@@ -100,12 +119,12 @@ void processes(State& st)
 
 
 
-double emiToLumi(State& st, ParamSpaceValues& psv, int E_position, int t_position) 
+double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_ix) 
 {
 	double sum = 0.0;
 			
 
-	Vector& z = st.photon.ps.dimensions[1]->values; 
+	Vector& z = pps.dimensions[1]->values; 
 
 	for (size_t i = 0; i < z.size()-1; ++i) { //no llego al ultimo
 	//for (int i = 0; i < n; ++i)
@@ -115,8 +134,8 @@ double emiToLumi(State& st, ParamSpaceValues& psv, int E_position, int t_positio
 
 			double jetR = jetRadius(z[i], openingAngle);
 
-			double E = st.photon.ps[0][E_position];
-			double T = st.photon.ps[2][t_position];
+			double E = pps[0][E_ix];
+			double T = pps[2][t_ix];
 
 			double emissivity = psv.interpolate({ E, z[i], T });
 

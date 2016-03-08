@@ -68,16 +68,17 @@ double luminosityAnisotropicIC(double E, Particle& particle, double r)
 		
 	double integral =
 		intTriple(E, a, b, r,
-		[E](double w0, double theta){
-		return cAniLum(w0, theta, E); },
 			[E](double w0, double theta){
-			return dAniLum(w0, theta, E); },
-				[E, r, &particle](double x, double t, double y){
-				return fLumi(x, t, y, E, r, particle); });
+				return cAniLum(w0, theta, E);
+			},
+			[E](double w0, double theta)
+			{
+				return dAniLum(w0, theta, E);
+			},
+			[E, r, &particle](double x, double t, double y){
+				return fLumi(x, t, y, E, r, particle);
+			});
 			
-	return integral*4.0*pi*cLight*P2(E); //en erg/s
+	return integral*4.0*pi*cLight*P2(E); //en erg/s/cm3
 
 	}
-
-
-

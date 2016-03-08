@@ -38,6 +38,29 @@ void show_message(MessageType message, ProgramModule module)
 }
 
 
+// Imprime la hora %H:%M:%S en pantalla.
+void timestamp_stream(std::ostream& out)
+{
+
+	time_t rawTime;
+	//  struct tm *timeInfo;
+	char buffer[MAX_BUFFER_SIZE];
+
+	struct tm timeInfo;
+
+
+	time(&rawTime);
+	localtime_s(&timeInfo, &rawTime);
+
+
+	//   time(&rawTime);     
+	//   timeInfo = localtime(&rawTime);
+
+	strftime(buffer, MAX_BUFFER_SIZE, "%H:%M:%S ", &timeInfo);
+	//printf("%s", buffer);
+
+	out << buffer << std::endl;
+}
 
 // Imprime la hora %H:%M:%S en pantalla.
 void show_time(void)
