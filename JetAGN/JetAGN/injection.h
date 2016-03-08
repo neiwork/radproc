@@ -8,7 +8,7 @@
 //#include "pairAnnihilation.h"
 
 
-double primaryInjection(double E, Particle& particle);
+//double primaryInjection(double E, Particle& particle);
 
 //void injection(Particle& particle, Particle& creator, fun1 tpf);
 

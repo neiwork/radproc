@@ -10,6 +10,9 @@
 //#include <fparticle\Particle.h>
 //#include <fluminosities/luminosityHadronic.h>
 //#include <fluminosities/luminosityPhotoHadronic.h>
+
+#include <omp.h>
+
 #include <fmath\physics.h>
 //#include <map>
 
@@ -27,6 +30,14 @@ void processes(State& st)
 
 	ParamSpaceValues Qsyn(st.photon.ps);
 	ParamSpaceValues Qic(st.photon.ps);
+
+	/////////////////////
+	#   pragma omp parallel for \
+		private(i,eSyn,eIC) \
+		shared(st,Qsyn,Qic) \
+		default(none) \
+		schedule(static, 1) \
+		num_threads(2)
 
 	st.photon.ps.iterate([&st,&Qsyn,&Qic](const SpaceIterator &i){
 

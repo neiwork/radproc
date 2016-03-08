@@ -18,31 +18,20 @@ void injection(Particle& p, State& st)
 	show_message(msgStart, Module_electronInjection);
 	
 	//p.ps.iterate([&p, &st, &total](const SpaceIterator& i){
+
 	p.injection.fill([&p, &st](const SpaceIterator& i){
-		double factor = 0.0, E = i.par.E, z = i.par.R, t = i.par.T;
-		
-		//case PT_electron:
-		//case PT_proton:
-		double total = primaryInjection(E, z, t, p);
-		return total;
-		//break;
-		
-		//switch (p.type)	{
-		/*	case PT_photon:
-				factor = radius / (volume*P2(E)*cLight); //este factor pasa de luminosidad a densidad de fotones [ 1/erg cm^3]
+				
+		if (i.its[1].canPeek(-1)) 
+		{
+			return 0.0;
+		}
+		else //if (z_position = 0) solo inyecto particulas en la posicion 0
+		{
+			double factor = 0.0, E = i.par.E, z = i.par.R, t = i.par.T;
+			double total = primaryInjection(E, z, t, p);
+			return total;
+		}
 
-				total = 
-					  factor*luminositySynchrotron(E, st.electron)
-					+ factor*luminosityIC(E, st.electron, st.tpf);   //esto lo pongo para que se sumen todas las contribuciones
-					
-				total +=
-					  factor*luminositySynchrotron(E, st.proton)
-					+ factor*luminosityHadronic(E, st.proton)
-					+ factor*luminosityPhotoHadronic(E, st.proton, st.tpf); 
-
-			    break; */ 
-
-		//}
 	//	p.injection.set(i, total);
 	});
 
@@ -85,3 +74,17 @@ double primaryInjection(double E, double z, double t, Particle& particle)
 	return Q;
 
 }
+
+
+
+//switch (p.type)	{
+/*	case PT_photon:
+factor = radius / (volume*P2(E)*cLight); //este factor pasa de luminosidad a densidad de fotones [ 1/erg cm^3]
+
+total =
+factor*luminositySynchrotron(E, st.electron)
++ factor*luminosityIC(E, st.electron, st.tpf);   //esto lo pongo para que se sumen todas las contribuciones
+
+break; */
+
+//}

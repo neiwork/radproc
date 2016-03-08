@@ -68,15 +68,7 @@ void Particle::initializeEnergyPoints(Vector& v, double logEmin, double logEmax)
 
 }
 
-//void Particle::initializeTimePoints( int nTimePoints, double tMin, double tStep )
-//{
-//	timePoints[0] = tMin;
-//
-//	for (size_t i=1; i < timePoints.size(); ++i){  
-//	
-//		timePoints[i] = timePoints[i-1]+tStep;
-//	}
-//}
+
 //
 //void Particle::initializeLinearEnergyPoints( int n )
 //{

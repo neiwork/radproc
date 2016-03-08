@@ -35,31 +35,31 @@ void distribution(Particle& p, State& st)
 			}, { -1, z_position, t_position }); //copio el iterador que sigue asi los aux se completan bien
 
 
-			p.distribution.fill([&p, &st, &Naux](const SpaceIterator& i){
+			p.ps.iterate([&p, &st, &Naux](const SpaceIterator& i){  //, &z_position, &t_position
 
 				double Emax = pow(10.0, p.logEmax)*1.6e-12;
 
 				double E = i.par.E;
-				double t = i.par.E;
-				double r = i.par.E;
+				double r = i.par.R;
+				double t = i.par.T;				
 
 
 				double Eeff = effectiveE(E, Emax, t, p, st);
 				double dist1(0.0), dist2(0.0), dist3(0.0);
 
-				if (i.its[1].canPeek(-1))
+				if (i.its[1].canPeek(-1)) //z_position != 0) //
 				{
 					//estos son los puntos donde Q=0, y las particulas vienen de ti-1
-					if (i.its[2].canPeek(-1))
+					if (i.its[2].canPeek(-1)) //t_position != 0
 					{
 						double dist = Naux.interpolate({ Eeff, r, i.its[2].peek(-1) });
 						double ratioLosses = losses(Eeff, p, st) / losses(E, p, st);
 						dist2 = dist*ratioLosses;
 					}
-					else  //(t_position == 0)
-					{
-						dist2 = 0.0;
-					}
+			//		else  //(t_position == 0)
+			//		{
+			//			dist2 = 0.0;
+			//		}
 
 				}
 				else //(z_position == 0)
@@ -73,12 +73,14 @@ void distribution(Particle& p, State& st)
 
 				if (i.its[1].canPeek(-1)) //if (z_position != 0)
 				{
-					double delta_t = 0.0; //VER
+					double timeStep = (timeMax - timeMin) / nTimes; //es el mismo para todos
+					double delta_t = timeStep / Gamma;
 					double delta_xk = i.its[1].peek(0) - i.its[1].peek(-1); // z[k] - z[k - 1];
 
 					SpaceCoord coord = i.moved({ 0, -1, 0 }); //N(ri-1)
 
-					double ni_1 = Naux.get(coord) / delta_xk;
+					double ni_1 = p.distribution.get(coord) / delta_xk;
+				//	double ni_1_aux = Naux.get(coord) / delta_xk; VER por que no dan lo mismo Naux y p.distribution
 					double ni = 0.0;
 
 					if (i.its[1].canPeek(1))
@@ -94,7 +96,7 @@ void distribution(Particle& p, State& st)
 					dist3 = Naux.get(i); //dejo el que estaba de los pasos 1 y 2
 				}
 
-				return dist3;// p.distribution.fill(dist3);
+				p.distribution.set(i,dist3);// p.distribution.fill(dist3);
 
 			}, { -1, z_position, t_position });
 

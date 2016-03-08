@@ -1,6 +1,6 @@
 #include "timeDistribution.h"
 
-#include <omp.h>
+
 
 #include "losses.h"
 #include "injection.h"

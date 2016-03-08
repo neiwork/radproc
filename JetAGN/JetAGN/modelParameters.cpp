@@ -81,7 +81,7 @@ void setParameters(void )
 	nR = 2;
 
 	timeMin = 1.0e-2;
-	timeMax = rmax/cLight;
+	timeMax = 1.0e5; // rmax / cLight;
 	nTimes = 2;
 
 	nEnergies = 20;        //massive particles
@@ -101,6 +101,18 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax)
 		v[i] = v[i - 1] * R_int;
 	}
 
+}
+
+void initializeLinearPoints(Vector& v, double tMin, double tMax)
+{
+	double tStep = (tMax - tMin) / (v.size() - 1); // nTimePoints;
+
+	v[0] = tMin;
+
+	for (size_t i=1; i < v.size(); ++i){  
+	
+		v[i] = v[i-1]+tStep;
+	}
 }
 
 
