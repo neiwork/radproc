@@ -82,6 +82,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="nonThermalLuminosity.cpp" />
     <ClCompile Include="processes.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="read.cpp">
@@ -111,6 +112,7 @@
     <ClInclude Include="luminosityAnisotropicIC.h" />
     <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="nonThermalLuminosity.h" />
     <ClInclude Include="processes.h" />
     <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="read.h">

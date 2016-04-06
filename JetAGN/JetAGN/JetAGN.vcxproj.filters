@@ -44,6 +44,7 @@
     <ClCompile Include="distribution_old.cpp">
       <Filter>distribution</Filter>
     </ClCompile>
+    <ClCompile Include="nonThermalLuminosity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -80,6 +81,7 @@
     <ClInclude Include="messages.h">
       <Filter>extras</Filter>
     </ClInclude>
+    <ClInclude Include="nonThermalLuminosity.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

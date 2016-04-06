@@ -5,8 +5,10 @@
 #include <fmath\interpolation.h>
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
-//double thermalPF(double E);
 
+//#include <string>
+#include <iostream>
+//#include <fstream>
 
 double fmagneticField(double z, double B_o)
 {	
@@ -20,10 +22,21 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
+	double Reff = 10.0*Rsp;
 	double vel = cLight;
+
 	double Emax_ad = accEfficiency*3.0*z*cLight*electronCharge*B / vel;
-	double Emax_syn = accEfficiency*6.0*pi*electronCharge*electronMass*cLight2/(thomson*B);
-	return std::min(Emax_syn, Emax_syn);
+	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
+	double Emax_hillas = electronCharge*B*Reff;
+	double min1 = std::min(Emax_syn, Emax_syn);
+
+	//std::ofstream file;
+	//file.open("Emax.txt", std::ios::out);
+
+	//std::cout << z << '\t' << Emax_ad << '\t' << Emax_syn << '\t' << Emax_hillas << '\t' << std::endl;
+
+	return std::min(min1, Emax_hillas);
+		
 }
 
 
@@ -46,14 +59,17 @@ void setParameters(void )
 
 	double z0 = 100.0*rg; //50 * Rschw
 
-	double Lj = 1.0e43;
+	Lj = 1.0e43;
 	openingAngle = 0.1;  //jet opening angle
 
 	B0 = sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
 
+	Rsp = 1.0e14; //distance to stagnation point
+
 	double inc = 10.0*pi / 180; //ang obs del jet
 	Gamma = 10;
-	Dlorentz = 1.0 / (Gamma*(1.0 - cos(inc)));
+	double beta = 1.0 - 1.0 / P2(Gamma);
+	Dlorentz = 1.0 / (Gamma*(1.0 - cos(inc)*beta));
 
 	accEfficiency = 0.1; 
 
@@ -81,8 +97,8 @@ void setParameters(void )
 	nR = 2;
 
 	timeMin = 1.0e-2;
-	timeMax = 1.0e5; // rmax / cLight;
-	nTimes = 2;
+	timeMax = 1.0e11; // rmax / cLight;
+	nTimes = 100;
 
 	nEnergies = 20;        //massive particles
 	nPhotonEnergies = 20;  //259;  //photons

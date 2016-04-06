@@ -5,9 +5,6 @@
 #include "injection.h"
 #include "losses.h"
 #include "timeDistribution.h"
-//#include <fmath\interpolation.h>
-//#include <fmath\elimiGaussiana.h>
-//#include <fmath\matrixInit.h>
 #include <fmath\physics.h>
 
 
@@ -21,21 +18,21 @@ void distribution(Particle& p, State& st)
 	ParamSpaceValues Naux(p.ps);
 
 
-	for (size_t t_i = 0; t_i < p.ps[2].size(); t_i++) {
+	for (int t_ix = 0; t_ix < p.ps[2].size(); t_ix++) {
 
-		int t_position = t_i; // posicion en la dimension z 
+		//t_ix; posicion en la dimension z 
+		//z_ix;  posicion en la dimension z 
 
-		for (size_t z_i = 0; z_i < p.ps[1].size(); z_i++) {
-
-			int z_position = z_i; // posicion en la dimension z 
+		for (int z_ix = 0; z_ix < p.ps[1].size(); z_ix++) {
+			
 
 			//genero el psv auxiliar para el siguiente iterate
 			Naux.fill([&p](const SpaceIterator& i){
 				return p.distribution.get(i); //copia del N  
-			}, { -1, z_position, t_position }); //copio el iterador que sigue asi los aux se completan bien
+			}, { -1, z_ix, t_ix }); //copio el iterador que sigue asi los aux se completan bien
 
 
-			p.ps.iterate([&p, &st, &Naux](const SpaceIterator& i){  //, &z_position, &t_position
+			p.ps.iterate([&p, &st, &Naux](const SpaceIterator& i){  
 
 				double Emax = pow(10.0, p.logEmax)*1.6e-12;
 
@@ -47,7 +44,7 @@ void distribution(Particle& p, State& st)
 				double Eeff = effectiveE(E, Emax, t, p, st);
 				double dist1(0.0), dist2(0.0), dist3(0.0);
 
-				if (i.its[1].canPeek(-1)) //z_position != 0) //
+				if (i.its[1].canPeek(-1)) //z_ix != 0) //
 				{
 					//estos son los puntos donde Q=0, y las particulas vienen de ti-1
 					if (i.its[2].canPeek(-1)) //t_position != 0
@@ -68,12 +65,13 @@ void distribution(Particle& p, State& st)
 				}
 
 
-				Naux.set(i, dist1 + dist2);
+				//Naux.set(i, dist1 + dist2);
 
+				double Ni = dist1 + dist2;
 
-				if (i.its[1].canPeek(-1)) //if (z_position != 0)
+				if (i.its[1].canPeek(-1)) //if (z_ix != 0)
 				{
-					double timeStep = (timeMax - timeMin) / nTimes; //es el mismo para todos
+					double timeStep = (timeMax - timeMin) / nTimes; //VER porque ahora NO es el mismo para todos
 					double delta_t = timeStep / Gamma;
 					double delta_xk = i.its[1].peek(0) - i.its[1].peek(-1); // z[k] - z[k - 1];
 
@@ -86,19 +84,30 @@ void distribution(Particle& p, State& st)
 					if (i.its[1].canPeek(1))
 					{
 						double delta_xk1 = i.its[1].peek(1) - i.its[1].peek(0); // z[k+1] - z[k];
-						ni = Naux.get(i) / delta_xk1;
+						double dum = Ni;// Naux.get(i);
+						ni = dum / delta_xk1;
 					}
-
+					else
+					{
+						double r_int = pow((rmax / rmin), (1.0 / nR));
+						double delta_xk1 = i.its[1].peek(0)*(r_int-1.0); // VER
+						double dum = Ni;// Naux.get(i);
+						ni =  dum/ delta_xk1;
+						
+					}
+					if (ni != 0.0){
+						double dum = 0.0;
+					}
 					dist3 = (ni_1 - ni)*(delta_t*cLight);
 				}
 				else
 				{
-					dist3 = Naux.get(i); //dejo el que estaba de los pasos 1 y 2
+					dist3 = Ni;// Naux.get(i); //dejo el que estaba de los pasos 1 y 2
 				}
 
 				p.distribution.set(i,dist3);// p.distribution.fill(dist3);
 
-			}, { -1, z_position, t_position });
+			}, { -1, z_ix, t_ix });
 
 		}//for sobre r
 

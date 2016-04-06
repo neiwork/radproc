@@ -14,7 +14,7 @@
 
 double losses(double E, Particle& p, State& st)
 {	
-	SpaceIterator* i = p.ps.current;
+	SpaceIterator* i = p.ps.current; //VER
 	
 	double r = i->par.R;
 	double B = i->par.magneticField;

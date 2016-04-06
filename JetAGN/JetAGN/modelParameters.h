@@ -16,6 +16,7 @@ void derive_parameters_r(double E, double R, double T);
 
 double blackBody(double E, double r);
 double jetRadius(double z, double openingAngle);
+double eEmax(double z, double B);
 
 //double vWind(double r, double starR);
 

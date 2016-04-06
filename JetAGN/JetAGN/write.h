@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <map>
 
 #include <fparticle\Particle.h>
@@ -56,27 +55,12 @@ void writeFlux(const std::string& archive, Vector salida, Particle particle);
 
 void write(const std::string& archive, Vector salida, Particle particle);
 
+/*It writes data for all param space*/
 void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data);
 
+/*It writes data for all param space, but fixin r*/
+void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int r); 
+
+/*It writes data as a function of energy for a given r and t*/
 void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r, int t);
 
-/* Write is a function that given the vectors ener and lum, prints on archive logE and logL.  */
-//void write(const std::string& archive, Vector& ener, Vector& salida);
-
-/* WriteChanged is a function that given the vectors ener and lum,
-prints on archive logE and logL with some changes in the midddle.  */
-//void writeChanged(const std::string& archive, Vector& ener, Vector& lum);
-
-/*Function writeMatrix writes a particular matrix*/
-//void writeMatrix (const std::string& archive, Matrix external, Particle particle);
-
-/*Function writeLum writes the total luminosity*/
-//void writeLum(const std::string& archive, Vector salida, Particle particle);
-
-
-
-//void writeEvolution (const std::string& electronFilename, 
-//					 const std::string& positronFilename, 
-//					 const std::string& photonFilename, CESEvolution states);
-
-//void writeMatrix(const std::string& archive, Matrix external, Particle particle);

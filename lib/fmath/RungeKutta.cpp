@@ -1,6 +1,6 @@
 #include "RungeKutta.h"
 
-int RK_N = 30;
+int RK_N = 3000;
 
 namespace {
 	void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)

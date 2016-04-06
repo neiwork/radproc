@@ -39,6 +39,31 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	file.close();
 }
 
+void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int r)
+{
+
+	std::ofstream file;
+	file.open(filename.c_str(), std::ios::out);
+
+	// version acotada
+	double logR = log10(data.ps[1][r]);
+	
+
+	file << "log(r)=" << logR << '\t' << std::endl;
+	data.ps.iterate([&file, &data](const SpaceIterator& i){
+
+		double logE = log10(i.par.E / 1.6e-12);
+		double time = i.par.T;
+		double logQ = log10(data.get(i));
+
+		file << logE << '\t' << time << '\t' << logQ << std::endl;
+		;
+	}, { -1, r, -1 });  //el -1 indica que las E se recorren, no quedan fijas
+	//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
+
+	file.close();
+}
+
 void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r, int t)
 {
 

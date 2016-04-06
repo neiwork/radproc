@@ -30,16 +30,16 @@ void processes(State& st)
 	ParamSpaceValues Qic(st.photon.ps);
 
 	std::ofstream file;
-	file.open("ntLuminosity_omp.txt", std::ios::out);
+	file.open("ntLuminosity_.txt", std::ios::out);
 	timestamp_stream(file);
 
-	/////////////////////
+	///////////////////
 	//#   pragma omp parallel for \
-		//	private(i, eSyn, eIC) \
-		//	shared(st, Qsyn, Qic) \
-		//	default(none) \
-		//	schedule(static, 1) \
-		//	num_threads(2)
+	//		private(i, eSyn, eIC) \
+	//		shared(st, Qsyn, Qic) \
+	//		default(none) \
+	//		schedule(static, 1) \
+	//		num_threads(2)
 
 	st.photon.ps.iterate([&st, &Qsyn, &Qic](const SpaceIterator &i){
 

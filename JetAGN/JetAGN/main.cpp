@@ -42,6 +42,7 @@ int main ()
 	
 	distribution(model.electron, model);
 //	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, 1);
 //	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nTimes);
 
 
@@ -50,7 +51,7 @@ int main ()
 	//	return model.electron.injection.get(i);
 	//});
 
-	processes(model);
+	//processes(model);
 
 	return 0;
 }
