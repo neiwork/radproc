@@ -93,14 +93,14 @@ void setParameters(void )
 	targetPhotonEmax = pow(10.0,photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV
 
 	rmin = 1.0*pc;
-	rmax = 1.0e3*pc;
-	nR = 2;
+	rmax = 1.0e2*pc;
+	nR = 4;
 
 	timeMin = 1.0e-2;
-	timeMax = 1.0e11; // rmax / cLight;
-	nTimes = 100;
+	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
+	nTimes = 50;
 
-	nEnergies = 20;        //massive particles
+	nEnergies = 12;        //massive particles
 	nPhotonEnergies = 20;  //259;  //photons
 }
 
