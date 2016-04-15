@@ -12,19 +12,19 @@
 #include <map>
 
 
-double losses(double E, Particle& p, State& st)
+double losses(double E, double r, Particle& p, State& st)
 {	
-	SpaceIterator* i = p.ps.current; //VER
+	//SpaceIterator* i = p.ps.current; //VER
 	
-	double r = i->par.R;
-	double B = i->par.magneticField;
+	//double r = i->par.R;
+	double B = magneticField; //VER no funciona i->par.magneticField;
 	
 	switch (p.type)	{
 	case PT_electron:
 
 		return  lossesSyn(E, B, p) +
 				adiabaticLosses(E, r, cLight) +
-				lossesAnisotropicIC(E, st.electron, r);
+				lossesAnisotropicIC(E, p, r);
 			break;
 	}
 

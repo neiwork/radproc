@@ -6,7 +6,7 @@
 using namespace std; 
 
 
-double effectiveE(double Ee, double Emax, double t, Particle& p, State& st);
+double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State& st);
 
 double timeDistribution(double Ee, double r, double t, Particle& p, State& st, double Eeff);
 

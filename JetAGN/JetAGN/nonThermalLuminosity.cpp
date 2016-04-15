@@ -11,7 +11,12 @@
 double starDensity(double z)
 {
 	double Nrg = 4.0e7;
-	double n_s = Nrg / P3(z); //star density
+
+	double pseda = 2.0;
+
+	double Astar = Nrg*(3.0 - pseda) / (pow(rmax, (3.0 - pseda)) - pow(rmin, (3.0 - pseda))) / pi;
+
+	double n_s = Astar / pow(z,pseda);
 	return n_s;
 }
 

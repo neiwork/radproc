@@ -39,6 +39,7 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	file.close();
 }
 
+
 void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int r)
 {
 
@@ -48,19 +49,33 @@ void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 	// version acotada
 	double logR = log10(data.ps[1][r]);
 	
+	file << "log(r)=" << logR << '\t' ;
 
-	file << "log(r)=" << logR << '\t' << std::endl;
-	data.ps.iterate([&file, &data](const SpaceIterator& i){
+	for (int t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
+		double time = data.ps[2][t_ix];
+		file << "t=" << log10(time) << '\t';
+	}
 
-		double logE = log10(i.par.E / 1.6e-12);
-		double time = i.par.T;
-		double logQ = log10(data.get(i));
 
-		file << logE << '\t' << time << '\t' << logQ << std::endl;
-		;
-	}, { -1, r, -1 });  //el -1 indica que las E se recorren, no quedan fijas
-	//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
+	for (int E_ix = 0; E_ix < data.ps[0].size(); E_ix++) {
 
+		file << std::endl;
+
+		double logE = log10(data.ps[0][E_ix]/1.6e-12);
+
+		file << logE << '\t';
+
+		data.ps.iterate([&file, &data](const SpaceIterator& i){
+
+			//double logR = log10(i.par.R);
+			//double time = i.par.T;
+			double logQ = safeLog10(data.get(i));
+
+			file << logQ << '\t';
+			;
+		}, { E_ix, r, -1 });  //el -1 indica que las E se recorren, no quedan fijas
+		//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
+	}
 	file.close();
 }
 
@@ -75,18 +90,31 @@ void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 	double logE = log10(data.ps[0][E]/1.6e-12);
 
 
-	file << "log(E)=" << logE << '\t' << std::endl;
-	data.ps.iterate([&file, &data](const SpaceIterator& i){
+	file << "log(E)=" << logE << '\t' ;
 
-		double logR = log10(i.par.R);
-		double time = i.par.T;
-		double logQ = log10(data.get(i));
+	for (int t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
+		double time = data.ps[2][t_ix];
+		file << "t=" << log10(time) << '\t';
+	}
 
-		file << logR << '\t' << time << '\t' << logQ << std::endl;
-		;
-	}, { E, -1, -1 });  //el -1 indica que las E se recorren, no quedan fijas
-	//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
 
+	for (int r_ix = 0; r_ix < data.ps[1].size(); r_ix++) {
+
+		file << std::endl;
+
+		double logR = data.ps[1][r_ix] / pc;
+
+		file << logR << '\t';
+
+		data.ps.iterate([&file, &data](const SpaceIterator& i){
+
+			double logQ = safeLog10(data.get(i));
+
+			file << logQ << '\t';
+			;
+		}, { E, r_ix, -1 });  //el -1 indica que las E se recorren, no quedan fijas
+		//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
+	}
 	file.close();
 }
 
@@ -105,7 +133,7 @@ void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& da
 	data.ps.iterate([&file, &data](const SpaceIterator& i){
 
 		double logE = log10(i.par.E / 1.6e-12);
-		double logQ = log10(data.get(i));
+		double logQ = safeLog10(data.get(i));
 
 		file << logE << '\t' << logQ << std::endl;
 		;

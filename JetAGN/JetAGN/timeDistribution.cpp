@@ -13,7 +13,7 @@
 #include <fstream>
 
 
-double effectiveE(double Ee, double Emax, double t, Particle& p, State& st)
+double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State& st)
 {
 	double Eeffmin, Eeffmax, Eeff_int, sum_Eeff, dEeff, dtau_eff;
 
@@ -27,7 +27,7 @@ double effectiveE(double Ee, double Emax, double t, Particle& p, State& st)
 	while ((sum_Eeff <= t) && (Eeff <= Eeffmax))	{// for (int k=0; k<=100000; ++k)	{
 
 		dEeff = Eeff*(Eeff_int - 1.0);
-		dtau_eff = dEeff / losses(Eeff, p, st);
+		dtau_eff = dEeff / losses(Eeff, r, p, st);
 		sum_Eeff = sum_Eeff + dtau_eff;
 
 		//	if (sum_Eeff > times[j]) goto
@@ -53,7 +53,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 	
 ////////////////CON ESTE IF CONTROLO SI LAS PERDIDAS SON RELEVANTES FRENTE A Tadv+Tdec//////////////////////
-	perdidas = losses(Ee, p, st);
+	perdidas = losses(Ee, r, p, st);
 
 	t_cool = Ee/perdidas;
 
@@ -100,7 +100,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 					dEpp = Epp*(Epp_int-1.0);
 
-					dtau = dEpp/losses(Epp, p, st);
+					dtau = dEpp/losses(Epp, r, p, st);
 					//dexp = dtau/escapeTime(Epp,p); 
 
 					sum_Epp  = sum_Epp + dtau;

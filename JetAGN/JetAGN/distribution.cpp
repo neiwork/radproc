@@ -16,7 +16,9 @@ void distribution(Particle& p, State& st)
 
 
 	ParamSpaceValues Naux(p.ps);
-
+	Naux.fill([&Naux](const SpaceIterator& i){
+		return 0.0;
+	});
 
 	//for (int t_ix = 0; t_ix < p.ps[2].size(); t_ix++) {
 
@@ -40,7 +42,7 @@ void distribution(Particle& p, State& st)
 				double t = i.par.T;				
 
 
-				double Eeff = effectiveE(E, Emax, t, p, st);
+				double Eeff = effectiveE(E, Emax, t, r, p, st);
 				double dist1(0.0), dist2(0.0), dist3(0.0);
 
 				if (i.its[1].canPeek(-1)) //z_ix != 0) //
@@ -49,7 +51,7 @@ void distribution(Particle& p, State& st)
 					if (i.its[2].canPeek(-1)) //t_position != 0
 					{
 						double dist = Naux.interpolate({ Eeff, r, i.its[2].peek(-1) });
-						double ratioLosses = losses(Eeff, p, st) / losses(E, p, st);
+						double ratioLosses = losses(Eeff, r, p, st) / losses(E, r, p, st);
 						dist2 = dist*ratioLosses;
 					}
 			//		else  //(t_position == 0)
@@ -70,7 +72,17 @@ void distribution(Particle& p, State& st)
 
 				if (i.its[1].canPeek(-1)) //if (z_ix != 0)
 				{
-					double timeStep = (timeMax - timeMin) / nTimes; //VER porque ahora NO es el mismo para todos
+					double timeStep;
+					if (i.its[2].canPeek(1))
+					{
+						timeStep = i.its[2].peek(1) - i.its[2].peek(0); // t[k+1] - t[k];
+					}
+					else
+					{
+						double t_int = pow((timeMax / timeMin), (1.0 / nTimes));
+						timeStep = i.its[1].peek(0)*(t_int - 1.0); // VER
+					}
+					//double timeStep = (timeMax - timeMin) / nTimes; //VER porque ahora NO es el mismo para todos
 					double delta_t = timeStep / Gamma;
 					double delta_xk = i.its[1].peek(0) - i.its[1].peek(-1); // z[k] - z[k - 1];
 
@@ -102,7 +114,7 @@ void distribution(Particle& p, State& st)
 				}
 
 				p.distribution.set(i,dist3);// p.distribution.fill(dist3);
-
+				
 				Naux.ps.iterate([&p, &Naux](const SpaceIterator& j){
 					Naux.set(j, p.distribution.get(j)); //copia del N  
 				});// , { -1, z_ix, t_ix }); //copio el iterador que sigue asi los aux se completan bien
