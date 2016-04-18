@@ -94,11 +94,12 @@ void setParameters(void )
 
 	rmin = 1.0*pc;
 	rmax = 1.0e2*pc;
-	nR = 4;
+	nR = 10;
 
-	timeMin = 1.0e-2;
-	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
-	nTimes = 50;
+	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
+//	timeMin = 1.0e-2; 
+//	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
+//	nTimes = 50;
 
 	nEnergies = 12;        //massive particles
 	nPhotonEnergies = 20;  //259;  //photons
@@ -106,8 +107,6 @@ void setParameters(void )
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)
 {
-	//double Emax = 1.6e-12*pow(10, logEmax);
-	//double Emin = 1.6e-12*pow(10, logEmin);
 
 	double R_int = pow((Rmax / Rmin), (1.0 / (v.size() - 1)));
 
@@ -119,17 +118,22 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax)
 
 }
 
-void initializeLinearPoints(Vector& v, double tMin, double tMax)
+void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 {
-	double tStep = (tMax - tMin) / (v.size() - 1); // nTimePoints;
+	double R_int = pow((rMax / rMin), (1.0 / nR));
 
-	v[0] = tMin;
+	Vector v(time.size()+1, 0.0);
 
-	for (size_t i=1; i < v.size(); ++i){  
-	
-		v[i] = v[i-1]+tStep;
+	v[0] = rMin;
+
+	for (size_t i = 0; i < time.size(); ++i){
+		v[i+1] = v[i] * R_int;
+		double delta_x = v[i+1]-v[i];
+		time[i] = delta_x / cLight;  //construyo los t_i como los crossing time de las celdas i
 	}
+
 }
+
 
 
 double blackBody(double E, double r)
