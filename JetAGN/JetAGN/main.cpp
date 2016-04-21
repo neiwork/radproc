@@ -41,10 +41,10 @@ int main ()
 //	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
 	
 	distribution(model.electron, model);
-//	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
-	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, 2);
+	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, 4);
 	writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, 6);
-//	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nTimes);
+	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nTimes);
 
 
 	//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades
@@ -52,7 +52,7 @@ int main ()
 	//	return model.electron.injection.get(i);
 	//});
 
-	//processes(model);
+	processes(model);
 
 	return 0;
 }

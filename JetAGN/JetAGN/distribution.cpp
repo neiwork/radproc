@@ -10,93 +10,91 @@
 
 void distribution(Particle& p, State& st)
 {
-
-
 	show_message(msgStart, Module_electronDistribution);
-
-
-	ParamSpaceValues Naux(p.ps);
-	Naux.fill([&Naux](const SpaceIterator& i){
+	
+	ParamSpaceValues N2(p.ps);
+	N2.fill([&N2](const SpaceIterator& i){
 		return 0.0;
 	});
 
+	ParamSpaceValues N12(p.ps);
+	N12.fill([&N12](const SpaceIterator& i){
+		return 0.0;
+	});
+
+
 	for (int t_ix = 0; t_ix < p.ps[2].size(); t_ix++) {
-
-		//t_ix; posicion en la dimension z 
-		//z_ix;  posicion en la dimension z 
-
+		 
 		for (int z_ix = 0; z_ix <= t_ix; z_ix++) { //z_ix < p.ps[1].size(); z_ix++) {
-			
 
-		//for (int t_ix = 0; t_ix < p.ps[2].size(); t_ix++) {
-			//genero el psv auxiliar para el siguiente iterate
-			
+			N2.ps.iterate([&p, &N2](const SpaceIterator& i){
+				N2.set(i, p.distribution.get(i));  //copia del N  
+			});      //ver si quizas lo puedo copiar en t-1 que es donde lo necesito
 
-
-			p.ps.iterate([&p, &st, &Naux, &z_ix, &t_ix](const SpaceIterator& i){
+			p.ps.iterate([&p, &st, &N2, &N12, &z_ix, &t_ix](const SpaceIterator& i){
 
 				double Emax = pow(10.0, p.logEmax)*1.6e-12;
 
 				double E = i.par.E;
 				double r = i.par.R;
 				double t = i.par.T;
-
-
+				
 				double Eeff = effectiveE(E, Emax, t, r, p, st);
-				double dist1(0.0), dist2(0.0), dist3(0.0);
+				double dist1(0.0), dist2(0.0);
 
 				if (z_ix == 0)
 				{
 					dist1 = timeDistribution(E, r, t, p, st, Eeff);
 				}
-				else //if (i.its[1].canPeek(-1)) //z_ix != 0) //
-				{
-					//estos son los puntos donde Q=0, y las particulas vienen de ti-1
-					//if (i.its[2].canPeek(-1)) //si r!=0 -> t!=0 asi que no necesito preguntar
-					//{
-					double dist = Naux.interpolate({ Eeff, r, i.its[2].peek(-1) });
+
+				if (t_ix != 0)
+				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
+					//if (i.its[2].canPeek(-1)) 
+
+					double dist = N2.interpolate({ Eeff, r, i.its[2].peek(-1) });
 					double ratioLosses = losses(Eeff, r, p, st) / losses(E, r, p, st);
 					dist2 = dist*ratioLosses;
-					//}
-					//		else  //(t_position == 0)
-					//		{
-					//			dist2 = 0.0;
-					//		}
-
 				}
 
-				Naux.set(i, dist1 + dist2);
+				N12.set(i, dist1 + dist2); //lo cargo en N12 mientras interpolo de N2
 
-				double ni = dist1 + dist2; //Naux.get(i)
+			}, { -1, z_ix, t_ix });
 
-				double ni_1;
+			//VER: aca creo qeu tengo que copiar algo
+
+			p.ps.iterate([&p, &st, &N12, &z_ix, &t_ix](const SpaceIterator& i){
+
+				double ni = N12.get(i); //el ni es que que obtengo con N12
+
+				double dist3;
+
+				double ri = i.its[1].peek(0);
+				double rip1;
 
 				if (i.its[1].canPeek(-1)) //if (z_ix != 0)
 				{
 					SpaceCoord coord = i.moved({ 0, -1, 0 }); //N(ri-1)
-					ni_1 = Naux.get(coord);// / delta_xk; //VER por que no dan lo mismo Naux y p.distribution
+					double ni_1 = p.distribution.get(coord); //este lo calculo con el p.dist porque ya esta en r-1
 
-					dist3 = (ni_1 - ni);// las fracciones delta_t*cLight/delta_x == 1 siempre *(delta_t*cLight);
+					
+					double ri_1 = i.its[1].peek(-1);
+					
+					if (i.its[1].canPeek(1)) { rip1 = i.its[1].peek(+1); }
+					else{
+						double r_int = pow((rmax / rmin), (1.0 / nR));
+						rip1 = ri*r_int; 
+					}
+
+					dist3 = ni*(1.0 - ri / rip1) + ni_1*(ri_1 / ri);
 				}
-				else
+				else //z_ix=0
 				{
-					dist3 = ni;// p.injection.get(i)*i.its[2].peek(0) - ni;  //Q*t-ni, el Q*t seria el ni_1
+					rip1 = i.its[1].peek(+1);
+					dist3 = ni*(1.0 - ri / rip1);  
 				}
 
+				p.distribution.set(i,dist3); // lleno p.distribution e interpolo en N12
 				
-					//double timeStep = i.its[2].peek(0);
-
-					//double delta_t = timeStep;// /Gamma;
-					//double delta_xk = i.its[1].peek(0) - i.its[1].peek(-1); // z[k] - z[k - 1];
-
-					//double ni_1 = p.distribution.get(coord) / delta_xk;
-			
-				p.distribution.set(i,dist3);// p.distribution.fill(dist3);
-				
-				Naux.ps.iterate([&p, &Naux](const SpaceIterator& j){
-					Naux.set(j, p.distribution.get(j)); //copia del N  
-				});// , { -1, z_ix, t_ix }); //copio el iterador que sigue asi los aux se completan bien
-
 			} , { -1, z_ix, t_ix });
 
 		}//for sobre r

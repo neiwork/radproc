@@ -29,7 +29,9 @@ double dLnt(double z)  //esta es la función que depende del número de estrellas 
 	double Sj = pi*P2(jetRadius(z, openingAngle));
 	double So = 100.0*pi*P2(Rsp);
 
-	double tad = adiabaticLosses(E, z, cLight) / E; //ad esta en erg/s
+	double vel_lat = cLight*openingAngle;
+
+	double tad = adiabaticLosses(E, z, vel_lat) / E; //ad esta en erg/s
 
 	double wph = Lj / (cLight*4.0*Sj);
 	double trad = 4.0*cLight*thomson*wph*E / P2(electronMass*cLight2);

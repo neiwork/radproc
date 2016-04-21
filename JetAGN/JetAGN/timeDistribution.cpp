@@ -113,7 +113,13 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 			tau = sum_Epp;
 			/////////////////// ya calcule el tau ////////////////////////////
-			inj = p.injection.interpolate({ Ep, r, t - tau }); //paso los valores E,r,t en donde quiero evaluar Q
+			double tmin = st.electron.ps[2][0]; //el siguiente if es para no interpolar fuera del rango
+			if (t - tau < tmin){
+				inj = p.injection.interpolate({ Ep, r, tmin }); //paso los valores E,r,t en donde quiero evaluar Q
+			}
+			else{
+				inj = p.injection.interpolate({ Ep, r, t - tau }); //paso los valores E,r,t en donde quiero evaluar Q
+			}
 			//t = i.par.T;
 			//p.ps[1][z] da el valor de la dim r en la posicion z (que le pase)		
 			//interpolDoble(Ep, Time[j]-tau, Ee, Time, injection);  //chequear que ande!

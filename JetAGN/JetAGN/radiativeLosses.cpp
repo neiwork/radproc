@@ -35,13 +35,14 @@ void radiativeLosses(State& st)
 		double B = magneticField; // i.par.magneticField; VER por qué no funciona
 
 		double Reff = 10.0*Rsp;
+		double vel_lat = cLight*openingAngle;
 
 		double eSyn  = lossesSyn(i.par.E, B, st.electron) / i.par.E;		
 		double eIC =  lossesAnisotropicIC(i.par.E, st.electron, i.par.R) / i.par.E;
 		//double eIC2 = lossesIC(i.par.E, st.electron, st.tpf) / i.par.E;
 		double eDif  = diffusionRate(i.par.E, i.par.R, B);
 		double eAcc = accelerationRate(i.par.E, B, accEfficiency);
-		double eAdia = adiabaticLosses(i.par.E, i.par.R, cLight) / i.par.E;
+		double eAdia = adiabaticLosses(i.par.E, i.par.R, vel_lat) / i.par.E;
 		
 	out["electronLosses"]->file << fmtE << "\t" << logR 
 											<< "\t" << safeLog10(eSyn) 

@@ -48,7 +48,7 @@ void processes(State& st)
 
 		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
-	});
+	}, { -1, -1, nR });
 
 
 	//#pragma omp parallel sections
@@ -73,12 +73,12 @@ void processes(State& st)
 	timestamp_stream(file);
 
 	file << "log(E/eV)"
-		<< '\t' << "log(t/s)"
+		//<< '\t' << "log(t/s)"
 		<< '\t' << "log(Lsyn/erg s-1)"
 		<< '\t' << "log(Lic/erg s-1)"
 		<< std::endl;
 
-	for (size_t t_ix = 0; t_ix < pps[2].size(); t_ix++) {
+//	for (size_t t_ix = 0; t_ix < pps[2].size(); t_ix++) {
 
 
 		//st.photon.ps.iterate([&st, &Qsyn, &Qic, &file, t_position](const SpaceIterator& i){
@@ -91,8 +91,9 @@ void processes(State& st)
 
 			//		int E_position = i.its[0].peek; //NO ESTA BIEN ESTO
 
+			int t_ix = nR;
 			double E = pps[0][E_ix];
-			double t = pps[2][t_ix];
+			double t = pps[2][t_ix];  //t es el ultimo valor
 
 			double Elab = E*Dlorentz; //Dlorentz=delta
 
@@ -111,7 +112,7 @@ void processes(State& st)
 
 		}
 
-	}
+	//}
 	file.close();
 
 	show_message(msgEnd, Module_luminosities);

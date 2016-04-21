@@ -23,9 +23,9 @@ double jetRadius(double z, double openingAngle)
 double eEmax(double z, double B)
 {
 	double Reff = 10.0*Rsp;
-	double vel = cLight;
+	double vel_lat = cLight*openingAngle;
 
-	double Emax_ad = accEfficiency*3.0*z*cLight*electronCharge*B / vel;
+	double Emax_ad = accEfficiency*3.0*jetRadius(z,openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 	double Emax_hillas = electronCharge*B*Reff;
 	double min1 = std::min(Emax_syn, Emax_syn);
@@ -94,15 +94,15 @@ void setParameters(void )
 
 	rmin = 1.0*pc;
 	rmax = 1.0e2*pc;
-	nR = 10;
+	nR = 20;
 
 	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
 //	timeMin = 1.0e-2; 
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	nEnergies = 12;        //massive particles
-	nPhotonEnergies = 20;  //259;  //photons
+	nEnergies = 50;        //massive particles
+	//nPhotonEnergies = 20;  //259;  //photons
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)

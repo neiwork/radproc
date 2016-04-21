@@ -6,9 +6,12 @@
 
 
 
-double adiabaticLosses(double E, double z, double vel)  //en [erg/s]
+double adiabaticLosses(double E, double z, double vel_lat)  //en [erg/s]
 {
-	return 2.0*vel*E / (3.0*z);
+	double jetRadius = z*openingAngle;
+
+	return 2.0*Gamma*(vel_lat*E / (3.0*jetRadius));
+	//termina quedando return 2.0*cLight*E / (3.0*z);
 }
 
 
