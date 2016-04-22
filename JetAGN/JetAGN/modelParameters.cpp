@@ -86,7 +86,7 @@ void setParameters(void )
 
 //Data of photons
 
-	photonLogEmin = -2.0;
+	photonLogEmin = -4.0;
 	photonLogEmax = 12.0;
 
 	targetPhotonEmin = pow(10.0,photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
@@ -102,7 +102,7 @@ void setParameters(void )
 //	nTimes = 50;
 
 	nEnergies = 50;        //massive particles
-	//nPhotonEnergies = 20;  //259;  //photons
+	nPhotonEnergies = 30;  //
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)

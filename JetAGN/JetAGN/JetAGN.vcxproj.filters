@@ -38,13 +38,14 @@
     <ClCompile Include="messages.cpp">
       <Filter>extras</Filter>
     </ClCompile>
-    <ClCompile Include="injection.cpp">
-      <Filter>losses</Filter>
-    </ClCompile>
     <ClCompile Include="distribution_old.cpp">
       <Filter>distribution</Filter>
     </ClCompile>
     <ClCompile Include="nonThermalLuminosity.cpp" />
+    <ClCompile Include="checkPower.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
+    <ClCompile Include="injection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -82,6 +83,9 @@
       <Filter>extras</Filter>
     </ClInclude>
     <ClInclude Include="nonThermalLuminosity.h" />
+    <ClInclude Include="checkPower.h">
+      <Filter>distribution</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

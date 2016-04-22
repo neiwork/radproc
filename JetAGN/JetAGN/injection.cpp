@@ -20,11 +20,14 @@ double powerLaw(double E, double Emin, double Emax)
 double normalization(double z, double t, double Emin, double Emax)
 {
 
-	double integral = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
+	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
 	});  //integra E*Q(E)  entre Emin y Emax
 
-	double Q0 = nonThermalLuminosity() / integral;  //factor de normalizacion de la inyeccion
+	double jetRadius = rmin*openingAngle;
+	double vol = pi*P2(jetRadius)*rmin;  //volumen de la primer celda
+
+	double Q0 = nonThermalLuminosity() / (int_E*vol);  //factor de normalizacion de la inyeccion
 	return Q0;
 }
 

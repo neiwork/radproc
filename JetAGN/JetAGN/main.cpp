@@ -9,6 +9,8 @@
 #include "processes.h"
 ////#include "photonDistribution.h"
 
+#include "checkPower.h"
+
 #include "write.h"
 #include "checks.h"
 
@@ -37,14 +39,19 @@ int main ()
 
 	injection(model.electron, model);
 
+	checkInyectedPower(model.electron.injection, nR);
+
 //	writeAllSpaceParam("electronInj.txt", model.electron.injection);
 //	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
 	
 	distribution(model.electron, model);
+
+	
+
 	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
-	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, 4);
-	writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, 6);
-	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nTimes);
+	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
+	writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
+	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
 	//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades

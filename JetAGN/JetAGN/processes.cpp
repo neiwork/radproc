@@ -83,7 +83,7 @@ void processes(State& st)
 
 		//st.photon.ps.iterate([&st, &Qsyn, &Qic, &file, t_position](const SpaceIterator& i){
 
-		for (size_t E_ix = 0; E_ix < pps[0].size(); E_ix++) {
+		for (size_t E_ix = 0; E_ix < pps[0].size(); E_ix++) {  //estas son las energías del foton, no las del electron
 
 			//E*L(E) = delta^4 E'*L'(E') and E=delta*E'
 			//variables primadas ->FF
@@ -105,7 +105,7 @@ void processes(State& st)
 
 			double fmtE = log10(Elab / 1.6e-12);
 
-			file << fmtE << '\t' << log10(t)
+			file << fmtE //<< '\t' << log10(t)
 				<< '\t' << safeLog10(LsynLab)
 				<< '\t' << safeLog10(LicLab)
 				<< std::endl;
@@ -128,8 +128,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 	Vector& z = pps.dimensions[1]->values; 
 
 	for (size_t i = 0; i < z.size()-1; ++i) { //no llego al ultimo
-	//for (int i = 0; i < n; ++i)
-		//{
+
 //				double dx = x*(x_int - 1);
 			double dz = z[i+1] - z[i];
 
