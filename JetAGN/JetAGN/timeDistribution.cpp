@@ -115,10 +115,10 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 			/////////////////// ya calcule el tau ////////////////////////////
 			double tmin = st.electron.ps[2][0]; //el siguiente if es para no interpolar fuera del rango
 			if (t - tau < tmin){
-				inj = p.injection.interpolate({ Ep, r, tmin }); //paso los valores E,r,t en donde quiero evaluar Q
+				inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, tmin } }); //paso los valores E,r,t en donde quiero evaluar Q
 			}
 			else{
-				inj = p.injection.interpolate({ Ep, r, t - tau }); //paso los valores E,r,t en donde quiero evaluar Q
+				inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, t - tau } }); //paso los valores E,r,t en donde quiero evaluar Q
 			}
 			//t = i.par.T;
 			//p.ps[1][z] da el valor de la dim r en la posicion z (que le pase)		
@@ -142,7 +142,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 		t_carac = min(t_cool, t); // min(t_cool, t_esc); //min(t_esc, Time[j]));
 
-		inj = p.injection.interpolate({ Ee, r, t });//  p.injection.get(i);// injection[j*(ne + 1) + i];  VER
+		inj = p.injection.interpolate({ { DIM_E, Ee }, { DIM_R, r }, { DIM_T, t } });//  p.injection.get(i);// injection[j*(ne + 1) + i];  VER
 	
 		dist = inj*t_carac; // t_esc;  //t_carac;  //exp(-tau*escapeTime(Ep,particle));
 

@@ -3,6 +3,10 @@
 #include <fmath\mathematics.h>
 #include <fparticle\Particle.h>
 
+const DimensionCoord
+	DIM_E = 0,
+	DIM_R    = 1,
+	DIM_T   = 2;
 
 /* define the inital values of the global parameters*/
 void setParameters(void );

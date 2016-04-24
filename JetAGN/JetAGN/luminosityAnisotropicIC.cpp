@@ -50,7 +50,7 @@ double fLumi(double x, double theta, double y, double E, double r, const Particl
 {
 	double t = p.ps.current->par.T;
 
-	double distCreator = p.distribution.interpolate({ x, r, t});// VER
+	double distCreator = p.distribution.interpolate({ { DIM_E, x }, { DIM_R, r }, { DIM_T, t } });// VER
 
 //	double distCreator = p.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);
 

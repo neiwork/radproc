@@ -262,9 +262,9 @@ void testMultiDimensionalInterpolate(){
 
 	std::cout << std::endl;
 	
-	m.interpolate({0.1,0.5,0});
 
-
-
-
+	SpaceCoord p({ 0, 0, 0 });
+	
+	m.interpolate({ { 0, 0.1 }, { 1, 0.5 }},&p);
+	m.interpolate({ { 0, 0.1 }, { 1, 0.5 }, { 2, 0 } });
 }

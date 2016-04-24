@@ -51,7 +51,7 @@ void distribution(Particle& p, State& st)
 				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
 					//if (i.its[2].canPeek(-1)) 
 
-					double dist = N2.interpolate({ Eeff, r, i.its[2].peek(-1) });
+					double dist = N2.interpolate({ { DIM_E, Eeff }, { DIM_R, r }, { DIM_T, i.its[2].peek(-1) } });
 					double ratioLosses = losses(Eeff, r, p, st) / losses(E, r, p, st);
 					dist2 = dist*ratioLosses;
 				}

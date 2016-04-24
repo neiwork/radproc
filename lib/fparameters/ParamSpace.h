@@ -57,6 +57,8 @@ public:
 	std::vector<DimensionCoord> dims;
 
 	SpaceCoord(const ParamSpace& ps);
+	SpaceCoord(const size_t dimensions);
+	SpaceCoord(std::initializer_list<DimensionCoord> dims);
 
 	const DimensionCoord& operator[](const size_t& index) const;
 
@@ -99,7 +101,6 @@ public:
 	}
 };
 
-
 class ParamSpaceValues {
 public:
 	const ParamSpace& ps;
@@ -123,7 +124,14 @@ public:
 
 	std::function<double(double)> dimInterpolator(int dimIx);
 
-	double interpolate(std::initializer_list<double> dimValues) const;
+	class InterpolateDim {
+	public:
+		DimensionCoord dim;
+		double value;
+		InterpolateDim(DimensionCoord d, double v) :dim(d), value(v) {}
+	};
+
+	double interpolate(std::initializer_list<InterpolateDim> dimValues, const SpaceCoord* fallback=0) const;
 
 	// debug:
 		void debug_dump();
@@ -155,14 +163,3 @@ public:
 	}
 
 };
-
-//class DimInterpolate : public Fun {
-//public:
-//
-//	const Dimension& dim;
-//	const ParamSpaceValues& values;
-//
-//	DimInterpolate(const Dimension& dim, const ParamSpaceValues& values);
-//	virtual double call(double v);
-//
-//};

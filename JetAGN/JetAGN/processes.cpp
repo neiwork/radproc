@@ -137,7 +137,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 			double E = pps[0][E_ix];
 			double T = pps[2][t_ix];
 
-			double emissivity = psv.interpolate({ E, z[i], T });
+			double emissivity = psv.interpolate({ { DIM_E, E }, { DIM_R, z[i] }, { DIM_T, T } });
 
 			double L1 = 2.0*pi*P2(jetR)*emissivity*dz;
 
