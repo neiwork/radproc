@@ -94,15 +94,15 @@ void setParameters(void )
 
 	rmin = 1.0*pc;
 	rmax = 1.0e2*pc;
-	nR = 20;
+	nR = 2;
 
 	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
 //	timeMin = 1.0e-2; 
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	nEnergies = 50;        //massive particles
-	nPhotonEnergies = 30;  //
+	nEnergies = 10;        //massive particles
+	nPhotonEnergies = 10;  //
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)
@@ -149,28 +149,11 @@ double blackBody(double E, double r)
 		(exp(E / Epeak) - 1))*P2(starR / r);
 }
 
-//double photonPowerLaw(double E)
-//{
-//	double photonIndex = 2.2;
-//	double Aph         = 7.9e8;  // esta es la cte que normaliza la distribucion de fotones termicos
-//	double photonEmin  = 0.2e3*1.6e-12;  //photonEmin = 0.15 KeV 
-//	double cutEnergy   = 200.0e3*1.6e-12;   //cutEnergy  = 150 KeV 
-//
-//	return Aph*pow(E,(-photonIndex))*exp(-E/cutEnergy)*exp(-photonEmin/E);
-//}
-//
-//double diskBlackBody(double E)
-//{
-//	return 8*pi*P2(E)/(P3(planck*cLight)*(exp(E/diskT)-1));	
-//}
-//
-//
-//double thermalPF(double E)   //en [erg^-1 cm^-3]
-//{
-//	return photonPowerLaw(E)+diskBlackBody(E);
-//}
-//
-//
+
+
+
+
+
 //double starBlackBody (double E, double r)
 //{
 //	//double E = i.par.E;
@@ -181,8 +164,6 @@ double blackBody(double E, double r)
 //	return 8.0*pi*P2(E)*exp(-Ephmin / E) / ((P3(planck*cLight))*
 //		(exp(E / Epeak) - 1))*P2(starR / r);
 //}
-
-
 
 
 /*

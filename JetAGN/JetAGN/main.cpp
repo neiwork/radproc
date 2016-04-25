@@ -47,11 +47,10 @@ int main ()
 	distribution(model.electron, model);
 
 	
-
-	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
-	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-	writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
-	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
+	//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+	//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
+	//writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
+	//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
 	//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades

@@ -46,11 +46,20 @@ double difNlum(double theta, double w, double w0, double E, double r)   //funcio
 }
 
 
-double fLumi(double x, double theta, double y, double E, double r, const Particle& p)
+double fLumi(double x, double theta, double y, double E,  const Particle& p, const SpaceCoord& distCoord)
 {
-	double t = p.ps.current->par.T;
+	//double t = p.ps.current->par.T;
 
-	double distCreator = p.distribution.interpolate({ { DIM_E, x }, { DIM_R, r }, { DIM_T, t } });// VER
+	double r = distCoord.dims[1]; //VER!!
+
+	double distCreator;
+
+	if (x < p.emin() || x > p.emax()){
+		distCreator = 0.0;
+	}
+	else{
+		distCreator = p.distribution.interpolate({ { 0, x }, { 1, r } }); //  { DIM_T, t } });// VER
+	}
 
 //	double distCreator = p.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);
 
@@ -59,12 +68,14 @@ double fLumi(double x, double theta, double y, double E, double r, const Particl
 }
 
 
-double luminosityAnisotropicIC(double E, Particle& particle, double r)
+double luminosityAnisotropicIC(double E, Particle& particle, const SpaceCoord& distCoord)
 {
+	double r = distCoord.dims[1]; //VER!!
+
 	double mass = particle.mass;
 
-	double a = pow(10.0,particle.logEmin)*1.6e-12;      //energia minima de los electrones
-	double b = pow(10.0, particle.logEmax)*1.6e-12;    //energia maxima de los electrones
+	double a = particle.emin(); //energia minima de los electrones
+	double b = particle.emax();    //energia maxima de los electrones
 		
 	double integral =
 		intTriple(E, a, b, r,
@@ -75,8 +86,8 @@ double luminosityAnisotropicIC(double E, Particle& particle, double r)
 			{
 				return dAniLum(w0, theta, E);
 			},
-			[E, r, &particle](double x, double t, double y){
-				return fLumi(x, t, y, E, r, particle);
+			[E, r, &particle, &distCoord](double x, double t, double y){
+				return fLumi(x, t, y, E, particle, distCoord);
 			});
 			
 	return integral*4.0*pi*cLight*P2(E); //en erg/s/cm3

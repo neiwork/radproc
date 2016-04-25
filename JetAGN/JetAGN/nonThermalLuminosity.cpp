@@ -42,7 +42,7 @@ double dLnt(double z)  //esta es la función que depende del número de estrellas 
 
 	double f = Sj*starDensity(z)*Lnt;
 
-	return f;   //VER ingrese esto de prueba
+	return f;   
 
 }
 

@@ -4,7 +4,7 @@
 
 
 /* this is the Synchrotron luminosity without Synchrotron self absorption; erg/s/cm^3*/ 
-double luminositySynchrotron(double E, const Particle& c);
+double luminositySynchrotron(double E, const Particle& c, const SpaceCoord& distCoord);
 
 /* this is the Synchrotron luminosity with Synchrotron self absorption*/ 
 //double luminositySynchrotron_conSSA(double E, const Particle& creator);
