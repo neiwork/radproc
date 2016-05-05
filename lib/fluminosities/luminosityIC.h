@@ -2,4 +2,7 @@
 
 #include <fparticle\particle.h>
 
-double luminosityIC(double E, const Particle& creator, fun1 tpf);
+
+/*erg/s/cm^3 */
+
+double luminosityIC(double E, const Particle& creator, const SpaceCoord& distCoord, fun1 tpf, double phEmin);

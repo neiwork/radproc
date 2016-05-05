@@ -2,8 +2,8 @@
 
 //#include "crossSectionInel.h"
 //#include "dataLosses.h"
-//#include <fmath\RungeKutta.h>
-#include "modelParameters.h"
+#include "targetFields.h"
+//#include "modelParameters.h"
 #include <fmath\physics.h>
 
 
@@ -41,13 +41,13 @@ double difN(double theta, double w, double w0, double E, double r)   //funcion a
 	// eps -> variable de afuera
 	// eps_0 -> variable integracion
 
-	double b = b_theta(theta, w0, E);
+	double b = b_theta(theta, w0, E); 
 	double z = w / E;
 
 	//defino F(z)
 	double F = 1.0 + P2(z) / (2.0*(1.0 - z)) - 2.0*z / (b*(1.0 - z)) + 2.0*P2(z) / P2(b*(1.0 - z));
 
-	double nph = blackBody(w, r);
+	double nph = starBlackBody(w, r);
 	double invariant = nph / w;
 
 	double result = (3.0*thomson / (16.0*pi)) * P2(electronMass*cLight2 / E) * invariant * F;

@@ -54,10 +54,10 @@ void derive_parameters_r(double E, double z, double t)
 void setParameters(void )
 {
 	
-	double mBH = 14.8*1.99e33;  //black hole mass
+	double mBH = 1.0e7*solarMass;  //black hole mass
 	double rg = mBH*gravitationalConstant / cLight2;
 
-	double z0 = 100.0*rg; //50 * Rschw
+	double z0 = 50.0*rg; //50 * Rschw  //OJO! si cambian, cambiar tmb nonthermalLuminosity!!
 
 	Lj = 1.0e43;
 	openingAngle = 0.1;  //jet opening angle
@@ -86,15 +86,15 @@ void setParameters(void )
 
 //Data of photons
 
-	photonLogEmin = -4.0;
+	photonLogEmin = -6.0;
 	photonLogEmax = 12.0;
 
 	targetPhotonEmin = pow(10.0,photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
 	targetPhotonEmax = pow(10.0,photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV
 
 	rmin = 1.0*pc;
-	rmax = 1.0e2*pc;
-	nR = 2;
+	rmax = 1.0e3*pc;
+	nR = 4;
 
 	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
 //	timeMin = 1.0e-2; 
@@ -135,35 +135,6 @@ void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 }
 
 
-
-double blackBody(double E, double r)
-{
-	double starT = 1.0e5; //VER
-	double starR = 1.0e-3*pc;
-
-	double Epeak = boltzmann*starT;
-	double Ephmin = Epeak / 100.0;
-	//double Ephmax = Epeak*10.0;
-
-	return 8.0*pi*P2(E)*exp(-Ephmin / E) / ((P3(planck*cLight))*
-		(exp(E / Epeak) - 1))*P2(starR / r);
-}
-
-
-
-
-
-
-//double starBlackBody (double E, double r)
-//{
-//	//double E = i.par.E;
-//	double Epeak = boltzmann*starT;
-//	double Ephmin = Epeak / 100.0;
-//	//double Ephmax = Epeak*10.0;
-//
-//	return 8.0*pi*P2(E)*exp(-Ephmin / E) / ((P3(planck*cLight))*
-//		(exp(E / Epeak) - 1))*P2(starR / r);
-//}
 
 
 /*

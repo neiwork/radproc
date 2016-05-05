@@ -8,4 +8,4 @@
 #include <fstream>
 
 
-double lossesIC(double E, Particle& particle, fun1 tpf);
+double lossesIC(double E, Particle& particle, fun1 tpf, double phEmin, double phEmax);

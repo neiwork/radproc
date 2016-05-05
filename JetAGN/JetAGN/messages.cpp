@@ -104,12 +104,12 @@ void show_module(ProgramModule module)
             break;
 
 		case Module_electronDistribution:
-            printf("Calculating Electron Distribution ");
+            printf("Electron Distribution ");
             break;
 
 
 		case Module_luminosities:
-			printf("Calculating non-thermal SEDs");
+			printf("Non-thermal SEDs");
 			break;
 
  

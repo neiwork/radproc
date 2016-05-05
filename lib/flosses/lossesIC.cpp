@@ -1,7 +1,7 @@
 #include "lossesIC.h"
 
 #include "crossSectionInel.h"
-#include "dataLosses.h"
+//#include "dataLosses.h"
 #include <fmath\RungeKutta.h>
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
@@ -30,28 +30,22 @@ double fIC(double u,double t, double E, double mass, fun1 tpf)   //funcion a int
 
 	double Erep = mass*cLight2;
 	double r    = t*P2(Erep)/(4*u*E*(E-t));
-	double pepe = tpf(u);
+	double Nterm = tpf(u);
 
-//	double Nterm = tpf(u); //state.targetPhotonField(Ep);
-//	double logE  = log10(u*6.25e11);
-//	double logsalida = log10(Nterm);
-//	std::cout << logE << "\t" << Nterm << std::endl;  //<< log10(E*6.25e11) << "\t"  
-
-	double result = (pepe/u)*(t-u)*(2*r*log(r)+
+	double result = (Nterm/u)*(t-u)*(2*r*log(r)+
        	(1+2*r)*(1-r)+(P2((t/(E-t)))*(1-r))/(2*(1+(t/(E-t)))));
 
 	return  result;
 }
 
-double lossesIC(double E, Particle& particle, fun1 tpf)
+double lossesIC(double E, Particle& particle, fun1 tpf, double phEmin, double phEmax)
 {
 	double mass = particle.mass;
 
 	double constant  = 3*crossSectionThomson(mass)*P2(mass)*pow(cLight,5)/4;
 
-
-	double a  = targetPhotonEmin;      //energia minima de los fotones en erg
-	double b  = 10*targetPhotonEmax;    //energia maxima de los fotones en erg
+	double a  = phEmin;     //energia minima de los fotones en erg
+	double b  = phEmax;     //energia maxima de los fotones en erg
 
 	double integral = RungeKutta(a,b,&cIC,
 		[mass, E](double u){return dIC(u, E, mass);},
@@ -64,8 +58,3 @@ double lossesIC(double E, Particle& particle, fun1 tpf)
 	return de;
 
 	}
-//	double Tmcc = diskT/(mass*cLight2);
-
-//	double deBlackBody = 5.5e17*P3(Tmcc)*E*(log(1+0.55*gamma*Tmcc)/
-//           				(1+25*Tmcc*gamma))*(1+(1.4*gamma*Tmcc/(1+12*
-//     							P2(gamma*Tmcc))));

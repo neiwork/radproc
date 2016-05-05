@@ -1,5 +1,6 @@
 #include "nonThermalLuminosity.h"
 
+#include "targetFields.h"
 #include "modelParameters.h"
 #include <flosses\nonThermalLosses.h>
 #include <fmath\RungeKutta.h>
@@ -8,17 +9,6 @@
 #include <fmath\physics.h>
 
 
-double starDensity(double z)
-{
-	double Nrg = 4.0e7;
-
-	double pseda = 2.0;
-
-	double Astar = Nrg*(3.0 - pseda) / (pow(rmax, (3.0 - pseda)) - pow(rmin, (3.0 - pseda))) / pi;
-
-	double n_s = Astar / pow(z,pseda);
-	return n_s;
-}
 
 double dLnt(double z)  //esta es la función que depende del número de estrellas a tiempo t
 {
@@ -46,9 +36,9 @@ double dLnt(double z)  //esta es la función que depende del número de estrellas 
 
 }
 
-double nonThermalLuminosity ()
+double nonThermalLuminosity(double intRmin, double intRmax)
 {
-	double integral = RungeKuttaSimple(rmin, rmax, dLnt); // (double z){ return dLnt(z, dummie) });
+	double integral = RungeKuttaSimple(intRmin, intRmax, dLnt); // (double z){ return dLnt(z, dummie) });
 	return integral;
 	//return 1.0e38;
 }

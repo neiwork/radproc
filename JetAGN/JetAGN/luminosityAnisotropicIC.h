@@ -8,6 +8,6 @@
 
 
 /* luminosityAnisotropicIC returns the luminosity erg/cm^3/s due to anisotropic IC*/
-double luminosityAnisotropicIC(double E, Particle& particle, const SpaceCoord& distCoord);
+double luminosityAnisotropicIC(double E, Particle& particle, const SpaceCoord& distCoord, double phEmin);
 
 

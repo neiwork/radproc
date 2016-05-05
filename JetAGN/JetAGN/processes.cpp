@@ -1,17 +1,21 @@
 #include "processes.h"
 
-
+#include "targetFields.h"
 #include "write.h"
 #include "messages.h"
 #include "luminosityAnisotropicIC.h"
 #include <fluminosities\luminositySynchrotron.h>
+#include <fluminosities\luminosityIC.h>
 
 
 
 //#include <omp.h>
 #include <fmath\physics.h>
 
-
+double Llab(double Lint)
+{
+	return Lint*pow(Dlorentz, 4.0);
+}
 
 /* Takes [emi] =  erg/s/cm^3 and calculates int(2.0*pi*P2(jetR)*emi dz), returns erg/s  */
 double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_ix)
@@ -49,19 +53,26 @@ void processes(State& st)
 
 	ParamSpaceValues Qsyn(st.photon.ps);
 	ParamSpaceValues Qic(st.photon.ps);
+	ParamSpaceValues QicCMB(st.photon.ps);
 
 	std::ofstream file;
 	file.open("ntLuminosity_.txt", std::ios::out);
 	timestamp_stream(file);
 
+	double EphminS(0.0), EphminCMB(0.0);
+	targetPhotonEnergies(EphminS, EphminCMB);
 
-	st.photon.ps.iterate([&st, &Qsyn, &Qic](const SpaceIterator &i){
+	st.photon.ps.iterate([&st, &Qsyn, &Qic, &QicCMB, &EphminCMB, &EphminS](const SpaceIterator &i){
 
-		double eSyn = luminositySynchrotron(i.par.E, st.electron, i.coord); //estos devuelven erg/s/cm^3, integrar!
-		double eIC = luminosityAnisotropicIC(i.par.E, st.electron, i.coord);
+		double E = i.par.E;
+		double eSyn   = luminositySynchrotron(E, st.electron, i.coord); //estos devuelven erg/s/cm^3, integrar!
+		double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
+		double eICcmb = luminosityIC(E, st.electron, i.coord, 
+			[E](double E){return cmbBlackBody(E); }, EphminCMB);
 
 		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
+		QicCMB.set(i, eICcmb);
 	}, { -1, -1, nR });
 
 
@@ -74,6 +85,7 @@ void processes(State& st)
 		//<< '\t' << "log(t/s)"
 		<< '\t' << "log(Lsyn/erg s-1)"
 		<< '\t' << "log(Lic/erg s-1)"
+		<< '\t' << "log(LicCMB/erg s-1)"
 		<< std::endl;
 
 //	for (size_t t_ix = 0; t_ix < pps[2].size(); t_ix++) {
@@ -93,17 +105,17 @@ void processes(State& st)
 
 			double Elab = E*Dlorentz; //Dlorentz=delta
 
-			double Lsyn = emiToLumi(pps, Qsyn, E_ix, t_ix);
-			double Lic = emiToLumi(pps, Qic, E_ix, t_ix);
+			double Lsyn   = emiToLumi(pps, Qsyn, E_ix, t_ix);
+			double Lic    = emiToLumi(pps, Qic, E_ix, t_ix);
+			double LicCMB = emiToLumi(pps, QicCMB, E_ix, t_ix);
 
-			double LsynLab = Lsyn*pow(Dlorentz, 4.0);
-			double LicLab = Lic*pow(Dlorentz, 4.0);
 
 			double fmtE = log10(Elab / 1.6e-12);
 
 			file << fmtE //<< '\t' << log10(t)
-				<< '\t' << safeLog10(LsynLab)
-				<< '\t' << safeLog10(LicLab)
+				<< '\t' << safeLog10(Llab(Lsyn))
+				<< '\t' << safeLog10(Llab(Lic))
+				<< '\t' << safeLog10(Llab(LicCMB))
 				<< std::endl;
 
 		}

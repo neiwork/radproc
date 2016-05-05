@@ -46,6 +46,7 @@
       <Filter>distribution</Filter>
     </ClCompile>
     <ClCompile Include="injection.cpp" />
+    <ClCompile Include="targetFields.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="checkPower.h">
       <Filter>distribution</Filter>
     </ClInclude>
+    <ClInclude Include="targetFields.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

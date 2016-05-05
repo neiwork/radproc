@@ -24,9 +24,20 @@ double normalization(double z, double t, double Emin, double Emax)
 		return E*powerLaw(E, Emin, Emax);
 	});  //integra E*Q(E)  entre Emin y Emax
 
-	double vol = pi*P2(jetRadius(rmin, openingAngle))*rmin;  //volumen de la primer celda
 
-	double Q0 = nonThermalLuminosity() / (int_E*vol);  //factor de normalizacion de la inyeccion
+	double mBH = 1.0e7*solarMass;  //black hole mass
+	double rg = mBH*gravitationalConstant / cLight2;
+
+	double z0 = 50.0*rg; //50 * Rschw
+
+	double intRmin = rmin;// z0;
+	double intRmax = rmax;// pc;
+
+	//double vol = pi*(P2(jetRadius(intRmax, openingAngle))*intRmax - P2(jetRadius(intRmin, openingAngle))*intRmin) / 3.0;
+		
+	double vol = pi*P2(jetRadius(rmin, openingAngle))*rmin;  //volumen de la primera celda
+
+	double Q0 = nonThermalLuminosity(intRmin, intRmax) / (int_E*vol);  //factor de normalizacion de la inyeccion
 	return Q0;
 }
 
@@ -44,7 +55,6 @@ void injection(Particle& p, State& st)
 		else //if (z_position = 0) solo inyecto particulas en la posicion 0
 		{
 			double factor = 0.0, E = i.par.E, z = i.par.R, t = i.par.T;
-			//double B = i.par.magneticField;  //VER por que esto no funciona
 
 			double Emin = p.emin();
 			double Emax = eEmax(z, magneticField); // 1.6e-12*pow(10.0, p.logEmax);

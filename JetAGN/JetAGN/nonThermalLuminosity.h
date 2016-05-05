@@ -2,4 +2,4 @@
 
 
 
-double nonThermalLuminosity();
+double nonThermalLuminosity(double intRmin, double intRmax);
