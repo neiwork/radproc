@@ -22,7 +22,7 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
-	double Reff = 10.0*Rsp;
+	double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z,openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
@@ -39,6 +39,16 @@ double eEmax(double z, double B)
 		
 }
 
+double stagnationPoint(double z)
+{
+	double Mdot_wind = 1.0e-8*solarMass / yr;
+	double v_wind = 2.0e7;
+
+	double stagPoint = sqrt(Mdot_wind*v_wind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
+
+	return stagPoint;
+
+}
 
 
 void derive_parameters_r(double E, double z, double t)
@@ -47,7 +57,7 @@ void derive_parameters_r(double E, double z, double t)
 	magneticField = fmagneticField(z, B0); 
 	//electronLogEmax = log10(eEmax(z, magneticField));
 
-	//	density = nWindDensity(r, starR); //el primero lo calculo en r = Rc ?
+	//Rsp = stagnationPoint(z);
 }
 
 
@@ -64,7 +74,7 @@ void setParameters(void )
 
 	B0 = sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
 
-	Rsp = 1.0e14; //distance to stagnation point
+//	Rsp = 1.0e14; //distance to stagnation point
 
 	double inc = 10.0*pi / 180; //ang obs del jet
 	Gamma = 10;
@@ -94,7 +104,7 @@ void setParameters(void )
 
 	rmin = 1.0*pc;
 	rmax = 1.0e3*pc;
-	nR = 4;
+	nR = 2;
 
 	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
 //	timeMin = 1.0e-2; 

@@ -68,6 +68,7 @@
   <ItemGroup>
     <ClCompile Include="checkPower.cpp" />
     <ClCompile Include="checks.cpp" />
+    <ClCompile Include="cilindricIntegral.cpp" />
     <ClCompile Include="distribution.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -105,6 +106,7 @@
   <ItemGroup>
     <ClInclude Include="checkPower.h" />
     <ClInclude Include="checks.h" />
+    <ClInclude Include="cilindricIntegral.h" />
     <ClInclude Include="distribution.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

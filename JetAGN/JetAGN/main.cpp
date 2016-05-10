@@ -39,7 +39,7 @@ int main ()
 
 	injection(model.electron, model);
 
-	checkInyectedPower(model.electron.injection, nR);
+	checkInyectedPower(model.electron.injection, 0);
 
 //	writeAllSpaceParam("electronInj.txt", model.electron.injection);
 //	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
@@ -47,10 +47,10 @@ int main ()
 	distribution(model.electron, model);
 
 	
-	writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+	//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
 	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
 	writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
-	writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
+	//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
 	//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades
@@ -58,36 +58,8 @@ int main ()
 	//	return model.electron.injection.get(i);
 	//});
 
-	processes(model);
+	//processes(model, "ntLuminosity_LR2.txt");
 
 	return 0;
 }
-
-
-
-
-
-
-	//show_message(msgStart, Module_primaryInjection);
-
-	////injectionAndDistribution(model.electron, model);
-	//injectionAndDistribution(model.proton, model);
-	//writeDistribution("protonDist.txt", model.proton);
-
-	//show_message(msgEnd, Module_primaryInjection);
-
-	//// Luminosidad primaria
-	//show_message(msgStart, Module_primaryLuminosity); 
-	//injection(model.photon, model);
-	//show_message(msgEnd, Module_primaryLuminosity); 
-	//
-	//// Distribucion fotones
-	////photondistribution(model);
-
-	
-
-	//show_message(msgEnd, Module_Main);
-
-
-
 

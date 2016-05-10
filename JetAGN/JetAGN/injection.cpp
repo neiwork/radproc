@@ -1,6 +1,7 @@
 #include "injection.h"
 
 #include "messages.h"
+#include <iostream>
 #include "modelParameters.h"
 #include "nonThermalLuminosity.h"
 #include <fparameters\parameters.h>
@@ -17,27 +18,19 @@ double powerLaw(double E, double Emin, double Emax)
 }
 
 
-double normalization(double z, double t, double Emin, double Emax)
+double normalization(Particle& p, const SpaceCoord& distCoord)
 {
+	int i_z = distCoord[1];
+	double z = p.ps[1][i_z];
+
+	double Emin = p.emin();
+	double Emax = eEmax(z, magneticField); 
 
 	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
 	});  //integra E*Q(E)  entre Emin y Emax
-
-
-	double mBH = 1.0e7*solarMass;  //black hole mass
-	double rg = mBH*gravitationalConstant / cLight2;
-
-	double z0 = 50.0*rg; //50 * Rschw
-
-	double intRmin = rmin;// z0;
-	double intRmax = rmax;// pc;
-
-	//double vol = pi*(P2(jetRadius(intRmax, openingAngle))*intRmax - P2(jetRadius(intRmin, openingAngle))*intRmin) / 3.0;
-		
-	double vol = pi*P2(jetRadius(rmin, openingAngle))*rmin;  //volumen de la primera celda
-
-	double Q0 = nonThermalLuminosity(intRmin, intRmax) / (int_E*vol);  //factor de normalizacion de la inyeccion
+	
+	double Q0 = dLnt(z) / (int_E);  //factor de normalizacion de la inyeccion
 	return Q0;
 }
 
@@ -46,26 +39,40 @@ void injection(Particle& p, State& st)
 {
 	show_message(msgStart, Module_electronInjection);
 
-	p.injection.fill([&p, &st](const SpaceIterator& i){
+	//volumen total del jet
+	double vol = (pi / 3.0)*(P2(jetRadius(rmax, openingAngle))*rmax
+		- P2(jetRadius(rmin, openingAngle))*rmin);
+
+	double z_int = pow((rmax / rmin), (1.0 / nR));
+
+
+	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
 		
-		if (i.its[1].canPeek(-1)) 
+		if (i.its[2].canPeek(-1)) 
 		{
 			return 0.0;
 		}
-		else //if (z_position = 0) solo inyecto particulas en la posicion 0
+		else //if (t_position = 0) solo inyecto particulas a tiempo 0
 		{
-			double factor = 0.0, E = i.par.E, z = i.par.R, t = i.par.T;
-
 			double Emin = p.emin();
-			double Emax = eEmax(z, magneticField); // 1.6e-12*pow(10.0, p.logEmax);
-			double Q0 = normalization(0, 0, Emin, Emax); //VER en principio no depende de z ni t
+			double Emax = eEmax(i.par.R, magneticField); 
+			double Q0 = normalization(p, i.coord);
 		
-			double total = powerLaw(E, Emin, Emax)*Q0;  //VER calculo el Q0 para no repetir
+			double z = i.par.R;			
+			double dz = z*(z_int - 1);
+			//volumen de la celda i
+			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
+
+			double total = powerLaw(i.par.E, Emin, Emax)*Q0*vol_i/vol;
+
 			return total;
 		}
 
-	//	p.injection.set(i, total);
 	});
+
+	double Lnt_total = nonThermalLuminosity(rmin, rmax);
+	
+	std::cout << "Lnt total" << '\t' << Lnt_total << std::endl;
 
 	show_message(msgEnd, Module_electronInjection);
 }

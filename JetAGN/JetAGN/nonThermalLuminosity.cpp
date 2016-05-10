@@ -2,8 +2,10 @@
 
 #include "targetFields.h"
 #include "modelParameters.h"
+#include "cilindricIntegral.h"
+
 #include <flosses\nonThermalLosses.h>
-#include <fmath\RungeKutta.h>
+//#include <fmath\RungeKutta.h>
 #include <fparameters\parameters.h>
 
 #include <fmath\physics.h>
@@ -17,7 +19,8 @@ double dLnt(double z)  //esta es la función que depende del número de estrellas 
 	double E = P2(electronMass*cLight2) / (boltzmann*Tstar);
 
 	double Sj = pi*P2(jetRadius(z, openingAngle));
-	double So = 100.0*pi*P2(Rsp);
+	double stagPoint = stagnationPoint(z);
+	double So = 100.0*pi*P2(stagPoint);
 
 	double vel_lat = cLight*openingAngle;
 
@@ -30,7 +33,7 @@ double dLnt(double z)  //esta es la función que depende del número de estrellas 
 
 	double Lnt = accEfficiency*Lj*(So / Sj)*frad*pow(Dlorentz, 4) / P2(Gamma);
 
-	double f = Sj*starDensity(z)*Lnt;
+	double f = starDensity(z)*Lnt; //saque el Sj
 
 	return f;   
 
@@ -38,7 +41,7 @@ double dLnt(double z)  //esta es la función que depende del número de estrellas 
 
 double nonThermalLuminosity(double intRmin, double intRmax)
 {
-	double integral = RungeKuttaSimple(intRmin, intRmax, dLnt); // (double z){ return dLnt(z, dummie) });
+	double integral = intCilindric(intRmin, intRmax, dLnt); // (double z){ return dLnt(z, dummie) });
 	return integral;
 	//return 1.0e38;
 }

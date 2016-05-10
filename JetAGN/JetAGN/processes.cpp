@@ -17,7 +17,10 @@ double Llab(double Lint)
 	return Lint*pow(Dlorentz, 4.0);
 }
 
-/* Takes [emi] =  erg/s/cm^3 and calculates int(2.0*pi*P2(jetR)*emi dz), returns erg/s  */
+/* Takes [emi] =  E^2*[Q(E)] and calculates int(2.0*pi*P2(jetR)*emi dz); 
+for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
+
+
 double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_ix)
 {
 	double sum = 0.0;
@@ -27,18 +30,20 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 	for (size_t i = 0; i < z.size() - 1; ++i) { //no llego al ultimo
 
 		//double dx = x*(x_int - 1);
-		double dz = z[i + 1] - z[i];
+		//double dz = z[i + 1] - z[i];
 
-		double jetR = jetRadius(z[i], openingAngle);
+		//double jetR = jetRadius(z[i], openingAngle);
 
 		double E = pps[0][E_ix];
 		double T = pps[2][t_ix];
 
 		double emissivity = psv.interpolate({ { DIM_E, E }, { DIM_R, z[i] }, { DIM_T, T } });
 
-		double L1 = 2.0*pi*P2(jetR)*emissivity*dz;
+		//double L1 = 2.0*pi*P2(jetR)*emissivity*dz;
+		//la integral de vol la reemplace por una suma sobre todo los z, 
+		//ya que N(E) esta multiplicado por el volumen de cada celda
 
-		sum = sum + L1;
+		sum = sum + emissivity;
 
 	}
 
@@ -46,9 +51,9 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 }
 
 
-
-void processes(State& st)
+void processes(State& st, const std::string& filename)
 {
+
 	show_message(msgStart, Module_luminosities);
 
 	ParamSpaceValues Qsyn(st.photon.ps);
@@ -56,7 +61,7 @@ void processes(State& st)
 	ParamSpaceValues QicCMB(st.photon.ps);
 
 	std::ofstream file;
-	file.open("ntLuminosity_.txt", std::ios::out);
+	file.open(filename.c_str(), std::ios::out);
 	timestamp_stream(file);
 
 	double EphminS(0.0), EphminCMB(0.0);
@@ -88,11 +93,6 @@ void processes(State& st)
 		<< '\t' << "log(LicCMB/erg s-1)"
 		<< std::endl;
 
-//	for (size_t t_ix = 0; t_ix < pps[2].size(); t_ix++) {
-
-
-	    //estas son las energías del foton, no las del electron
-		//st.photon.ps.iterate([&st, &Qsyn, &Qic, &file, t_position](const SpaceIterator& i){
 		for (size_t E_ix = 0; E_ix < pps[0].size(); E_ix++) {  
 
 			//E*L(E) = delta^4 E'*L'(E') and E=delta*E'

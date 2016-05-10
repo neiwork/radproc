@@ -25,29 +25,28 @@ void distribution(Particle& p, State& st)
 
 	for (int t_ix = 0; t_ix < p.ps[2].size(); t_ix++) {
 		 
-		for (int z_ix = 0; z_ix <= t_ix; z_ix++) { //z_ix < p.ps[1].size(); z_ix++) {
+		for (int z_ix = 0; z_ix < p.ps[1].size(); z_ix++) { //z_ix <= t_ix; z_ix++) {
 
 			N2.ps.iterate([&p, &N2](const SpaceIterator& i){
 				N2.set(i, p.distribution.get(i));  //copia del N  
 			});      //ver si quizas lo puedo copiar en t-1 que es donde lo necesito
 
 			p.ps.iterate([&p, &st, &N2, &N12, &z_ix, &t_ix](const SpaceIterator& i){
-
-				double Emax = pow(10.0, p.logEmax)*1.6e-12;
-
+				
 				double E = i.par.E;
 				double r = i.par.R;
 				double t = i.par.T;
+
+				double Emax = eEmax(r, magneticField);
 				
 				double Eeff = effectiveE(E, Emax, t, r, p, st);
 				double dist1(0.0), dist2(0.0);
 
-				if (z_ix == 0)
+				if (t_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
 				{
 					dist1 = timeDistribution(E, r, t, p, st, Eeff);
 				}
-
-				if (t_ix != 0)
+				else //if (t_ix != 0)
 				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
 					//if (i.its[2].canPeek(-1)) 
 
@@ -60,7 +59,6 @@ void distribution(Particle& p, State& st)
 
 			}, { -1, z_ix, t_ix });
 
-			//VER: aca creo qeu tengo que copiar algo
 
 			p.ps.iterate([&p, &st, &N12, &z_ix, &t_ix](const SpaceIterator& i){
 
@@ -75,8 +73,7 @@ void distribution(Particle& p, State& st)
 				{
 					SpaceCoord coord = i.moved({ 0, -1, 0 }); //N(ri-1)
 					double ni_1 = p.distribution.get(coord); //este lo calculo con el p.dist porque ya esta en r-1
-
-					
+				
 					double ri_1 = i.its[1].peek(-1);
 					
 					if (i.its[1].canPeek(1)) { rip1 = i.its[1].peek(+1); }

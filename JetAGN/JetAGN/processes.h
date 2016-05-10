@@ -4,4 +4,4 @@
 
 #include "State.h"
 
-void processes(State& st);
+void processes(State& st, const std::string& filename);

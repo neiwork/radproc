@@ -20,7 +20,7 @@ void initializeCrossingTimePoints(Vector& time, double rMin, double rMax);
 /* change_parameters changes the values of some parameters for the iteration on variable r*/
 void derive_parameters_r(double E, double R, double T);
 
-
+double stagnationPoint(double z);
 
 double jetRadius(double z, double openingAngle);
 

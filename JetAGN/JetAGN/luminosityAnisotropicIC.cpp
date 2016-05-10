@@ -9,17 +9,25 @@
 
 
 
-double cAniLum(double w0, double theta, double E, double phEmin)   //limite inferior
+double cAniLum(double w, double theta, double E, double phEmin)   //limite inferior
 {
-	double s = b_theta(theta, w0, E);  //reemplazo el Gamma = 4*u*E / P2(mass*cLight2), para incuir la dep theta
-	double inf =  s*E / (1 + s);     
+	double s = b_theta(theta, w, E);  //reemplazo el Gamma = 4*u*E / P2(mass*cLight2), para incuir la dep theta
+	double inf =  E/(1.0-w/E)/s;     //w/E-1.0
 	
 	inf = std::max(inf, phEmin);
-	
+
 	return inf;   ////puse la condicion Ega < s*Ee/1+s, recordar que ahora E = Ega
+
+	//double Erep = mass*cLight2;
+
+	//double condition = E*u - P2(u);  //Ega*Ee-Ee^2
+
+	//double inf = E*P2(Erep) / (4.0*condition);
+
+
 }
 
-double dAniLum(double w0, double theta, double E)   //limite superior     
+double dAniLum(double w, double theta, double E)   //limite superior     
 {
 	return E;  //esta es la condicion epsilon < Ega	= E
 }
@@ -93,6 +101,8 @@ double luminosityAnisotropicIC(double E, Particle& particle, const SpaceCoord& d
 				return fLumi(x, t, y, E, particle, distCoord);
 			});
 			
-	return integral*4.0*pi*cLight*P2(E); //en erg/s/cm3
+	double result = integral*4.0*pi*cLight*P2(E);
+	
+	return result > 0.0 ? result : 0.0; //en erg/s/cm3
 
 	}

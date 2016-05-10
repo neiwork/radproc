@@ -70,7 +70,7 @@ double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como arg
 
 		}
 
-		return (J1 + 2 * J2 + 4 * J3) / 3;
+		return (J1 + 2.0 * J2 + 4.0 * J3) / 3.0;
 	}
 	else
 	{
@@ -94,7 +94,7 @@ double RungeKuttaSimple(double a, double b, fun1 f)
 
 		for (int i = 0; i < n; ++i)
 		{
-			double dx = x*(x_int - 1);
+			double dx = x*(x_int - 1.0);
 
 			double L1 = f(x)*dx;
 
@@ -105,5 +105,5 @@ double RungeKuttaSimple(double a, double b, fun1 f)
 		}
 	}
 
-	return (J1 + 2 * J2 + 4 * J3) / 3;
+	return (J1 + 2.0 * J2 + 4.0 * J3) / 3.0;
 }

@@ -40,6 +40,8 @@ const double EV_TO_ERG				= 1.602e-12;			   // eV to erg conversion
 
 const double pc						= 3.09e18;			 	// parsec to cm
 
+const double yr = 3.15e7;			 	// s in a year
+
 
 ///Particle Data 
 

@@ -47,6 +47,7 @@
     </ClCompile>
     <ClCompile Include="injection.cpp" />
     <ClCompile Include="targetFields.cpp" />
+    <ClCompile Include="cilindricIntegral.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -88,6 +89,7 @@
       <Filter>distribution</Filter>
     </ClInclude>
     <ClInclude Include="targetFields.h" />
+    <ClInclude Include="cilindricIntegral.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

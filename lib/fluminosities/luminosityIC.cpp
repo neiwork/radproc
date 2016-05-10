@@ -15,14 +15,7 @@ double cICemi(double u, double E, double mass, double phEmin)  //limite inferior
 
 	double condition = E*u-P2(u);  //Ega*Ee-Ee^2
 
-	double inf;
-
-	if (condition > 0.0){
-		inf = E*P2(Erep)/(4.0*condition);
-	}
-	else {
-		inf = -E*P2(Erep)/(4.0*condition);
-	}
+	double inf = E*P2(Erep) / (4.0*condition);
 
 	return std::max(phEmin,inf);  //puse la condicion Ega < s*Ee/1+s
 }

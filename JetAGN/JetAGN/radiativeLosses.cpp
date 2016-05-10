@@ -42,7 +42,7 @@ void radiativeLosses(State& st)
 
 		double B = magneticField; // i.par.magneticField; VER por qué no funciona
 
-		double Reff = 10.0*Rsp;
+		double Reff = 10.0*stagnationPoint(i.par.R);
 		double vel_lat = cLight*openingAngle;
 
 		double E = i.par.E;

@@ -5,7 +5,7 @@ Parameters::Parameters() {
 	density = 0.0;
 	radius = 0.0;   //cambie Rc por radius, asi que no va a compilar las cosas viejas
 	volume = 0.0;
-	Rsp = 0.0;
+	//Rsp = 0.0;
 	Lj = 0.0;
 
 	//particle injection

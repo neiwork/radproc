@@ -8,16 +8,12 @@
 //#include "pairAnnihilation.h"
 
 
-//double primaryInjection(double E, Particle& particle);
 
-//void injection(Particle& particle, Particle& creator, fun1 tpf);
+/* Returns Q(E,z) in units of 1/erg/s  (it is multiplied by the volume of each celd)*/
 
 void injection(Particle& p, State& st);
 
 
-//double electronInjection(double E, const CoupledEqSys* previous, CoupledEqSys* current);
-
-//double positronInjection(double E, const CoupledEqSys* previous, CoupledEqSys* current);
 
 
 
