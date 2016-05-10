@@ -252,8 +252,9 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 	const DimensionCoord D = ps.dimensions.size();
 
 	if (!fallback && dimValues.size() != D) {
-		std::cout << "ERROR: Invalid number of coordinates for this ParamSpaceValues." << std::endl;
-		throw;
+		std::ostringstream errormsg;
+		errormsg << "Invalid number of coordinates " << dimValues.size() << "  for interpolating in " << D << " dimensions." << std::endl;
+		throw std::runtime_error(errormsg.str());
 	}
 
 	std::vector<DimensionCoord> lower(D), upper(D);
@@ -292,7 +293,7 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 			}
 			else {
 				std::ostringstream errormsg;
-				errormsg << "ERROR. Interpolation value " << id.value << " is not in range [ " << dimv.front() << " .. " << dimv.back() << " ] of dimension " << d << "." << std::endl;
+				errormsg << "Interpolation value " << id.value << " is not in range [ " << dimv.front() << " .. " << dimv.back() << " ] of dimension " << d << "." << std::endl;
 				throw std::runtime_error(errormsg.str());
 			}
 		}

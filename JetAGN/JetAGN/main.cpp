@@ -23,42 +23,51 @@
 
 int main ()
 {
-	//testBinarySearch();
+	try
+	{
+		//testBinarySearch();
 
-	setParameters();
+		setParameters();
 
-	State model;
+		State model;
 
-//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
-	//	double nph = blackBody(i.par.E, i.par.R);
-		//model.nph.set(i, nph);
-	//});
+	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
+		//	double nph = blackBody(i.par.E, i.par.R);
+			//model.nph.set(i, nph);
+		//});
 
 
-//	radiativeLosses(model);
+	//	radiativeLosses(model);
 
-	injection(model.electron, model);
+		injection(model.electron, model);
 
-	checkInyectedPower(model.electron.injection, 0);
+		checkInyectedPower(model.electron.injection, 0);
 
-//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
-//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
+	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
+	//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
 	
-	distribution(model.electron, model);
+		distribution(model.electron, model);
 
 	
-	//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
-	writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-	writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
-	//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
+		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+		writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
+		writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
+		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
-	//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades
-	//model.electron.distribution.fill([&model](const SpaceIterator& i){
-	//	return model.electron.injection.get(i);
-	//});
+		//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades
+		//model.electron.distribution.fill([&model](const SpaceIterator& i){
+		//	return model.electron.injection.get(i);
+		//});
 
-	//processes(model, "ntLuminosity_LR2.txt");
+		//processes(model, "ntLuminosity_LR2.txt");
+
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << "ERROR: " << e.what() << std::endl;
+		throw;
+	}
 
 	return 0;
 }
