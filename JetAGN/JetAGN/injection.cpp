@@ -63,7 +63,7 @@ void injection(Particle& p, State& st)
 			//volumen de la celda i
 			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
 
-			double total = powerLaw(i.par.E, Emin, Emax)*Q0*vol_i/vol;
+			double total = powerLaw(i.par.E, Emin, Emax)*Q0*vol_i / vol;
 
 			return total;
 		}

@@ -47,11 +47,10 @@ int main ()
 	//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
 	
 		distribution(model.electron, model);
-
 	
 		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
-		writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-		writeRandTParamSpace("electronDist_RT.txt", model.electron.distribution, nEnergies/2);
+		//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
+		writeRandTParamSpace("electronDist_RT_2.txt", model.electron.distribution, nEnergies-4);
 		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
@@ -60,7 +59,7 @@ int main ()
 		//	return model.electron.injection.get(i);
 		//});
 
-		//processes(model, "ntLuminosity_LR2.txt");
+		processes(model, "ntLuminosity_LR2.txt");
 
 	}
 	catch (std::runtime_error& e)

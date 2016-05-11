@@ -5,6 +5,7 @@ Parameters::Parameters() {
 	density = 0.0;
 	radius = 0.0;   //cambie Rc por radius, asi que no va a compilar las cosas viejas
 	volume = 0.0;
+	starT = 0.0;
 	//Rsp = 0.0;
 	Lj = 0.0;
 
@@ -68,8 +69,9 @@ double magneticField = 0.0;
 double density = 0.0;
 double radius = 0.0;   //cambie Rc por radius, asi que no va a compilar las cosas viejas
 double volume = 0.0;
+double starT = 0.0;
 double accEfficiency = 0.0;
-double Rsp = 0.0;
+//double Rsp = 0.0;
 
 double Lj = 0.0;
 double openingAngle = 0.0;

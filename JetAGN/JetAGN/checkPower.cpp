@@ -34,7 +34,7 @@ double checkInyectedPower(const ParamSpaceValues& dist, int t_ix)
 
 	}
 
-	std::cout << sum << std::endl;
+	std::cout << "checking injected power" << '\t' << sum << std::endl;
 
 	return sum;
 }

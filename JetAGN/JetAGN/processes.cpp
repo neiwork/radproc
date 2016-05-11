@@ -25,14 +25,16 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 {
 	double sum = 0.0;
 
+	double z_int = pow((rmax / rmin), (1.0 / nR));
+
 	Vector& z = pps.dimensions[1]->values;
 
 	for (size_t i = 0; i < z.size() - 1; ++i) { //no llego al ultimo
 
-		//double dx = x*(x_int - 1);
-		//double dz = z[i + 1] - z[i];
-
-		//double jetR = jetRadius(z[i], openingAngle);
+		double dz = z[i]*(z_int - 1);
+		
+		//volumen de la celda i
+		double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
 
 		double E = pps[0][E_ix];
 		double T = pps[2][t_ix];
@@ -43,7 +45,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 		//la integral de vol la reemplace por una suma sobre todo los z, 
 		//ya que N(E) esta multiplicado por el volumen de cada celda
 
-		sum = sum + emissivity;
+		sum = sum + emissivity*vol_i;
 
 	}
 

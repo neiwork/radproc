@@ -68,7 +68,7 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 	double mass = particle.mass;
 
 
-	double starT = 1.0e5; //VER
+	//double starT = 3.0e3; 
 	double a = 1.0e-3*boltzmann*starT;      //energia minima de los fotones en erg
 	double b = 1.0e3*boltzmann*starT;    //energia maxima de los fotones en erg
 

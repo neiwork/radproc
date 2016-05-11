@@ -42,114 +42,43 @@ double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State
 
 double timeDistribution(double Ee, double r, double t, Particle& p, State& st, double Eeff)
 { 
+	double Emax = eEmax(r, magneticField);
+	double tmin = st.electron.ps[2][0]; //en teoria esto no es necesario, porque solo llamo a etsa funcion en el tmin
+	//chequear que t == tmin
 
-	//aca declaro las variables del bucle
-	//double Eeff este no lo declaro porque lo paso como argumento
-	//double Eeffmin, Eeffmax, Eeff_int, sum_Eeff, dEeff, dtau_eff;
-	double dtau, tau;
-	double EpMin, EpMax, Ep, Ep_int, sum_Ep, dEp;
-	double EppMin, EppMax, Epp, Epp_int, sum_Epp, dEpp;
-	double perdidas, inj, dist, t_cool, t_carac;
+	double EpMin = Ee;   //Ep = Eprima
+	double EpMax = Eeff;
+	double Ep = EpMin;
 
-	
-////////////////CON ESTE IF CONTROLO SI LAS PERDIDAS SON RELEVANTES FRENTE A Tadv+Tdec//////////////////////
-	perdidas = losses(Ee, r, p, st);
+	int nEp = 50;
+	double Ep_int = pow((EpMax / EpMin), 1.0 / nEp);  //0.001
 
-	t_cool = Ee/perdidas;
+	double dEp(0.0), inj(0.0);
 
-	//t_esc = escapeTime(Ee, p);
+	double sum_Ep = 0.0;
 
-	//comento el siguiente if porque Tesc-> inf 
-	//por lo que las perdidas siempre dominan
-	//if (t_cool <= t){//  (t_cool <= t_esc)){ //| (t_cool <= Time[j]) )	{   //perdidas importantes
+	for (size_t l=0; l < nEp; ++l)	{
 
-///////////////BUSCO EL Eeff/////////////////////////////////////////////
-	//double Eeff = effectiveE(Ee, Emax, t, p, st);
-///////////////////YA ENCONTRE EL Eeff/////////////////////////////////////
-//lo calculo para todo t porque lo necesito independientemente del siguiente if
+		dEp = Ep*(Ep_int-1.0);
 
-	if (t_cool <= t){
-
-///////////////////AHORA CALCULO LA INTEGRAL "DOBLE" QUE DA N(E,t)/////////////////////////////////////
-		EpMin = Ee;   //Ep = Eprima
-		EpMax = Eeff;
-		Ep    = EpMin;
-
-		Ep_int = pow((EpMax/EpMin),0.01);  //0.001
-
-		sum_Ep = 0.0;
-
-		for (size_t l=0; l <= 10; ++l)	{ //100
-
-			dEp = Ep*(Ep_int-1.0);
-					
-////aca calculo la integral del exponente con variable Epp = E'' //////////////
-
-			EppMin = Ee;   //Ep = Eprima
-			EppMax = Ep;
-			Epp    = EppMin; 
-
-			Epp_int = pow((EppMax/EppMin),0.01);
-
-			sum_Epp  = 0.0;
-			//sum_dexp = 0.0;
-
-			if (EppMax > EppMin){
-
-				for (size_t n=0; n <= 10; ++n)	{ //100
-
-					dEpp = Epp*(Epp_int-1.0);
-
-					dtau = dEpp/losses(Epp, r, p, st);
-					//dexp = dtau/escapeTime(Epp,p); 
-
-					sum_Epp  = sum_Epp + dtau;
-					//sum_dexp = sum_dexp + dexp;
-
-					Epp = Epp*Epp_int;
-	
-				}
-			}
-
-			tau = sum_Epp;
-			/////////////////// ya calcule el tau ////////////////////////////
-			double tmin = st.electron.ps[2][0]; //el siguiente if es para no interpolar fuera del rango
-			if (t - tau < tmin){
-				inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, tmin } }); //paso los valores E,r,t en donde quiero evaluar Q
-			}
-			else{
-				inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, t - tau } }); //paso los valores E,r,t en donde quiero evaluar Q
-			}
-			//t = i.par.T;
-			//p.ps[1][z] da el valor de la dim r en la posicion z (que le pase)		
-			//interpolDoble(Ep, Time[j]-tau, Ee, Time, injection);  //chequear que ande!
-
-			dist = inj;  //*exp(-sum_dexp);lo comento por lo del Tesc //tau/escapeTime(Ep,particle));
-
-			sum_Ep = dist*dEp+sum_Ep;
-
-			Ep = Ep*Ep_int;
-
+		if (Ep > Emax){
+			inj = 0.0;
 		}
-		//particle.distribution[j*(ne+1)+i] = sum_Ep/perdidas;
-		double total = sum_Ep / perdidas;
-				
-		dist = total;
+		else{
+			inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, t} }); //paso los valores E,r,t en donde quiero evaluar Q
+			//interpolDoble(Ep, Time[j]-tau, Ee, Time, injection);  //chequear que ande!
+		}
 
-	} //aca termina la parte del if en donde tcool < T //las perdidas son importantes
-			
-	else {  //t_cool > t_esc or t_cool > t  
+		sum_Ep = sum_Ep + inj*dEp;
 
-		t_carac = min(t_cool, t); // min(t_cool, t_esc); //min(t_esc, Time[j]));
-
-		inj = p.injection.interpolate({ { DIM_E, Ee }, { DIM_R, r }, { DIM_T, t } });//  p.injection.get(i);// injection[j*(ne + 1) + i];  VER
-	
-		dist = inj*t_carac; // t_esc;  //t_carac;  //exp(-tau*escapeTime(Ep,particle));
-
-		//particle.distribution[j*(ne+1)+i] = dist;
-	//	return dist;
+		Ep = Ep*Ep_int;
 
 	}
 
-	return dist;
+	double perdidas = losses(Ee, r, p, st);
+
+	double total = sum_Ep / perdidas;
+				
+	return total;
+
 }

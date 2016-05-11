@@ -69,6 +69,8 @@ void setParameters(void )
 
 	double z0 = 50.0*rg; //50 * Rschw  //OJO! si cambian, cambiar tmb nonthermalLuminosity!!
 
+	starT = 3.0e3;
+
 	Lj = 1.0e43;
 	openingAngle = 0.1;  //jet opening angle
 
@@ -91,7 +93,7 @@ void setParameters(void )
 	//factor_qrel   = 3.0; 
 
 	electronLogEmin = 6.0;
-	electronLogEmax = 14.0;  
+	electronLogEmax = 15.0;  
 
 
 //Data of photons
@@ -104,15 +106,15 @@ void setParameters(void )
 
 	rmin = 1.0*pc;
 	rmax = 1.0e3*pc;
-	nR = 2;
+	nR = 10;
 
 	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
 //	timeMin = 1.0e-2; 
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	nEnergies = 10;        //massive particles
-	nPhotonEnergies = 10;  //
+	nEnergies = 20;        //massive particles
+	nPhotonEnergies = 20;  //
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)

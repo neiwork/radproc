@@ -16,11 +16,12 @@ double starDensity(double z)
 	double rg = mBH*gravitationalConstant / cLight2;
 
 	double z0 = 50.0*rg;
-	double RintMax = pc;
-	double RintMin = z0;
+	double RintMax = 1.0e3*pc;
+	double RintMin = z0;// rmin;// z0;
 
-	//double Astar = Nrg*(3.0 - pseda) / (pi*P2(openingAngle)) / (pow(RintMax, (3.0 - pseda)) - pow(rmin, (3.0 - pseda)) ) ;
-	double Astar = Nrg*(3.0 - pseda) / (pi*P2(openingAngle)) / (pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)));
+	double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
+
+	double Astar = Nrg / (pi*P2(openingAngle)*int_z);
 
 	double n_s = Astar / pow(z, pseda);
 	return n_s;
@@ -30,7 +31,7 @@ double starDensity(double z)
 double starBlackBody(double E, double r)
 {
 
-	double starT = 3.0e3;  //Ver, si cambia aca, cambiar en targetPhotonEnergies
+	//double starT = 3.0e3;  //Ver, si cambia aca, cambiar en targetPhotonEnergies y en losses Ani
 	double starR = 1.0e13;
 
 	double Epeak = boltzmann*starT;
@@ -51,7 +52,7 @@ double starBlackBody(double E, double r)
 
 double cmbBlackBody(double E)
 {
-	//nph'(E') = nph(E) ver Potter, W 2012
+	//nph'(E') = nph(E) Potter, W 2012
 	//double E = Dlorentz*Ep;
 
 	double Tcmb = 2.7;
@@ -68,14 +69,14 @@ double cmbBlackBody(double E)
 
 void targetPhotonEnergies(double& EphminS, double& EphminCMB)
 {
-	double starT = 3.0e3; //Ver, si cambia aca, cambiar en starBlackBody
+	//double starT = 3.0e3; //VER, si cambia aca, cambiar en starBlackBody
 	double EpS = boltzmann*starT;
-	EphminS = EpS*Dlorentz / 100.0;
+	EphminS = EpS / 100.0;
 	//double EphmaxS = EpS*Dlorentz * 100.0;
 
 	double Tcmb = 2.7;
 	double EpCMB = boltzmann*Tcmb;
-	EphminCMB = EpCMB*Dlorentz / 100.0;
+	EphminCMB = EpCMB / 100.0;
 	//double EphmaxCMB = EpCMB*Dlorentz * 100.0;
 
 }

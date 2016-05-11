@@ -15,8 +15,8 @@
 double dLnt(double z)  //esta es la función que depende del número de estrellas a tiempo t
 {
 	
-	double Tstar = 3.0e3; //VER
-	double E = P2(electronMass*cLight2) / (boltzmann*Tstar);
+	//double Tstar = 3.0e3; 
+	double E = P2(electronMass*cLight2) / (boltzmann*starT);
 
 	double Sj = pi*P2(jetRadius(z, openingAngle));
 	double stagPoint = stagnationPoint(z);

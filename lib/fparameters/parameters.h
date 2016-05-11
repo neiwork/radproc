@@ -6,6 +6,7 @@ extern double magneticField;
 extern double density;
 extern double radius;  //cambie Rc por radius, asi que no van a compilar las cosas viejas
 extern double volume;
+extern double starT;
 extern double accEfficiency;
 //extern double Rsp;
 
@@ -78,6 +79,7 @@ public:
 	double radius;  //cambie Rc por radius, asi que no van a compilar las cosas viejas
 	double volume;
 	double accEfficiency;
+	double starT;
 	//double Rsp;
 
 	//jet data
