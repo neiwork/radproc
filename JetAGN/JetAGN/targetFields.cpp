@@ -21,7 +21,7 @@ double starDensity(double z)
 
 	double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
 
-	double Astar = Nrg / (pi*P2(openingAngle)*int_z);
+	double Astar = Nrg / (pi*P2(parameters.openingAngle)*int_z);
 
 	double n_s = Astar / pow(z, pseda);
 	return n_s;
@@ -34,7 +34,7 @@ double starBlackBody(double E, double r)
 	//double starT = 3.0e3;  //Ver, si cambia aca, cambiar en targetPhotonEnergies y en losses Ani
 	double starR = 1.0e13;
 
-	double Epeak = boltzmann*starT;
+	double Epeak = boltzmann*parameters.starT;
 	double Ephmin = Epeak / 100.0;
 	//double Ephmax = Epeak*10.0;
 
@@ -70,7 +70,7 @@ double cmbBlackBody(double E)
 void targetPhotonEnergies(double& EphminS, double& EphminCMB)
 {
 	//double starT = 3.0e3; //VER, si cambia aca, cambiar en starBlackBody
-	double EpS = boltzmann*starT;
+	double EpS = boltzmann*parameters.starT;
 	EphminS = EpS / 100.0;
 	//double EphmaxS = EpS*Dlorentz * 100.0;
 

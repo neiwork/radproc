@@ -40,10 +40,10 @@ void radiativeLosses(State& st)
 		double logR = log10(i.par.R/pc);
 		//double logT = log10(i.par.T);
 
-		double B = magneticField; // i.par.magneticField; VER por qué no funciona
+		double B = parameters.magneticField; // i.par.magneticField; VER por qué no funciona
 
 		double Reff = 10.0*stagnationPoint(i.par.R);
-		double vel_lat = cLight*openingAngle;
+		double vel_lat = cLight*parameters.openingAngle;
 
 		double E = i.par.E;
 
@@ -59,7 +59,7 @@ void radiativeLosses(State& st)
 		
 		   
 		double eDif  = diffusionRate(i.par.E, i.par.R, B);
-		double eAcc = accelerationRate(i.par.E, B, accEfficiency);
+		double eAcc = accelerationRate(i.par.E, B, parameters.accEfficiency);
 		double eAdia = adiabaticLosses(i.par.E, i.par.R, vel_lat) / i.par.E;
 		
 	out["electronLosses"]->file << fmtE << "\t" << logR 

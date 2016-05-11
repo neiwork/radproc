@@ -14,7 +14,7 @@
 
 double Llab(double Lint)
 {
-	return Lint*pow(Dlorentz, 4.0);
+	return Lint*pow(parameters.Dlorentz, 4.0);
 }
 
 /* Takes [emi] =  E^2*[Q(E)] and calculates int(2.0*pi*P2(jetR)*emi dz); 
@@ -25,7 +25,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 {
 	double sum = 0.0;
 
-	double z_int = pow((rmax / rmin), (1.0 / nR));
+	double z_int = pow((parameters.rmax / parameters.rmin), (1.0 / parameters.nR));
 
 	Vector& z = pps.dimensions[1]->values;
 
@@ -34,7 +34,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 		double dz = z[i]*(z_int - 1);
 		
 		//volumen de la celda i
-		double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
+		double vol_i = pi*P2(jetRadius(z[i], parameters.openingAngle))*dz;;
 
 		double E = pps[0][E_ix];
 		double T = pps[2][t_ix];
@@ -80,7 +80,7 @@ void processes(State& st, const std::string& filename)
 		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
 		QicCMB.set(i, eICcmb);
-	}, { -1, -1, nR });
+	}, { -1, -1, parameters.nR });
 
 
 
@@ -101,11 +101,11 @@ void processes(State& st, const std::string& filename)
 			//variables primadas ->FF
 			//variables sin primar-> lab frame
 
-			int t_ix = nR;
+			int t_ix = parameters.nR;
 			double E = pps[0][E_ix];
 			double t = pps[2][t_ix];  //t es el ultimo valor
 
-			double Elab = E*Dlorentz; //Dlorentz=delta
+			double Elab = E*parameters.Dlorentz; //Dlorentz=delta
 
 			double Lsyn   = emiToLumi(pps, Qsyn, E_ix, t_ix);
 			double Lic    = emiToLumi(pps, Qic, E_ix, t_ix);

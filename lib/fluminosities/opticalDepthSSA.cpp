@@ -9,7 +9,7 @@
 double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Particle& creator)  //E=Eph
 {
 	
-	double cte	= pow(3.0,0.5)*P3(electronCharge)*magneticField/(planck*mass*cLight2);
+	double cte = pow(3.0, 0.5)*P3(electronCharge)*parameters.magneticField / (planck*mass*cLight2);
 	
 	int n = 100;
 
@@ -27,7 +27,7 @@ double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Pa
 			double dx = x*(x_int-1);
 
 ////////////// calculo el Psyn
-			double Echar = 3*electronCharge*planck*magneticField*P2(x)/(4*pi*P3(mass)*cLight*P2(cLight2));
+			double Echar = 3 * electronCharge*planck*parameters.magneticField*P2(x) / (4 * pi*P3(mass)*cLight*P2(cLight2));
 			double aux = E/Echar;  //aca el aux es el x real
 
 			double Psyn = cte*1.85*pow(aux,(1.0/3.0))*exp(-aux);  
@@ -57,7 +57,7 @@ double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Pa
 
 	double absorptionCoefficient = - P3(planck)*cLight2*integral/(8*pi*P2(E));
 
-	double opacity = absorptionCoefficient*radius;
+	double opacity = absorptionCoefficient*parameters.radius;
 
 	return opacity;
 }

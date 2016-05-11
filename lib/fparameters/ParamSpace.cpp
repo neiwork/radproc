@@ -81,7 +81,7 @@ double DimensionIterator::canPeek(int offset) const
 
 SpaceCoord::SpaceCoord(const ParamSpace& ps)
 {
-	for (size_t i = 0; i < ps.dimensions.size(); ++i){
+	for (auto d:ps.dimensions){
 		dims.push_back(0);
 	}
 }

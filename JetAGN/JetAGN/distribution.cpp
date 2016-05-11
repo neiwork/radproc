@@ -37,7 +37,7 @@ void distribution(Particle& p, State& st)
 				double r = i.par.R;
 				double t = i.par.T;
 
-				double Emax = eEmax(r, magneticField);
+				double Emax = eEmax(r, parameters.magneticField);
 				
 				double Eeff = effectiveE(E, Emax, t, r, p, st);
 				double dist1(0.0), dist2(0.0);
@@ -78,7 +78,7 @@ void distribution(Particle& p, State& st)
 					
 					if (i.its[1].canPeek(1)) { rip1 = i.its[1].peek(+1); }
 					else{
-						double r_int = pow((rmax / rmin), (1.0 / nR));
+						double r_int = pow((parameters.rmax / parameters.rmin), (1.0 / parameters.nR));
 						rip1 = ri*r_int; 
 					}
 

@@ -24,8 +24,8 @@ void State::initializeParticle(Particle& p)
 	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 
 	// add dimension for R
-	p.ps.add(new Dimension(nR + 1, &Parameters::R, bind(initializeRPoints, _1, rmin, rmax)));
-	p.ps.add(new Dimension(nR + 1, &Parameters::T, bind(initializeCrossingTimePoints, _1, rmin, rmax)));
+	p.ps.add(new Dimension(parameters.nR + 1, &Parameters::R, bind(initializeRPoints, _1, parameters.rmin, parameters.rmax)));
+	p.ps.add(new Dimension(parameters.nR + 1, &Parameters::T, bind(initializeCrossingTimePoints, _1, parameters.rmin, parameters.rmax)));
 
 	p.ps.addDerivation([](const SpaceIterator& i){
 		derive_parameters_r(i.par.E, i.par.R, i.par.T);

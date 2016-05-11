@@ -42,7 +42,7 @@ double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State
 
 double timeDistribution(double Ee, double r, double t, Particle& p, State& st, double Eeff)
 { 
-	double Emax = eEmax(r, magneticField);
+	double Emax = eEmax(r, parameters.magneticField);
 	double tmin = st.electron.ps[2][0]; //en teoria esto no es necesario, porque solo llamo a etsa funcion en el tmin
 	//chequear que t == tmin
 

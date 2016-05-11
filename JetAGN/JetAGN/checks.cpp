@@ -178,7 +178,7 @@ void testCanPeek() {
 
 void testSpaceIterator2() {
 	setParameters();
-	Particle electron(PT_electron, electronMass, electronLogEmin, electronLogEmax, nEnergies);
+	Particle electron(PT_electron, electronMass, parameters.electronLogEmin, parameters.electronLogEmax, parameters.nEnergies);
 
 	electron.ps.add(new Dimension(5, &Parameters::E, zeroToN));
 	electron.ps.add(new Dimension(4, &Parameters::magneticField, zeroToN));

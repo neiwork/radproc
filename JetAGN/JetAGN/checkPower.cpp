@@ -19,7 +19,7 @@ double checkInyectedPower(const ParamSpaceValues& dist, int t_ix)
 		
 		double dz = z[i + 1] - z[i];
 
-		double jetR = jetRadius(z[i], openingAngle);
+		double jetR = jetRadius(z[i], parameters.openingAngle);
 
 		for (size_t j = 0; j < E.size() - 1; ++j) {
 

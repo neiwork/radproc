@@ -72,33 +72,28 @@ public:
 
 class Proton : public Particle {
 public:
-	Proton() :Particle(PT_proton, protonMass, protonLogEmin, protonLogEmax, nEnergies) {
-
-	}
+	Proton();
 };
 
 class Electron : public Particle {
 public:
-	Electron() : Particle(PT_electron, electronMass, electronLogEmin, electronLogEmax, nEnergies) {
-	
-	}
+	Electron();
 };
 
 class Photon : public Particle {
 public:
-	Photon() : Particle(PT_photon, 0.0, photonLogEmin, photonLogEmax, nPhotonEnergies) {
-	}
+	Photon();
 };
 
 class Pion : public Particle {
 public:
-	Pion() : Particle(PT_pion, chargedPionMass, pionLogEmin, pionLogEmax, nEnergies){}
+	Pion();
 
 };
 
 class Muon : public Particle {
 public:
-	Muon() : Particle(PT_muon, muonMass, muonLogEmin, muonLogEmax, nEnergies){}
+	Muon();
 
 };
 
@@ -112,11 +107,11 @@ class Neutron : public Particle {
 
 class SecondaryElectron : public Particle {
 public:
-	SecondaryElectron() :Particle(PT_secondaryElectron, electronMass, electronLogEmin, 12.0, nEnergies) {}
+	SecondaryElectron();
 };
 
 class Positron: public Particle {
 public:
-	Positron() : Particle(PT_positron, electronMass, electronLogEmin, 12.0, nEnergies) {}   //estas particulas son los positrones
+	Positron();   //estas particulas son los positrones
 };
 

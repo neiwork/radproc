@@ -2,76 +2,6 @@
 
 #include <fmath\mathematics.h>
 
-extern double magneticField;
-extern double density;
-extern double radius;  //cambie Rc por radius, asi que no van a compilar las cosas viejas
-extern double volume;
-extern double starT;
-extern double accEfficiency;
-//extern double Rsp;
-
-
-extern double Lj;
-extern double openingAngle;
-extern double B0;
-extern double Gamma;
-extern double Dlorentz;
-
-extern double distance;
-//extern double tcross;
-
-extern double photonLogEmin;
-extern double photonLogEmax;
-
-//extern fun targetPhotonField;   //equivalente a double (*photonField)(double) es un puntero a funcion
-extern double targetPhotonEmin;
-extern double targetPhotonEmax;
-extern int nPhotonEnergies;
-
-
-
-// Data of electrons and protons
-
-extern double primaryIndex;
-extern double electronNormalization;
-extern double protonNormalization;
-
-extern double electronLogEmin;
-extern double electronLogEmax;
-extern double protonLogEmin;
-extern double protonLogEmax;
-
-
-//Energy, zPoints and time data
-
-extern int nEnergies;        //massive particles
-
-extern double rmin;
-extern double rmax;
-extern int nR;
-
-extern double timeMin;
-extern double timeMax;   //segundos en dos horas
-extern int nTimes;
-
-
-//particulas extras
-extern double neutronLogEmin;
-extern double neutronLogEmax;
-
-extern double pionLogEmin;
-extern double pionLogEmax;
-extern double muonLogEmin;  //en realidad es log(2*mc^2) = 8.32
-extern double muonLogEmax;
-
-extern double neutrinoLogEmin;
-extern double neutrinoLogEmax;
-
-extern double neutronLogEmin;
-extern double neutronLogEmax;
-
-
-
 class Parameters {
 public:
 	double magneticField;
@@ -110,6 +40,17 @@ public:
 	double electronLogEmax;
 	double protonLogEmin;
 	double protonLogEmax;
+
+	double pionLogEmin;
+	double pionLogEmax;
+	double muonLogEmin;  //en realidad es log(2*mc^2) = 8.32
+	double muonLogEmax;
+	
+	double neutrinoLogEmin;
+	double neutrinoLogEmax;
+
+	double neutronLogEmin;
+	double neutronLogEmax;
 
 	//Energy and time data
 

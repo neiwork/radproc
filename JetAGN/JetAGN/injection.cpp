@@ -13,7 +13,7 @@
 
 double powerLaw(double E, double Emin, double Emax)
 {
-	double result = pow(E, (-primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
+	double result = pow(E, (-parameters.primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
 	return result;
 }
 
@@ -24,7 +24,7 @@ double normalization(Particle& p, const SpaceCoord& distCoord)
 	double z = p.ps[1][i_z];
 
 	double Emin = p.emin();
-	double Emax = eEmax(z, magneticField); 
+	double Emax = eEmax(z, parameters.magneticField);
 
 	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
@@ -40,10 +40,10 @@ void injection(Particle& p, State& st)
 	show_message(msgStart, Module_electronInjection);
 
 	//volumen total del jet
-	double vol = (pi / 3.0)*(P2(jetRadius(rmax, openingAngle))*rmax
-		- P2(jetRadius(rmin, openingAngle))*rmin);
+	double vol = (pi / 3.0)*(P2(jetRadius(parameters.rmax, parameters.openingAngle))*parameters.rmax
+		- P2(jetRadius(parameters.rmin, parameters.openingAngle))*parameters.rmin);
 
-	double z_int = pow((rmax / rmin), (1.0 / nR));
+	double z_int = pow((parameters.rmax / parameters.rmin), (1.0 / parameters.nR));
 
 
 	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
@@ -55,13 +55,13 @@ void injection(Particle& p, State& st)
 		else //if (t_position = 0) solo inyecto particulas a tiempo 0
 		{
 			double Emin = p.emin();
-			double Emax = eEmax(i.par.R, magneticField); 
+			double Emax = eEmax(i.par.R, parameters.magneticField);
 			double Q0 = normalization(p, i.coord);
 		
 			double z = i.par.R;			
 			double dz = z*(z_int - 1);
 			//volumen de la celda i
-			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
+			double vol_i = pi*P2(jetRadius(z, parameters.openingAngle))*dz;
 
 			double total = powerLaw(i.par.E, Emin, Emax)*Q0*vol_i / vol;
 
@@ -70,7 +70,7 @@ void injection(Particle& p, State& st)
 
 	});
 
-	double Lnt_total = nonThermalLuminosity(rmin, rmax);
+	double Lnt_total = nonThermalLuminosity(parameters.rmin, parameters.rmax);
 	
 	std::cout << "Lnt total" << '\t' << Lnt_total << std::endl;
 

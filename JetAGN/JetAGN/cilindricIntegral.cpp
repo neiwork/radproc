@@ -8,7 +8,7 @@
 
 double intCilindric(double zMin, double zMax, fun1 fun)
 {
-	double theta = openingAngle;
+	double theta = parameters.openingAngle;
 
 	double integral =
 		RungeKuttaSimple(zMin, zMax, [theta,fun](double z){
