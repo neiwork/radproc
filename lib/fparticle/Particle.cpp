@@ -19,7 +19,7 @@ Particle::Particle(ParticleType t, double m, double emin, double emax, int nE)
 	logEmin = emin;
 	logEmax = emax;
 
-	ps.add(new Dimension(nE + 1, &Parameters::E, bind(initializeEnergyPoints, _1, emin, emax)));
+	ps.add(new Dimension(nE + 1, bind(initializeEnergyPoints, _1, emin, emax), &Parameters::E));
 }
 //
 //

@@ -2,11 +2,9 @@
 
 Parameters::Parameters() {
 	magneticField = 0.0;
-	density = 0.0;
 	radius = 0.0;   //cambie Rc por radius, asi que no va a compilar las cosas viejas
 	volume = 0.0;
 	starT = 0.0;
-	//Rsp = 0.0;
 	Lj = 0.0;
 
 	//particle injection
@@ -21,18 +19,13 @@ Parameters::Parameters() {
 	protonLogEmax = 0.0;
 
 	openingAngle = 0.0;
-	B0			 = 0.0;
 	Gamma		 = 0.0;
 	Dlorentz	 = 0.0; //Dlorentz es el factor que transforma las distribuciones en el caso de jets
-
-	distance = 0.0;
 
 	photonLogEmin;
 	photonLogEmax;
 	nPhotonEnergies = 0;  //photons
 
-
-	//fun targetPhotonField   = NULL;   //equivalente a (*photonField)(double) es un puntero a funcion
 	targetPhotonEmin = 0.0;
 	targetPhotonEmax = 0.0;
 

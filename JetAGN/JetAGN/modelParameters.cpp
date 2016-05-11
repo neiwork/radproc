@@ -47,16 +47,19 @@ double stagnationPoint(double z)
 
 }
 
+double computeModelB0(double Lj, double openingAngle) {
+	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
+}
 
 void derive_parameters_r(double E, double z, double t)
 {
+	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
 	parameters.radius = jetRadius(z, parameters.openingAngle);
-	parameters.magneticField = fmagneticField(z, parameters.B0); 
+	parameters.magneticField = fmagneticField(z, B0);
 	//electronLogEmax = log10(eEmax(z, magneticField));
 
 	//Rsp = stagnationPoint(z);
 }
-
 
 void setParameters(void )
 {
@@ -71,7 +74,7 @@ void setParameters(void )
 	parameters.Lj = 1.0e43;
 	parameters.openingAngle = 0.1;  //jet opening angle
 
-	parameters.B0 = sqrt(8.0*parameters.Lj / cLight) / parameters.openingAngle;  //ojo que esto es Bo*z0
+//	parameters.B0 = sqrt(8.0*parameters.Lj / cLight) / parameters.openingAngle;  //ojo que esto es Bo*z0
 
 //	Rsp = 1.0e14; //distance to stagnation point
 

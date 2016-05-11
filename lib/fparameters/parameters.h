@@ -5,26 +5,19 @@
 class Parameters {
 public:
 	double magneticField;
-	double density;
 	double radius;  //cambie Rc por radius, asi que no van a compilar las cosas viejas
 	double volume;
 	double accEfficiency;
 	double starT;
-	//double Rsp;
 
 	//jet data
 	double openingAngle;
-	double B0;
 	double Gamma;
 	double Dlorentz;
 	double Lj;
 
-	double distance;
-
 	double photonLogEmin;
 	double photonLogEmax;
-
-	//fun targetPhotonField;   //equivalente a double (*photonField)(double) es un puntero a funcion
 	double targetPhotonEmin;
 	double targetPhotonEmax;
 	int nPhotonEnergies;

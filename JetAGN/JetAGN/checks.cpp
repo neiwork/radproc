@@ -48,9 +48,9 @@ void zeroToN(Vector& v) {
 void testFillAndDump() {
 
 	ParamSpace ps;
-	ps.add(new Dimension(2, &Parameters::E, zeroToN));
-	ps.add(new Dimension(3, &Parameters::magneticField, zeroToN));
-	ps.add(new Dimension(2, &Parameters::density, zeroToN));
+	ps.add(new Dimension(2, zeroToN));
+	ps.add(new Dimension(3, zeroToN));
+	ps.add(new Dimension(2, zeroToN));
 
 	// create the PSVs
 	ParamSpaceValues m(ps); // some PSV
@@ -74,9 +74,9 @@ void testFillAndDump() {
 void test3DPrint() {
 
 	ParamSpace ps;
-	ps.add(new Dimension(4, &Parameters::E, zeroToN));
-	ps.add(new Dimension(4, &Parameters::magneticField, zeroToN));
-	ps.add(new Dimension(4, &Parameters::density, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
 
 	// create the PSV
 	int c = 0;
@@ -101,8 +101,8 @@ void test3DPrint() {
 void testIteratePlane() {
 
 	ParamSpace ps;
-	ps.add(new Dimension(4, &Parameters::E, zeroToN));
-	ps.add(new Dimension(4, &Parameters::magneticField, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
 
 	// create the PSV
 	int c = 0;
@@ -151,8 +151,8 @@ void testIteratePlane() {
 void testCanPeek() {
 
 	ParamSpace ps;
-	ps.add(new Dimension(4, &Parameters::E, zeroToN));
-	ps.add(new Dimension(4, &Parameters::magneticField, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
+	ps.add(new Dimension(4, zeroToN));
 
 	// create the PSV
 	int c = 0;
@@ -180,8 +180,8 @@ void testSpaceIterator2() {
 	setParameters();
 	Particle electron(PT_electron, electronMass, parameters.electronLogEmin, parameters.electronLogEmax, parameters.nEnergies);
 
-	electron.ps.add(new Dimension(5, &Parameters::E, zeroToN));
-	electron.ps.add(new Dimension(4, &Parameters::magneticField, zeroToN));
+	electron.ps.add(new Dimension(5, zeroToN));
+	electron.ps.add(new Dimension(4, zeroToN));
 
 	// create the PSVs
 	//electron.initialize();
@@ -239,9 +239,9 @@ void testBinarySearch(){
 void testMultiDimensionalInterpolate(){
 
 	ParamSpace ps;
-	ps.add(new Dimension(2, &Parameters::E, zeroToN));
-	ps.add(new Dimension(3, &Parameters::magneticField, zeroToN));
-	ps.add(new Dimension(2, &Parameters::density, zeroToN));
+	ps.add(new Dimension(2, zeroToN));
+	ps.add(new Dimension(3, zeroToN));
+	ps.add(new Dimension(2, zeroToN));
 
 	// create the PSVs
 	ParamSpaceValues m(ps); // some PSV

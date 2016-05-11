@@ -20,17 +20,15 @@ public:
 	double min;
 	double max;
 	
-	double Parameters::*par; // the pointer-to-member used to update the parameters object
+	double Parameters::*fieldRef; // the pointer-to-member used to update the parameters object
 	
-	Dimension(size_t size, double Parameters::*par, std::function<void(Vector&)> initializer);
+	Dimension(size_t size, std::function<void(Vector&)> initializer, double Parameters::*fieldRef = nullptr);
 
 	void update(Parameters& pars, size_t index);
 
 	double interpolate(double x, const ParamSpaceValues& psv) const;
 
-	const double& operator[](const size_t& index) const {
-		return values[index];
-	}
+	const double& operator[](const size_t& index) const;
 
 	size_t size() const;
 };
