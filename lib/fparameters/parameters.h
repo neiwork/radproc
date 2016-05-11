@@ -4,9 +4,16 @@
 
 class Parameters {
 public:
-	double magneticField;
-	double radius;  //cambie Rc por radius, asi que no van a compilar las cosas viejas
-	double volume;
+
+	// <derivados>
+
+		double magneticField;
+		
+		double radius;  // cambie Rc por radius, asi que no van a compilar las cosas viejas
+		                // [av] usado solo por opticalDepthSSA
+
+	// </derivados>
+
 	double accEfficiency;
 	double starT;
 
@@ -31,11 +38,13 @@ public:
 
 	double electronLogEmin;
 	double electronLogEmax;
+
 	double protonLogEmin;
 	double protonLogEmax;
 
 	double pionLogEmin;
 	double pionLogEmax;
+
 	double muonLogEmin;  //en realidad es log(2*mc^2) = 8.32
 	double muonLogEmax;
 	
