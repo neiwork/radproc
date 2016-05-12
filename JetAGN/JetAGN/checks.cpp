@@ -215,7 +215,7 @@ void testSpaceIterator2() {
 
 	m.debug_dump();
 	//electron.distribution = m;
-	std::cout << electron.dist(1.5) << std::endl;
+	//std::cout << electron.dist(1.5) << std::endl;
 	// <<<<<<<<<<<<<<<<<<<
 
 }

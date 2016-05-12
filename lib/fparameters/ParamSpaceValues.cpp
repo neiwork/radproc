@@ -183,12 +183,3 @@ void ParamSpaceValues::debug_dump()
 {
 	dump(std::cout, std_dump);
 }
-std::function<double(double)> ParamSpaceValues::dimInterpolator(int dimIx)
-{
-	Dimension* d = ps.dimensions[dimIx];
-	ParamSpaceValues* psv = this;
-	return [d, psv](double x) {
-		return d->interpolate(x, *psv);
-	};
-}
-

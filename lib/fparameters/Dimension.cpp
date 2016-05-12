@@ -24,20 +24,6 @@ Dimension::Dimension(size_t size, std::function<void(Vector&)> initializer, doub
 	initializer(values);
 }
 
-double Dimension::interpolate(double x, const ParamSpaceValues& psv) const
-{
-	if (fieldRef != &Parameters::E || psv.ps.dimensions[0] != this) {
-		std::cout << "Por ahora solo se puede interpolar la dimension 0, que debe ser la energia." << std::endl;
-		throw;
-	}
-
-	const Vector& key = values;
-	const Vector& val = psv.values;
-
-	size_t base = psv.ps.currentInnerDimBase();
-	return interpol(x, values, psv.values, values.size(), base);
-}
-
 const double& Dimension::operator[](const size_t& index) const
 {
 	return values[index];

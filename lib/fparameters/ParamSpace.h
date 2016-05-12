@@ -16,14 +16,11 @@ public:
 	std::vector<Dimension*> dimensions;
 	std::vector<const DerivationFun> derivations;
 
-	static SpaceIterator* current;
-
 	size_t size() const;
 
 	void add(Dimension* dim);
 
 	void addDerivation( const DerivationFun& f );
-
 
 	size_t dim2ix(const SpaceCoord& si) const;
 
@@ -31,8 +28,6 @@ public:
 
 	void iterate(Parameters& pars, std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions = {}) const;
 	void iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions = {}) const;
-
-	size_t currentInnerDimBase() const;
 
 	ParamSpace(){};
 

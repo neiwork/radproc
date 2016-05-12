@@ -17,7 +17,7 @@ public:
 	//Positron positron;
 
 	ParamSpaceValues nph;
-	fun1 tpf;
+	//fun1 tpf;
 
 	State();
 	

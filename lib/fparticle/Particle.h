@@ -60,15 +60,6 @@ public:
 	ParamSpaceValues distribution;
 
 	Dimension* eDim() const;
-	
-	fun1 eInterpolator(ParamSpaceValues psv) const;
-	
-	//void iterate(std::function <void(const SpaceIterator&)> b); 
-	//void iterate(std::function <void(const SpaceIterator&)> b, std::initializer_list<int> fixedDimensions = {}) const;
-
-	/* Interpolates and returns the distribution of a particle at a given energy level */
-	double dist(double e) const;
-
 
 };
 

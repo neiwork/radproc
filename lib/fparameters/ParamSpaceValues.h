@@ -31,8 +31,6 @@ public:
 	double set(const SpaceCoord& si, double v);
 	double get(const SpaceCoord& si) const;
 
-	std::function<double(double)> dimInterpolator(int dimIx);
-
 	class InterpolateDim {
 	public:
 		DimensionCoord dim;

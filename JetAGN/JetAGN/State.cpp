@@ -19,7 +19,7 @@ State::State() :
 	}
 
 	nph.initialize();
-	tpf = nph.dimInterpolator(0);
+	//tpf = nph.dimInterpolator(0);
 }
 
 void State::initializeParticle(Particle& p)

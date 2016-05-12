@@ -87,27 +87,9 @@ void Particle::initializeEnergyPoints(Vector& v, double logEmin, double logEmax)
 //
 //}
 
-double Particle::dist(double e) const
-{
-	return eDim()->interpolate(e, distribution);
-}
-
-//(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
-//{
-	//iterate(Parameters(parameters), body, fixedDimensions);
-//void Particle::iterate(std::function <void(const SpaceIterator&)> b, std::initializer_list<int> fixedDimensions) const
-//{
-//	ps.iterate(b, fixedDimensions);
-//}
-
 Dimension* Particle::eDim() const
 {
 	return ps.dimensions[0];
-}
-
-fun1 Particle::eInterpolator(ParamSpaceValues psv) const
-{
-	return psv.dimInterpolator(0);
 }
 
 double Particle::emin() const

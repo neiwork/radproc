@@ -18,8 +18,6 @@ public:
 
 	void update(Parameters& pars, size_t index);
 
-	double interpolate(double x, const ParamSpaceValues& psv) const;
-
 	const double& operator[](const size_t& index) const;
 
 	size_t size() const;

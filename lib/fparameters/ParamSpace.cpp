@@ -21,12 +21,10 @@ void ParamSpace::updateDerivations(const SpaceIterator& i) const {
 void ParamSpace::iterate(Parameters& p, std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
 {
 	SpaceIterator it(*this,p,fixedDimensions);
-	current = &it;
 	while (it.next(&p)) {
 		updateDerivations(it);
 		body(it);
 	}
-	current = NULL;
 }
 
 void ParamSpace::iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
@@ -68,26 +66,3 @@ void ParamSpace::ix2dim(int ix, SpaceCoord& si) const
 		si[i] = ix % dimensions[i]->size();
 	}
 }
-
-size_t ParamSpace::currentInnerDimBase() const
-{
-	// find the current location; and then substract the innermost dimension index.
-	// this is the starting point for energy-based interpolation of PSVs
-	if (current && dimensions.size() > 1) {
-		return dim2ix(*current) - current->its[0].index;
-	} else {
-		return 0;
-	}
-}
-
-
-//double DimInterpolate::call(double v) {
-//	return dim.interpolate(v, values);
-//}
-//
-//DimInterpolate::DimInterpolate(const Dimension& dim, const ParamSpaceValues& values) :dim(dim), values(values)
-//{
-//
-//}
-
-SpaceIterator* ParamSpace::current = NULL;
