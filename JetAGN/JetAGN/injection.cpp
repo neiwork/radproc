@@ -1,14 +1,17 @@
 #include "injection.h"
 
 #include "messages.h"
-#include <iostream>
 #include "modelParameters.h"
 #include "nonThermalLuminosity.h"
+
 #include <fparameters\parameters.h>
+#include <fparameters\SpaceIterator.h>
+#include <fparameters\Dimension.h>
+
 #include <fmath\RungeKutta.h>
 #include <fmath\physics.h>
 
-
+#include <iostream>
 
 
 double powerLaw(double E, double Emin, double Emax)

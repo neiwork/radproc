@@ -2,6 +2,10 @@
 
 #include "injection.h"
 #include "distribution.h"
+
+#include <fparameters/Dimension.h>
+#include <fparameters/SpaceIterator.h>
+
 #include <fmath/interpolation.h>
 
 #include <iostream>

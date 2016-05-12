@@ -8,6 +8,7 @@
 #include <flosses\lossesSyn.h>
 #include <flosses\nonThermalLosses.h>
 #include <flosses\lossesIC.h>
+#include <fparameters\SpaceIterator.h>
 
 //#include "losses.h"
 //#include <flosses\lossesHadronics.h>

@@ -5,6 +5,9 @@
 
 #include "targetFields.h"
 
+#include <fparameters\SpaceCoord.h>
+#include <fparameters\Dimension.h>
+#include <algorithm>
 
 
 

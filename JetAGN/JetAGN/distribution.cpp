@@ -5,7 +5,10 @@
 #include "injection.h"
 #include "losses.h"
 #include "timeDistribution.h"
+
 #include <fmath\physics.h>
+#include <fparameters\Dimension.h>
+#include <fparameters\SpaceIterator.h>
 
 
 void distribution(Particle& p, State& st)

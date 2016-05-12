@@ -2,6 +2,9 @@
 
 #include "state.h"
 #include "modelParameters.h"
+
+#include <fparameters\SpaceIterator.h>
+#include <fparameters\Dimension.h>
 #include <fparameters\parameters.h>
 
 //namespace {

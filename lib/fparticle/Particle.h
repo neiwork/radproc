@@ -1,6 +1,8 @@
 #pragma once
 
 #include <fmath\physics.h>
+
+#include <fparameters\ParamSpaceValues.h>
 #include <fparameters\ParamSpace.h>
 
 enum ParticleType { PT_proton, 

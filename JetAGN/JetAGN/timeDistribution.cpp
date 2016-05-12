@@ -9,6 +9,9 @@
 #include <fmath\elimiGaussiana.h>
 #include <fmath\matrixInit.h>
 #include <fmath\physics.h>
+
+#include <fparameters\Dimension.h>
+
 #include <iostream>
 #include <fstream>
 

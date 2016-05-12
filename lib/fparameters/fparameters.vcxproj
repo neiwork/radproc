@@ -74,12 +74,23 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dimension.cpp" />
+    <ClCompile Include="DimensionIterator.cpp" />
     <ClCompile Include="parameters.cpp" />
     <ClCompile Include="ParamSpace.cpp" />
+    <ClCompile Include="ParamSpaceValues.cpp" />
+    <ClCompile Include="SpaceCoord.cpp" />
+    <ClCompile Include="SpaceIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dimension.h" />
+    <ClInclude Include="DimensionCoord.h" />
+    <ClInclude Include="DimensionIterator.h" />
     <ClInclude Include="ParamSpace.h" />
     <ClInclude Include="parameters.h" />
+    <ClInclude Include="ParamSpaceValues.h" />
+    <ClInclude Include="SpaceCoord.h" />
+    <ClInclude Include="SpaceIterator.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fmath\fmath.vcxproj">

@@ -7,6 +7,8 @@
 #include <fluminosities\luminositySynchrotron.h>
 #include <fluminosities\luminosityIC.h>
 
+#include <fparameters\Dimension.h>
+#include <fparameters\SpaceIterator.h>
 
 
 //#include <omp.h>

@@ -1,5 +1,8 @@
 #include "checkPower.h"
 
+#include <fparameters/ParamSpaceValues.h>
+#include <fparameters/ParamSpace.h>
+#include <fparameters/Dimension.h>
 
 #include "write.h"
 

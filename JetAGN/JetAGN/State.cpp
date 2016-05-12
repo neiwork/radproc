@@ -1,5 +1,8 @@
 #include "State.h"
 
+#include <fparameters\Dimension.h>
+#include <fparameters\SpaceIterator.h>
+
 State::State() :
 	nph(photon.ps,false)
 {

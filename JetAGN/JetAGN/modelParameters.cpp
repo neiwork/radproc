@@ -6,6 +6,7 @@
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
 #include <iostream>
+#include <algorithm>
 
 double fmagneticField(double z, double B_o)
 {

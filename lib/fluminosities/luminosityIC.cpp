@@ -6,7 +6,8 @@
 #include <flosses\crossSectionInel.h>
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
-//#include <algorithm>
+
+#include <algorithm>
 
 
 double cICemi(double u, double E, double mass, double phEmin)  //limite inferior
