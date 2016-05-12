@@ -33,8 +33,6 @@ public:
 	// Data of electrons and protons
 
 	double primaryIndex;
-	double electronNormalization;
-	double protonNormalization;
 
 	double electronLogEmin;
 	double electronLogEmax;

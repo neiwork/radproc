@@ -9,8 +9,6 @@ Parameters::Parameters() {
 	//particle injection
 	accEfficiency = 0.0;
 	primaryIndex = 0.0;
-	electronNormalization = 0.0;
-	protonNormalization = 0.0;
 
 	electronLogEmin = 0.0;
 	electronLogEmax = 0.0;
