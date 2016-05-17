@@ -114,15 +114,17 @@ void setParameters(void )
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	ParticleCfg<Proton>::config.nE = 20;
-	ParticleCfg<Electron>::config.nE = 20;
-	ParticleCfg<Photon>::config.nE = 20;
-	ParticleCfg<Pion>::config.nE = 20;
-	ParticleCfg<Muon>::config.nE = 20;
-	ParticleCfg<Neutrino>::config.nE = 20;
-	ParticleCfg<Neutron>::config.nE = 20;
-	ParticleCfg<SecondaryElectron>::config.nE = 20;
-	ParticleCfg<Positron>::config.nE = 20;
+	const auto nEnergyPoints = 10;
+
+	ParticleCfg<Proton>::config.nE = nEnergyPoints;
+	ParticleCfg<Electron>::config.nE = nEnergyPoints;
+	ParticleCfg<Photon>::config.nE = nEnergyPoints;
+	ParticleCfg<Pion>::config.nE = nEnergyPoints;
+	ParticleCfg<Muon>::config.nE = nEnergyPoints;
+	ParticleCfg<Neutrino>::config.nE = nEnergyPoints;
+	ParticleCfg<Neutron>::config.nE = nEnergyPoints;
+	ParticleCfg<SecondaryElectron>::config.nE = nEnergyPoints;
+	ParticleCfg<Positron>::config.nE = nEnergyPoints;
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)

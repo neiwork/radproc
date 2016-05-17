@@ -28,7 +28,7 @@ void State::initializeParticle(Particle& p)
 
 	double rmin = 1.0*pc;
 	double rmax = 1.0e3*pc;
-	int nR = 10;
+	int nR = 4; // solo por ahora; y no deberia ser usado directamente desde otro lado
 
 	// add dimension for R
 	p.ps.add(new Dimension(nR + 1, bind(initializeRPoints, _1, rmin, rmax)));
