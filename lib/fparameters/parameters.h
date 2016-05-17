@@ -9,8 +9,6 @@ public:
 
 		double magneticField{ 0 };
 		
-		double radius{ 0 };  // cambie Rc por radius, asi que no van a compilar las cosas viejas
-		                // [av] usado solo por opticalDepthSSA
 	// </derivados>
 
 	double accEfficiency{ 0 };

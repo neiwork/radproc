@@ -41,10 +41,17 @@ void distribution(Particle& p, State& st)
 			});      //ver si quizas lo puedo copiar en t-1 que es donde lo necesito
 
 			p.ps.iterate([&](const SpaceIterator& i){
-				
 				double E = i.val(DIM_E);
+				//
+				// equivale a:
+				//	i.its[0].val();
+				//	i.its[0].peek(DIM_E);
+				//
+				// equivalia a:
+				//	 ex i.par.T;
+
 				double r = i.val(DIM_R);
-				double t = i.val(DIM_T);
+				double t = i.val(DIM_T); 
 
 				double Emax = eEmax(r, parameters.magneticField);
 				

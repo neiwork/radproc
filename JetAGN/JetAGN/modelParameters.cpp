@@ -55,7 +55,7 @@ double computeModelB0(double Lj, double openingAngle) {
 void derive_parameters_r(double E, double z, double t)
 {
 	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
-	parameters.radius = jetRadius(z, parameters.openingAngle);
+	//parameters.radius = jetRadius(z, parameters.openingAngle);
 	parameters.magneticField = fmagneticField(z, B0);
 	//electronLogEmax = log10(eEmax(z, magneticField));
 
@@ -93,14 +93,17 @@ void setParameters(void )
 	parameters.primaryIndex = 2.0;
 	//factor_qrel   = 3.0; 
 
+	const auto nEnergyPoints = 10;
+
 	ParticleCfg<Electron>::config.logEmin = 6.0;
 	ParticleCfg<Electron>::config.logEmax = 15.0;
-
+	ParticleCfg<Electron>::config.nE = nEnergyPoints;
 
 //Data of photons
 
 	ParticleCfg<Photon>::config.logEmin = -6.0;
 	ParticleCfg<Photon>::config.logEmax = 12.0;
+	ParticleCfg<Photon>::config.nE = nEnergyPoints;
 
 	//parameters.targetPhotonEmin = pow(10.0, parameters.photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
 	//parameters.targetPhotonEmax = pow(10.0, parameters.photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV
@@ -114,17 +117,6 @@ void setParameters(void )
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	const auto nEnergyPoints = 10;
-
-	ParticleCfg<Proton>::config.nE = nEnergyPoints;
-	ParticleCfg<Electron>::config.nE = nEnergyPoints;
-	ParticleCfg<Photon>::config.nE = nEnergyPoints;
-	ParticleCfg<Pion>::config.nE = nEnergyPoints;
-	ParticleCfg<Muon>::config.nE = nEnergyPoints;
-	ParticleCfg<Neutrino>::config.nE = nEnergyPoints;
-	ParticleCfg<Neutron>::config.nE = nEnergyPoints;
-	ParticleCfg<SecondaryElectron>::config.nE = nEnergyPoints;
-	ParticleCfg<Positron>::config.nE = nEnergyPoints;
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)
