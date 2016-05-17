@@ -14,14 +14,20 @@
 void distribution(Particle& p, State& st)
 {
 	show_message(msgStart, Module_electronDistribution);
+
+	const ParamSpace& ps{ p.ps };
 	
+	const double rmin = ps[DIM_R].first();
+	const double rmax = ps[DIM_R].last();
+	const double nR = ps[DIM_R].size()-1;
+
 	ParamSpaceValues N2(p.ps);
-	N2.fill([&N2](const SpaceIterator& i){
+	N2.fill([&](const SpaceIterator& i){
 		return 0.0;
 	});
 
 	ParamSpaceValues N12(p.ps);
-	N12.fill([&N12](const SpaceIterator& i){
+	N12.fill([&](const SpaceIterator& i){
 		return 0.0;
 	});
 
@@ -30,15 +36,15 @@ void distribution(Particle& p, State& st)
 		 
 		for (int z_ix = 0; z_ix < p.ps[1].size(); z_ix++) { //z_ix <= t_ix; z_ix++) {
 
-			N2.ps.iterate([&p, &N2](const SpaceIterator& i){
+			N2.ps.iterate([&](const SpaceIterator& i){
 				N2.set(i, p.distribution.get(i));  //copia del N  
 			});      //ver si quizas lo puedo copiar en t-1 que es donde lo necesito
 
-			p.ps.iterate([&p, &st, &N2, &N12, &z_ix, &t_ix](const SpaceIterator& i){
+			p.ps.iterate([&](const SpaceIterator& i){
 				
-				double E = i.par.E;
-				double r = i.par.R;
-				double t = i.par.T;
+				double E = i.val(DIM_E);
+				double r = i.val(DIM_R);
+				double t = i.val(DIM_T);
 
 				double Emax = eEmax(r, parameters.magneticField);
 				
@@ -63,7 +69,7 @@ void distribution(Particle& p, State& st)
 			}, { -1, z_ix, t_ix });
 
 
-			p.ps.iterate([&p, &st, &N12, &z_ix, &t_ix](const SpaceIterator& i){
+			p.ps.iterate([&](const SpaceIterator& i){
 
 				double ni = N12.get(i); //el ni es que que obtengo con N12
 
@@ -81,7 +87,7 @@ void distribution(Particle& p, State& st)
 					
 					if (i.its[1].canPeek(1)) { rip1 = i.its[1].peek(+1); }
 					else{
-						double r_int = pow((parameters.rmax / parameters.rmin), (1.0 / parameters.nR));
+						double r_int = pow((rmax / rmin), (1.0 / nR));
 						rip1 = ri*r_int; 
 					}
 

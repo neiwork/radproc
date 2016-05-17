@@ -93,29 +93,36 @@ void setParameters(void )
 	parameters.primaryIndex = 2.0;
 	//factor_qrel   = 3.0; 
 
-	parameters.electronLogEmin = 6.0;
-	parameters.electronLogEmax = 15.0;
+	ParticleCfg<Electron>::config.logEmin = 6.0;
+	ParticleCfg<Electron>::config.logEmax = 15.0;
 
 
 //Data of photons
 
-	parameters.photonLogEmin = -6.0;
-	parameters.photonLogEmax = 12.0;
+	ParticleCfg<Photon>::config.logEmin = -6.0;
+	ParticleCfg<Photon>::config.logEmax = 12.0;
 
 	//parameters.targetPhotonEmin = pow(10.0, parameters.photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
 	//parameters.targetPhotonEmax = pow(10.0, parameters.photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV
 
-	parameters.rmin = 1.0*pc;
-	parameters.rmax = 1.0e3*pc;
-	parameters.nR = 10;
+	//parameters.rmin = 1.0*pc;
+	//parameters.rmax = 1.0e3*pc;
+	//parameters.nR = 10;
 
 	//los parametros de t los comento porque el vector t(i) lo construyo como los crossing times de las celdas xi
 //	timeMin = 1.0e-2; 
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	parameters.nEnergies = 20;        //massive particles
-	parameters.nPhotonEnergies = 20;  //
+	ParticleCfg<Proton>::config.nE = 20;
+	ParticleCfg<Electron>::config.nE = 20;
+	ParticleCfg<Photon>::config.nE = 20;
+	ParticleCfg<Pion>::config.nE = 20;
+	ParticleCfg<Muon>::config.nE = 20;
+	ParticleCfg<Neutrino>::config.nE = 20;
+	ParticleCfg<Neutron>::config.nE = 20;
+	ParticleCfg<SecondaryElectron>::config.nE = 20;
+	ParticleCfg<Positron>::config.nE = 20;
 }
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax)
@@ -133,7 +140,7 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax)
 
 void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 {
-	double R_int = pow((rMax / rMin), (1.0 / parameters.nR));
+	double R_int = pow((rMax / rMin), (1.0 / time.size()));
 
 	Vector v(time.size()+1, 0.0);
 

@@ -42,11 +42,15 @@ void injection(Particle& p, State& st)
 {
 	show_message(msgStart, Module_electronInjection);
 
-	//volumen total del jet
-	double vol = (pi / 3.0)*(P2(jetRadius(parameters.rmax, parameters.openingAngle))*parameters.rmax
-		- P2(jetRadius(parameters.rmin, parameters.openingAngle))*parameters.rmin);
+	const double RMIN = p.ps[DIM_R].first();
+	const double RMAX = p.ps[DIM_R].last();
+	const double N_R = p.ps[DIM_R].size()-1;
 
-	double z_int = pow((parameters.rmax / parameters.rmin), (1.0 / parameters.nR));
+	//volumen total del jet
+	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, parameters.openingAngle))*RMAX
+		- P2(jetRadius(RMIN, parameters.openingAngle))*RMIN);
+
+	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
 
 	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
@@ -58,22 +62,22 @@ void injection(Particle& p, State& st)
 		else //if (t_position = 0) solo inyecto particulas a tiempo 0
 		{
 			double Emin = p.emin();
-			double Emax = eEmax(i.par.R, parameters.magneticField);
+			double Emax = eEmax(i.val(DIM_R), parameters.magneticField);
 			double Q0 = normalization(p, i.coord);
 		
-			double z = i.par.R;			
+			double z = i.val(DIM_R);			
 			double dz = z*(z_int - 1);
 			//volumen de la celda i
 			double vol_i = pi*P2(jetRadius(z, parameters.openingAngle))*dz;
 
-			double total = powerLaw(i.par.E, Emin, Emax)*Q0*vol_i / vol;
+			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol_i / vol;
 
 			return total;
 		}
 
 	});
 
-	double Lnt_total = nonThermalLuminosity(parameters.rmin, parameters.rmax);
+	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
 	
 	std::cout << "Lnt total" << '\t' << Lnt_total << std::endl;
 

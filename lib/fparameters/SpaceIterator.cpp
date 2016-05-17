@@ -7,21 +7,20 @@
 #include <algorithm>
 
 
-SpaceIterator::SpaceIterator(const ParamSpace& ps, Parameters& par, std::initializer_list<int> fixedDimensions) :ps(ps), par(par), its(), coord(ps)
+SpaceIterator::SpaceIterator(const ParamSpace& ps, std::initializer_list<int> fixedDimensions) :ps(ps), its(), coord(ps)
 {
 	std::vector<int> fixed = fixedDimensions;
 	for (size_t i = 0; i < ps.dimensions.size(); ++i){
 		int fix = i < fixed.size() ? fixed[i] : -1;
 		its.push_back(DimensionIterator(ps.dimensions[i], coord.dims[i], fix));
-		ps.dimensions[i]->update(par, std::max(0, fix));
 	}
 	its.front().reset();
 }
 
-bool SpaceIterator::next(Parameters* pars /*= NULL*/)
+bool SpaceIterator::next()
 {
 	size_t ii = 0;
-	while (ii < its.size() && !its[ii].next(pars)) {
+	while (ii < its.size() && !its[ii].next()) {
 		++ii;
 	}
 	return ii < its.size();
@@ -59,6 +58,11 @@ bool SpaceIterator::canPeek(const SpaceCoord& c) const
 		}
 	}
 	return true;
+}
+
+double SpaceIterator::val(DimensionCoord dim) const
+{
+	return its[dim].val();
 }
 
 

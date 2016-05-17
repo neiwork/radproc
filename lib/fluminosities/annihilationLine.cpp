@@ -36,11 +36,11 @@ void annihilationLine(Particle& photon, Particle& electron, Particle& secondaryE
 
 	photon.ps.iterate([&photon,&electron,&secondaryElectron,&positron,&arch](const SpaceIterator& i){
 
-		double factor = P2(i.par.E)*volume;   //este factor pasa de inyeccion a luminosidad a 
+		double factor = P2(i.val(DIM_E))*volume;   //este factor pasa de inyeccion a luminosidad a 
 
-		double line = pairAnnihilation(i.par.E, electron, secondaryElectron, positron);
+		double line = pairAnnihilation(i.val(DIM_E), electron, secondaryElectron, positron);
 
-		arch << log10(i.par.E / 1.6e-12);
+		arch << log10(i.val(DIM_E) / 1.6e-12);
 
 		arch << "\t" << log10(line*factor) << std::endl;
 

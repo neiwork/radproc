@@ -21,7 +21,7 @@ Particle::Particle(ParticleType t, double m, double emin, double emax, int nE)
 	logEmin = emin;
 	logEmax = emax;
 
-	ps.add(new Dimension(nE + 1, bind(initializeEnergyPoints, _1, emin, emax), &Parameters::E));
+	ps.add(new Dimension(nE + 1, bind(initializeEnergyPoints, _1, emin, emax)));
 }
 //
 //
@@ -101,38 +101,12 @@ double Particle::emax() const
 {
 	return 1.6e-12*pow(10.0, logEmax);
 }
-
-SecondaryElectron::SecondaryElectron() :Particle(PT_secondaryElectron, electronMass, parameters.electronLogEmin, 12.0, parameters.nEnergies)
-{
-
-}
-
-Positron::Positron() : Particle(PT_positron, electronMass, parameters.electronLogEmin, 12.0, parameters.nEnergies)
-{
-
-}
-
-Muon::Muon() : Particle(PT_muon, muonMass, parameters.muonLogEmin, parameters.muonLogEmax, parameters.nEnergies)
-{
-
-}
-
-Proton::Proton() : Particle(PT_proton, protonMass, parameters.protonLogEmin, parameters.protonLogEmax, parameters.nEnergies)
-{
-
-}
-
-Electron::Electron() : Particle(PT_electron, electronMass, parameters.electronLogEmin, parameters.electronLogEmax, parameters.nEnergies)
-{
-
-}
-
-Photon::Photon() : Particle(PT_photon, 0.0, parameters.photonLogEmin, parameters.photonLogEmax, parameters.nPhotonEnergies)
-{
-
-}
-
-Pion::Pion() : Particle(PT_pion, chargedPionMass, parameters.pionLogEmin, parameters.pionLogEmax, parameters.nEnergies)
-{
-
-}
+ParticleConfig ParticleCfg<Proton>::config{ PT_proton, protonMass, 0, 0, 0 };
+ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
+ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
+ParticleConfig ParticleCfg<Pion>::config{ PT_pion, 0, 0, 0, 0 };
+ParticleConfig ParticleCfg<Muon>::config{ PT_muon, muonMass, 0, 0, 0 };
+ParticleConfig ParticleCfg<Neutrino>::config{ PT_neutrino, 0, 0, 0, 0 };
+ParticleConfig ParticleCfg<Neutron>::config{ PT_neutron, neutronMass, 0, 0, 0 };
+ParticleConfig ParticleCfg<SecondaryElectron>::config{ PT_secondaryElectron, 0, 0, 0, 0 };
+ParticleConfig ParticleCfg<Positron>::config{ PT_positron, 0, 0, 0, 0 };

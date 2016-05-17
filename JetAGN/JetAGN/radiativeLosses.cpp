@@ -37,31 +37,31 @@ void radiativeLosses(State& st)
 	st.electron.ps.iterate([&st, &files, &out](const SpaceIterator& i){
 
 
-		double fmtE = log10(i.par.E / 1.6e-12);
-		double logR = log10(i.par.R/pc);
-		//double logT = log10(i.par.T);
+		double fmtE = log10(i.val(DIM_E) / 1.6e-12);
+		double logR = log10(i.val(DIM_R)/pc);
+		//double logT = log10(i.val(DIM_T));
 
 		double B = parameters.magneticField; // i.par.magneticField; VER por qué no funciona
 
-		double Reff = 10.0*stagnationPoint(i.par.R);
+		double Reff = 10.0*stagnationPoint(i.val(DIM_R));
 		double vel_lat = cLight*parameters.openingAngle;
 
-		double E = i.par.E;
+		double E = i.val(DIM_E);
 
 		double EphminS(0.0), EphminCMB(0.0);
 		targetPhotonEnergies(EphminS, EphminCMB);
 
-		double eSyn = lossesSyn(i.par.E, B, st.electron) / i.par.E;
-		double eIC = lossesAnisotropicIC(i.par.E, st.electron, i.par.R) / i.par.E;
-		double eIC2 = lossesIC(i.par.E, st.electron,
+		double eSyn = lossesSyn(i.val(DIM_E), B, st.electron) / i.val(DIM_E);
+		double eIC = lossesAnisotropicIC(i.val(DIM_E), st.electron, i.val(DIM_R)) / i.val(DIM_E);
+		double eIC2 = lossesIC(i.val(DIM_E), st.electron,
 			[E](double E){
 			return cmbBlackBody(E);},   
-				EphminCMB, 1.0e4*EphminCMB ) / i.par.E;
+				EphminCMB, 1.0e4*EphminCMB ) / i.val(DIM_E);
 		
 		   
-		double eDif  = diffusionRate(i.par.E, i.par.R, B);
-		double eAcc = accelerationRate(i.par.E, B, parameters.accEfficiency);
-		double eAdia = adiabaticLosses(i.par.E, i.par.R, vel_lat) / i.par.E;
+		double eDif  = diffusionRate(i.val(DIM_E), i.val(DIM_R), B);
+		double eAcc = accelerationRate(i.val(DIM_E), B, parameters.accEfficiency);
+		double eAdia = adiabaticLosses(i.val(DIM_E), i.val(DIM_R), vel_lat) / i.val(DIM_E);
 		
 	out["electronLosses"]->file << fmtE << "\t" << logR 
 											<< "\t" << safeLog10(eSyn) 
@@ -87,13 +87,13 @@ void radiativeLosses(State& st)
 
 	//st.proton.ps.iterate([&st, &files, &out](const SpaceIterator& i){
 
-	//	double fmtE = log10(i.par.E / 1.6e-12);
+	//	double fmtE = log10(i.val(DIM_E) / 1.6e-12);
 
-	//	double pSyn   = lossesSyn(i.par.E, st.proton) / i.par.E;
-	//	double pp     = lossesHadronics(i.par.E, st.proton) / i.par.E;
-	//	double pgamma = lossesPhotoHadronic(i.par.E, st.proton, st.tpf) / i.par.E;
-	//	double pDif   = diffusionRate(i.par.E, st.proton);
-	//	double pAcc   = accelerationRate(i.par.E, st.proton);
+	//	double pSyn   = lossesSyn(i.val(DIM_E), st.proton) / i.val(DIM_E);
+	//	double pp     = lossesHadronics(i.val(DIM_E), st.proton) / i.val(DIM_E);
+	//	double pgamma = lossesPhotoHadronic(i.val(DIM_E), st.proton, st.tpf) / i.val(DIM_E);
+	//	double pDif   = diffusionRate(i.val(DIM_E), st.proton);
+	//	double pAcc   = accelerationRate(i.val(DIM_E), st.proton);
 
 	//	out["protonLosses"]->file << fmtE	<< "\t" << safeLog10(pSyn)
 	//										<< "\t" << safeLog10(pgamma)

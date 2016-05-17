@@ -27,6 +27,15 @@ enum ParticleType { PT_proton,
 					PT_neutron,
                     PT_dummy };
 
+struct ParticleConfig {
+public:
+	ParticleType type;
+	double mass;
+	double logEmin;
+	double logEmax;
+	int nE;
+};
+
 /*
 	Particle State
 	
@@ -48,6 +57,7 @@ public:
 	static void initializeEnergyPoints( Vector& energyPoints, double logEmin, double logEmax );
 
 	Particle(ParticleType t, double m, double emin, double emax, int nE);
+	Particle(const ParticleConfig& pcfg) :Particle(pcfg.type, pcfg.mass, pcfg.logEmin, pcfg.logEmax, pcfg.nE){};
 
 	
 	/* Creates the vectors for injection and distribution 
@@ -60,51 +70,23 @@ public:
 	ParamSpaceValues distribution;
 
 	Dimension* eDim() const;
-
 };
 
-class Proton : public Particle {
+
+template <class ConfigHolder>
+class ParticleCfg : public Particle {
 public:
-	Proton();
+	static ParticleConfig config;
+	ParticleCfg():Particle(ParticleCfg::config) {}
 };
 
-class Electron : public Particle {
-public:
-	Electron();
-};
-
-class Photon : public Particle {
-public:
-	Photon();
-};
-
-class Pion : public Particle {
-public:
-	Pion();
-
-};
-
-class Muon : public Particle {
-public:
-	Muon();
-
-};
-
-class Neutrino : public Particle {
-
-};
-
-class Neutron : public Particle {
-
-};
-
-class SecondaryElectron : public Particle {
-public:
-	SecondaryElectron();
-};
-
-class Positron: public Particle {
-public:
-	Positron();   //estas particulas son los positrones
-};
+class Proton : public ParticleCfg<Proton> {};
+class Electron : public ParticleCfg<Electron> {};
+class Photon: public ParticleCfg<Photon> {};
+class Pion: public ParticleCfg<Pion> {};
+class Muon: public ParticleCfg<Muon> {};
+class Neutrino : public ParticleCfg<Neutrino> {};
+class Neutron : public ParticleCfg<Neutron> {};
+class SecondaryElectron : public ParticleCfg<SecondaryElectron> {};
+class Positron : public ParticleCfg<Positron> {};
 

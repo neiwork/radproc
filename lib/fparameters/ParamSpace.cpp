@@ -18,18 +18,13 @@ void ParamSpace::updateDerivations(const SpaceIterator& i) const {
 	}
 }
 
-void ParamSpace::iterate(Parameters& p, std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
+void ParamSpace::iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
 {
-	SpaceIterator it(*this,p,fixedDimensions);
-	while (it.next(&p)) {
+	SpaceIterator it(*this,fixedDimensions);
+	while (it.next()) {
 		updateDerivations(it);
 		body(it);
 	}
-}
-
-void ParamSpace::iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
-{
-	iterate(Parameters(parameters), body, fixedDimensions);
 }
 
 void ParamSpace::add(Dimension* dim)

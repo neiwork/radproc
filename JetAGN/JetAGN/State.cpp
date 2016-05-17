@@ -26,12 +26,16 @@ void State::initializeParticle(Particle& p)
 {
 	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 
+	double rmin = 1.0*pc;
+	double rmax = 1.0e3*pc;
+	int nR = 10;
+
 	// add dimension for R
-	p.ps.add(new Dimension(parameters.nR + 1, bind(initializeRPoints, _1, parameters.rmin, parameters.rmax), &Parameters::R));
-	p.ps.add(new Dimension(parameters.nR + 1, bind(initializeCrossingTimePoints, _1, parameters.rmin, parameters.rmax), &Parameters::T));
+	p.ps.add(new Dimension(nR + 1, bind(initializeRPoints, _1, rmin, rmax)));
+	p.ps.add(new Dimension(nR + 1, bind(initializeCrossingTimePoints, _1, rmin, rmax)));
 
 	p.ps.addDerivation([](const SpaceIterator& i){
-		derive_parameters_r(i.par.E, i.par.R, i.par.T);
+		derive_parameters_r(i.val(DIM_E), i.val(DIM_R), i.val(DIM_T));
 	});
 
 	p.initialize();

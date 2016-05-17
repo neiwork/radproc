@@ -17,6 +17,7 @@
 
 #include <fparticle\Particle.h>
 #include <fparameters\parameters.h>
+#include <fparameters\Dimension.h>
 #include <fmath\physics.h>
 
 
@@ -32,7 +33,7 @@ int main ()
 		State model;
 
 	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
-		//	double nph = blackBody(i.par.E, i.par.R);
+		//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));
 			//model.nph.set(i, nph);
 		//});
 
@@ -50,7 +51,7 @@ int main ()
 	
 		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
 		//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-		writeRandTParamSpace("electronDist_RT_2.txt", model.electron.distribution, parameters.nEnergies - 4);
+		writeRandTParamSpace("electronDist_RT_2.txt", model.electron.distribution, model.electron.ps[0].size() - 4);
 		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 

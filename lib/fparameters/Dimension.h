@@ -1,22 +1,24 @@
 #pragma once
 
 #include <fmath/interpolation.h>
-#include "parameters.h"
 
 class ParamSpaceValues;
 class Dimension {
 public:
 	
 	Vector values; // all the values in the discretization of this dimension
-	
-	double min;
-	double max;
-	
-	double Parameters::*fieldRef; // the pointer-to-member used to update the parameters object
-	
-	Dimension(size_t size, std::function<void(Vector&)> initializer, double Parameters::*fieldRef = nullptr);
 
-	void update(Parameters& pars, size_t index);
+	inline double first() const {
+		return values.front();
+	};
+
+	inline double last() const {
+		return values.back();
+	};
+
+	Dimension(size_t size, std::function<void(Vector&)> initializer);
+
+	//void update(Parameters& pars, size_t index);
 
 	const double& operator[](const size_t& index) const;
 

@@ -26,10 +26,9 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	// a.iterate;  no me deja hacer esta operacion
 	
 	data.ps.iterate([&file, &data](const SpaceIterator& i){
-
-		double logE = log10(i.par.E / 1.6e-12);
-		double logR = log10(i.par.R);
-		double logT = log10(i.par.T);
+		double logE = log10(i.val(DIM_E) / 1.6e-12);
+		double logR = log10(i.val(DIM_R));
+		double logT = log10(i.val(DIM_T));
 		double logQ = log10(data.get(i)); //log10(salida.values(i));  // values(i));
 //		salida.values(i);
 
@@ -70,8 +69,8 @@ void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 
 		data.ps.iterate([&file, &data](const SpaceIterator& i){
 
-			//double logR = log10(i.par.R);
-			//double time = i.par.T;
+			//double logR = log10(i.val(DIM_R));
+			//double time = i.val(DIM_T);
 			double logQ = safeLog10(data.get(i));
 
 			file << logQ << '\t';
@@ -135,7 +134,7 @@ void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& da
 	file << "log(r)=" << logR << '\t' << "log(t)=" << logT << std::endl;
 	data.ps.iterate([&file, &data](const SpaceIterator& i){
 
-		double logE = log10(i.par.E / 1.6e-12);
+		double logE = log10(i.val(DIM_E) / 1.6e-12);
 		double logQ = safeLog10(data.get(i));
 
 		file << logE << '\t' << logQ << std::endl;

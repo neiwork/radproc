@@ -37,9 +37,9 @@ void distribution(Particle& p, State& st)
 
 				double Emax = pow(10.0, p.logEmax)*1.6e-12;
 
-				double E = i.par.E;
-				double r = i.par.R;
-				double t = i.par.T;				
+				double E = i.val(DIM_E);
+				double r = i.val(DIM_R);
+				double t = i.val(DIM_T);				
 
 
 				double Eeff = effectiveE(E, Emax, t, r, p, st);

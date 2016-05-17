@@ -10,15 +10,15 @@ size_t Dimension::size() const
 	return values.size();
 }
 
-void Dimension::update(Parameters& pars, size_t index)
-{
-	// update the parameters object using the pointer-to-member
-	if (fieldRef != nullptr) {
-		pars.*fieldRef = values[index];
-	}
-}
+//void Dimension::update(Parameters& pars, size_t index)
+//{
+//	// update the parameters object using the pointer-to-member
+//	//if (fieldRef != nullptr) {
+//	//	pars.*fieldRef = values[index];
+//	//}
+//}
 
-Dimension::Dimension(size_t size, std::function<void(Vector&)> initializer, double Parameters::*fieldRef) :fieldRef(fieldRef)
+Dimension::Dimension(size_t size, std::function<void(Vector&)> initializer) 
 {
 	values.resize(size, 0.0);
 	initializer(values);

@@ -12,16 +12,13 @@ DimensionIterator::DimensionIterator(Dimension* dim, DimensionCoord& coord, int 
 	}
 }
 
-bool DimensionIterator::next(Parameters* pars /*= NULL*/)
+bool DimensionIterator::next()
 {
 	index++;
 	bool finished = fixed>=0?(index>fixed):(index == dim->size());
 	if (finished) {
 		// start over
 		index = std::max(0,fixed);
-	}
-	if (pars) {
-		dim->update(*pars, index);
 	}
 	return !finished;
 }

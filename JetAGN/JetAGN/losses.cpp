@@ -11,7 +11,6 @@
 #include <iostream>
 #include <map>
 
-
 double losses(double E, double r, Particle& p, State& st)
 {	
 	//SpaceIterator* i = p.ps.current; //VER

@@ -27,7 +27,11 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 {
 	double sum = 0.0;
 
-	double z_int = pow((parameters.rmax / parameters.rmin), (1.0 / parameters.nR));
+	const double RMIN = pps[DIM_R].first();
+	const double RMAX = pps[DIM_R].last();
+	const double N_R = pps[DIM_R].size()-1;
+
+	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
 	Vector& z = pps.dimensions[1]->values;
 
@@ -71,9 +75,9 @@ void processes(State& st, const std::string& filename)
 	double EphminS(0.0), EphminCMB(0.0);
 	targetPhotonEnergies(EphminS, EphminCMB);
 
-	st.photon.ps.iterate([&st, &Qsyn, &Qic, &QicCMB, &EphminCMB, &EphminS](const SpaceIterator &i){
+	st.photon.ps.iterate([&](const SpaceIterator &i){
 
-		double E = i.par.E;
+		double E = i.val(DIM_E);
 		double eSyn   = luminositySynchrotron(E, st.electron, i.coord); //estos devuelven erg/s/cm^3, integrar!
 		double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
 		double eICcmb = luminosityIC(E, st.electron, i.coord, 
@@ -82,7 +86,7 @@ void processes(State& st, const std::string& filename)
 		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
 		QicCMB.set(i, eICcmb);
-	}, { -1, -1, parameters.nR });
+	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
 
 
 
@@ -103,7 +107,7 @@ void processes(State& st, const std::string& filename)
 			//variables primadas ->FF
 			//variables sin primar-> lab frame
 
-			int t_ix = parameters.nR;
+			int t_ix = pps[DIM_R].size()-1;
 			double E = pps[0][E_ix];
 			double t = pps[2][t_ix];  //t es el ultimo valor
 
@@ -150,14 +154,14 @@ void processes(State& st, const std::string& filename)
 //#pragma omp section
 //	{
 //		Qsyn.fill([&st](const SpaceIterator &i){
-//			return luminositySynchrotron(i.par.E, st.electron); //estos devuelven erg/s/cm^3, integrar!
+//			return luminositySynchrotron(i.val(DIM_E), st.electron); //estos devuelven erg/s/cm^3, integrar!
 //		});
 //	}
 
 //#pragma omp section
 //	{
 //		Qic.fill([&st](const SpaceIterator &i){
-//			return luminosityAnisotropicIC(i.par.E, st.electron, i.par.R);
+//			return luminosityAnisotropicIC(i.val(DIM_E), st.electron, i.val(DIM_R));
 //		});
 //	}
 //}
