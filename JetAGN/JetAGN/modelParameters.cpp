@@ -142,7 +142,7 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax)
 
 void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 {
-	double R_int = pow((rMax / rMin), (1.0 / time.size()));
+	double R_int = pow((rMax / rMin), (1.0 / (time.size()-1)));
 
 	Vector v(time.size()+1, 0.0);
 

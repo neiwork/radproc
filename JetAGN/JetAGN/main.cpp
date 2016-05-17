@@ -51,7 +51,7 @@ int main ()
 	
 		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
 		//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-		writeRandTParamSpace("electronDist_RT_2.txt", model.electron.distribution, model.electron.ps[0].size() - 4);
+		writeRandTParamSpace("electronDist_RT_2.txt", model.electron.distribution, model.electron.ps[0].size() - 5);
 		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
