@@ -17,3 +17,5 @@ void test3DPrint();
 void testBinarySearch();
 
 void testMultiDimensionalInterpolate();
+
+void zeroToN(Vector& v);

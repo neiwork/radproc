@@ -4,19 +4,15 @@
 #include <fparameters/ParamSpace.h>
 #include <fparameters/Dimension.h>
 #include <fparameters/SpaceIterator.h>
+#include <JetAGN/checks.h>
 
 #include <iostream>
+
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace JetAGNUnitTests
 {		
-
-	void zeroToN(Vector& v) {
-		for (int i = 0; i < (int)v.size(); ++i) {
-			v[i] = i;
-		}
-	}
 
 	TEST_CLASS(TestParamSpaceValues)
 	{
