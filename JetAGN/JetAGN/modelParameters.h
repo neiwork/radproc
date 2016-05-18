@@ -3,6 +3,9 @@
 #include <fmath\mathematics.h>
 #include <fparticle\Particle.h>
 
+class Electron : public ParticleCfg<Electron> {};
+class Photon : public ParticleCfg<Photon> {};
+
 const DimensionCoord
 	DIM_E = 0,
 	DIM_R = 1,

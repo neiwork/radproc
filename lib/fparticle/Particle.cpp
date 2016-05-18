@@ -101,12 +101,3 @@ double Particle::emax() const
 {
 	return 1.6e-12*pow(10.0, logEmax);
 }
-ParticleConfig ParticleCfg<Proton>::config{ PT_proton, protonMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
-ParticleConfig ParticleCfg<Pion>::config{ PT_pion, chargedPionMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<Muon>::config{ PT_muon, muonMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<Neutrino>::config{ PT_neutrino, 0, 0, 0, 0 };
-ParticleConfig ParticleCfg<Neutron>::config{ PT_neutron, neutronMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<SecondaryElectron>::config{ PT_secondaryElectron, electronMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<Positron>::config{ PT_positron, electronMass, 0, 0, 0 };

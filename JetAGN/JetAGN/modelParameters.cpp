@@ -8,6 +8,9 @@
 #include <iostream>
 #include <algorithm>
 
+ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
+ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
+
 double fmagneticField(double z, double B_o)
 {
 	return B_o/z;

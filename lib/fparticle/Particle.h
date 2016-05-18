@@ -79,14 +79,3 @@ public:
 	static ParticleConfig config;
 	ParticleCfg():Particle(ParticleCfg::config) {}
 };
-
-class Proton : public ParticleCfg<Proton> {};
-class Electron : public ParticleCfg<Electron> {};
-class Photon: public ParticleCfg<Photon> {};
-class Pion: public ParticleCfg<Pion> {};
-class Muon: public ParticleCfg<Muon> {};
-class Neutrino : public ParticleCfg<Neutrino> {};
-class Neutron : public ParticleCfg<Neutron> {};
-class SecondaryElectron : public ParticleCfg<SecondaryElectron> {};
-class Positron : public ParticleCfg<Positron> {};
-

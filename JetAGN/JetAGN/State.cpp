@@ -3,6 +3,10 @@
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 
+ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
+
+ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
+
 State::State() :
 	nph(photon.ps,false)
 {
