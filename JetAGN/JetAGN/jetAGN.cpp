@@ -42,7 +42,7 @@ int jetAGN()
 
 		injection(model.electron, model);
 
-		checkInyectedPower(model.electron.injection, 0);
+		std::cout << "checking injected power" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
 
 	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
 	//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)

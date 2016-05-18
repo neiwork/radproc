@@ -9,7 +9,7 @@
 #include <fmath\physics.h>
 
 
-double checkInyectedPower(const ParamSpaceValues& dist, int t_ix)
+double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
 {
 	double sum = 0.0;
 
@@ -36,8 +36,6 @@ double checkInyectedPower(const ParamSpaceValues& dist, int t_ix)
 		}
 
 	}
-
-	std::cout << "checking injected power" << '\t' << sum << std::endl;
 
 	return sum;
 }

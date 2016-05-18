@@ -10,20 +10,22 @@
 
 #include <iostream>
 #include <iomanip>
-void check_vec(const Vector& a, const Vector& b)
+#include <algorithm>
+
+bool check_vec(const std::vector<double>& a, const std::vector<double>& b)
 {
-	//size_t N = a.size();
-	//bool error = false;
-	//for (int i = 0; i < N; ++i) {
-	//	if (std::abs((a[i] - b[i]) / b[i]) >= 1.0e-15) {
-	//		std::cout << (a[i] - b[i]) / std::max(std::abs(a[i]), std::abs(b[i])) << " diff at " << i << std::endl;
-	//		error = true;
-	//	}
-	//}
-	//if (error) {
-	//	throw;
-	//}
-	//std::cout << "OK." << std::endl;
+	size_t N = a.size();
+	if (a.size() != b.size()) {
+		return false;
+	}
+	bool error = false;
+	for (int i = 0; i < N; ++i) {
+		if (std::abs((a[i] - b[i]) / b[i]) >= 1.0e-15) {
+			std::cout << (a[i] - b[i]) / std::max(std::abs(a[i]), std::abs(b[i])) << " diff at " << i << std::endl;
+			error = true;
+		}
+	}
+	return !error;
 }
 
 void check_inj(const Particle& p)

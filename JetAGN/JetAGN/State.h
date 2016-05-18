@@ -19,7 +19,7 @@ public:
 	ParamSpaceValues nph;
 	//fun1 tpf;
 
-	State();
+	State(int timePoints = 4);
 	
-	void initializeParticle(Particle& p);
+	void initializeParticle(Particle& p, int timePoints);
 };

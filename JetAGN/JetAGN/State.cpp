@@ -7,7 +7,7 @@ ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0
 
 ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
 
-State::State() :
+State::State(int timePoints) :
 	nph(photon.ps,false)
 {
 	particles.push_back(&electron);
@@ -19,20 +19,20 @@ State::State() :
 	//particles.push_back(&positron);
 
 	for (auto p : particles) {
-		initializeParticle(*p);
+		initializeParticle(*p,timePoints);
 	}
 
 	nph.initialize();
 	//tpf = nph.dimInterpolator(0);
 }
 
-void State::initializeParticle(Particle& p)
+void State::initializeParticle(Particle& p, int timePoints)
 {
 	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 
 	double rmin = 1.0*pc;
 	double rmax = 1.0e3*pc;
-	int nR = 4; // solo por ahora; y no deberia ser usado directamente desde otro lado
+	int nR = timePoints; // solo por ahora; y no deberia ser usado directamente desde otro lado
 
 	// add dimension for R
 	p.ps.add(new Dimension(nR + 1, bind(initializeRPoints, _1, rmin, rmax)));

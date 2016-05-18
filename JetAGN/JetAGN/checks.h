@@ -2,7 +2,7 @@
 
 #include "State.h"
 
-void check_vec(const Vector& a, const Vector& b);
+bool check_vec(const std::vector<double>& a, const std::vector<double>& b);
 
 void check_inj(const Particle& p);
 

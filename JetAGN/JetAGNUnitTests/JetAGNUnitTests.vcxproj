@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TestJetAGNResults.cpp" />
     <ClCompile Include="TestParamSpaceValues.cpp" />
   </ItemGroup>
   <ItemGroup>
