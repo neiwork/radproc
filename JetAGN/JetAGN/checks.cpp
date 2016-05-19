@@ -19,7 +19,7 @@ bool check_vec(const std::vector<double>& a, const std::vector<double>& b)
 		return false;
 	}
 	bool error = false;
-	for (int i = 0; i < N; ++i) {
+	for (size_t i = 0; i < N; ++i) {
 		if (std::abs((a[i] - b[i]) / b[i]) >= 1.0e-15) {
 			std::cout << (a[i] - b[i]) / std::max(std::abs(a[i]), std::abs(b[i])) << " diff at " << i << std::endl;
 			error = true;

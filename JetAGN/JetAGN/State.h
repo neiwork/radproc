@@ -22,5 +22,7 @@ public:
 
 	State(boost::property_tree::ptree& cfg);
 	
+	Dimension* createDimension(Particle& p, std::string dimid, std::function<void(Vector&, double, double)> initializer, boost::property_tree::ptree& cfg);
+
 	void initializeParticle(Particle& p, boost::property_tree::ptree& cfg);
 };

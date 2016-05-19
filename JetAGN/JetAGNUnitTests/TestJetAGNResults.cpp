@@ -44,7 +44,6 @@ namespace JetAGNUnitTests
 			Assert::AreEqual<size_t>(4, model.electron.ps[0].size(), L"energy dimension size", LINE_INFO());
 			Assert::AreEqual<size_t>(3, model.electron.ps[1].size(), L"energy dimension size", LINE_INFO());
 			Assert::AreEqual<size_t>(3, model.electron.ps[2].size(), L"energy dimension size", LINE_INFO());
-
 		}
 
 		TEST_METHOD(TestEnergyDimensionValues11)

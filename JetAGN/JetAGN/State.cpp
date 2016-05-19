@@ -29,10 +29,10 @@ State::State(boost::property_tree::ptree& cfg) :
 }
 
 
-Dimension* createDimension(Particle& p, std::string dimid, std::function<void(Vector&,double,double)> initializer, boost::property_tree::ptree& cfg) {
+Dimension* State::createDimension(Particle& p, std::string dimid, std::function<void(Vector&,double,double)> initializer, boost::property_tree::ptree& cfg) {
 	int samples = p.getpar<int>(cfg,"dim." + dimid + ".samples");
-	int min = p.getpar<int>(cfg, "dim." + dimid + ".min");
-	int max = p.getpar<int>(cfg, "dim." + dimid + ".max");
+	double min = p.getpar<double>(cfg, "dim." + dimid + ".min");
+	double max = p.getpar<double>(cfg, "dim." + dimid + ".max");
 	return new Dimension(samples, bind(initializer, std::placeholders::_1, min, max));
 }
 
