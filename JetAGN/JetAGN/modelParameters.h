@@ -21,7 +21,7 @@ void initializeRPoints(Vector& v, double Rmin, double Rmax);
 
 void initializeCrossingTimePoints(Vector& time, double rMin, double rMax);
 
-//void initializeLinearPoints(Vector& v, double tMin, double tMax);
+void initializeEnergyPoints(Vector& v, double logEmin, double logEmax);
 
 /* change_parameters changes the values of some parameters for the iteration on variable r*/
 void derive_parameters_r(double E, double R, double T);

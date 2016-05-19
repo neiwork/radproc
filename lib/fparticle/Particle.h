@@ -35,8 +35,6 @@ public:
 	double emax() const;
 	double emin() const;
 
-	static void initializeEnergyPoints(Vector& energyPoints, double logEmin, double logEmax);
-
 	template<typename T> T getpar(boost::property_tree::ptree& cfg, const std::string &path, const T& def = T{}) {
 		return cfg.get<T>("particle." + id + "." + path, cfg.get<T>("particle.default." + path, def));
 	}

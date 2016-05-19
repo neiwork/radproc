@@ -43,7 +43,7 @@ void State::initializeParticle(Particle& p, boost::property_tree::ptree& cfg)
 	p.configure(cfg.get_child("particle.default"));
 	p.configure(cfg.get_child("particle."+p.id));
 
-	p.ps.add(createDimension(p,"energy",Particle::initializeEnergyPoints,cfg));
+	p.ps.add(createDimension(p,"energy",initializeEnergyPoints,cfg));
 
 	// we can't use createDimension because we're multiplying by pc before creating them
 	// add dimension for R

@@ -46,6 +46,22 @@ namespace JetAGNUnitTests
 			Assert::AreEqual<size_t>(3, model.electron.ps[2].size(), L"energy dimension size", LINE_INFO());
 
 		}
+
+		TEST_METHOD(TestEnergyDimensionValues11)
+		{
+			auto cfg = config();
+			cfg.put<int>("particle.default.dim.energy.samples", 11);
+
+			setParameters(cfg);
+			State model(cfg);
+			
+			// check construction of standard 11-value energy vector
+			std::vector<double> expected{ { 1.6000000000000001e-006, 1.6000000000000003e-005, 0.00016000000000000007, 0.0016000000000000009, 0.016000000000000011, 0.16000000000000014, 1.6000000000000016, 16.000000000000018, 160.00000000000020, 1600.0000000000023, 16000.000000000025 } };
+
+			Assert::IsTrue(check_vec(expected, model.electron.ps[0].values), L"wrong energy dimension vector", LINE_INFO());
+		}
+
+
 		TEST_METHOD(TestInjection)
 		{
 			auto cfg = config();

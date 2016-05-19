@@ -66,37 +66,6 @@ void Particle::initialize() {
 	distribution.initialize();
 }
 
-void Particle::initializeEnergyPoints(Vector& v, double logEmin, double logEmax)
-{
-	double Emax = 1.6e-12*pow(10, logEmax);
-	double Emin = 1.6e-12*pow(10, logEmin);
-
-	double E_int = pow((10 * Emax / Emin), (1.0 / (v.size() - 1)));
-
-	v[0] = Emin;
-
-	for (size_t i = 1; i < v.size(); ++i){
-		v[i] = v[i - 1] * E_int;
-	}
-
-}
-
-
-//
-//void Particle::initializeLinearEnergyPoints( int n )
-//{
-//	double Emax  = 1.6e-12*pow(10,logEmax);    
-//	double Emin  = 1.6e-12*pow(10,logEmin);
-//
-//	double E_int = (Emax-Emin)/n;
-//
-//	energyPoints[0] = Emin;
-//
-//	for (size_t i=1; i < energyPoints.size() ; ++i){  
-//		energyPoints[i] = energyPoints[i-1]+E_int;
-//	}
-//
-//}
 
 Dimension* Particle::eDim() const
 {

@@ -1,0 +1,41 @@
+{
+	"startT":3.0e3,
+	
+	"particle": {
+		"default": {
+			"mass":0,
+			"dim": {
+				"energy":{
+					"samples":11
+				},
+				"radius":{
+					"min":1.0,
+					"max":1.0e3,
+					"samples":5
+				},
+				"time":{
+					"min":1.0,
+					"max":1.0e3,
+					"samples":5
+				}
+			}
+		},
+		"photon": {
+			"dim":{
+				"energy": {
+					"min":-6.0,
+					"max":12.0
+				}
+			}
+		},
+		"electron": {
+			"mass":9.1094e-28,
+			"dim":{
+				"energy": {
+					"min":6.0,
+					"max":15.0
+				}
+			}
+		}
+	}
+}
