@@ -19,7 +19,7 @@ void distribution(Particle& p, State& st)
 	
 	const double rmin = ps[DIM_R].first();
 	const double rmax = ps[DIM_R].last();
-	const double nR = ps[DIM_R].size()-1;
+	const int nR = ps[DIM_R].size()-1;
 
 	ParamSpaceValues N2(p.ps);
 	N2.fill([&](const SpaceIterator& i){

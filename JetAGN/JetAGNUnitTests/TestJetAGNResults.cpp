@@ -1,5 +1,7 @@
 #include "CppUnitTest.h"
 
+#include <fparameters/Dimension.h>
+
 #include <JetAGN/distribution.h>
 #include <JetAGN/injection.h>
 #include <JetAGN/State.h>
@@ -11,38 +13,59 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace JetAGNUnitTests
 {
+	/* Default parameter config for testing. */
+	boost::property_tree::ptree config() {
+
+		boost::property_tree::ptree cfg, dim;
+		dim.add<int>("energy.samples", 4);
+		dim.add<int>("radius.samples", 3);
+		dim.add<int>("time.samples", 3);
+		cfg.add_child("particle.default.dim", dim);
+
+		cfg.add<double>("particle.electron.mass", electronMass);
+		cfg.add<double>("particle.electron.dim.energy.min", 6.0);
+		cfg.add<double>("particle.electron.dim.energy.max", 15.0);
+		cfg.add<double>("particle.photon.dim.energy.min", -6.0);
+		cfg.add<double>("particle.photon.dim.energy.max", 12.0);
+
+		return std::move(cfg);
+	}
 
 	TEST_CLASS(JetAGNResults)
 	{
 	public:
 
-		TEST_METHOD(Injection)
+		TEST_METHOD(TestStateConfiguration)
 		{
-			setParameters();
+			auto cfg = config();
+			setParameters(cfg);
+			State model(cfg);
+			
+			Assert::AreEqual<size_t>(4, model.electron.ps[0].size(), L"energy dimension size", LINE_INFO());
+			Assert::AreEqual<size_t>(3, model.electron.ps[1].size(), L"energy dimension size", LINE_INFO());
+			Assert::AreEqual<size_t>(3, model.electron.ps[2].size(), L"energy dimension size", LINE_INFO());
 
-			const double energyPointsForTesting = 4;
-			ParticleCfg<Electron>::config.nE = energyPointsForTesting;
-			ParticleCfg<Photon>::config.nE = energyPointsForTesting;
-
-			State model(3);
+		}
+		TEST_METHOD(TestInjection)
+		{
+			auto cfg = config();
+			setParameters(cfg);
+			State model(cfg);
 
 			injection(model.electron, model);
 
 			double injectedPower = computeInjectedPower(model.electron.injection, 0);
-			Assert::AreEqual(1.8828708877129821e+044, injectedPower, L"wrong injected power", LINE_INFO());
+			Assert::AreEqual(1.1372460991317841e+044, injectedPower, L"wrong injected power", LINE_INFO());
 
 		}
 
-		TEST_METHOD(Distribution)
+		TEST_METHOD(TestDistribution)
 		{
-			setParameters();
-
 			// OVERRIDE DISCRETIZATION TO MAKE SURE TEST RUNS FAST
 			// >>
-			const double energyPointsForTesting = 3;
-			ParticleCfg<Electron>::config.nE = energyPointsForTesting;
-			ParticleCfg<Photon>::config.nE = energyPointsForTesting;
-			State model(2);
+			auto cfg = config();
+			setParameters(cfg);
+			State model(cfg);
 			// <<
 
 			injection(model.electron, model);

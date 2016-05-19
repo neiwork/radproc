@@ -186,10 +186,12 @@ void testSpaceIterator2() {
 	//setParameters();
 	//factor_qrel   = 3.0; 
 
-	double electronLogEmin = 6.0;
-	double electronLogEmax = 15.0;
-	Particle electron(PT_electron, electronMass, electronLogEmin, electronLogEmax, 10);
+	Particle electron("electron");
+	electron.logEmin = 6.0;
+	electron.logEmax = 15.0;
+	electron.mass = electronMass;
 
+	electron.ps.add(new Dimension(10, zeroToN));
 	electron.ps.add(new Dimension(5, zeroToN));
 	electron.ps.add(new Dimension(4, zeroToN));
 

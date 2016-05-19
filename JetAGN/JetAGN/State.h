@@ -3,23 +3,24 @@
 #include "modelParameters.h"
 #include <fparticle/Particle.h>
 #include <fmath\mathematics.h>
+#include <fmath\physics.h>
 
 class State {
 public:
 	std::vector<Particle*> particles;
 
-	Electron electron;
+	Particle electron;
 	//Proton proton;
 	//Pion pion;
 	//Muon muon;
-	Photon photon;
+	Particle photon;
 	//SecondaryElectron secondaryElectron;
 	//Positron positron;
 
 	ParamSpaceValues nph;
 	//fun1 tpf;
 
-	State(int timePoints = 4);
+	State(boost::property_tree::ptree& cfg);
 	
-	void initializeParticle(Particle& p, int timePoints);
+	void initializeParticle(Particle& p, boost::property_tree::ptree& cfg);
 };

@@ -8,8 +8,8 @@
 #include <iostream>
 #include <algorithm>
 
-ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
-ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
+//ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
+//ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
 
 double fmagneticField(double z, double B_o)
 {
@@ -65,15 +65,15 @@ void derive_parameters_r(double E, double z, double t)
 	//Rsp = stagnationPoint(z);
 }
 
-void setParameters(void )
+void setParameters(bpt::ptree& cfg)
 {
 	
-	double mBH = 1.0e7*solarMass;  //black hole mass
-	double rg = mBH*gravitationalConstant / cLight2;
+	//double mBH = 1.0e7*solarMass;  //black hole mass
+	//double rg = mBH*gravitationalConstant / cLight2;
 
-	double z0 = 50.0*rg; //50 * Rschw  //OJO! si cambian, cambiar tmb nonthermalLuminosity!!
+	//double z0 = 50.0*rg; //50 * Rschw  //OJO! si cambian, cambiar tmb nonthermalLuminosity!!
 
-	parameters.starT = 3.0e3;
+	parameters.starT = cfg.get<double>("starT",3.0e3);
 
 	parameters.Lj = 1.0e43;
 	parameters.openingAngle = 0.1;  //jet opening angle
@@ -82,8 +82,9 @@ void setParameters(void )
 
 //	Rsp = 1.0e14; //distance to stagnation point
 
-	double inc = 10.0*pi / 180; //ang obs del jet
 	parameters.Gamma = 10;
+
+	double inc = 10.0*pi / 180; //ang obs del jet
 	double beta = 1.0 - 1.0 / P2(parameters.Gamma);
 	parameters.Dlorentz = 1.0 / (parameters.Gamma*(1.0 - cos(inc)*beta));
 
@@ -96,17 +97,17 @@ void setParameters(void )
 	parameters.primaryIndex = 2.0;
 	//factor_qrel   = 3.0; 
 
-	const auto nEnergyPoints = 10;
-
-	ParticleCfg<Electron>::config.logEmin = 6.0;
-	ParticleCfg<Electron>::config.logEmax = 15.0;
-	ParticleCfg<Electron>::config.nE = nEnergyPoints;
-
-//Data of photons
-
-	ParticleCfg<Photon>::config.logEmin = -6.0;
-	ParticleCfg<Photon>::config.logEmax = 12.0;
-	ParticleCfg<Photon>::config.nE = nEnergyPoints;
+//	const auto nEnergyPoints = cfg.get<int>("particle.default.dim.energy.samples", 10);
+//
+//	ParticleCfg<Electron>::config.logEmin = cfg.get<double>("particle.electron.dim.energy.min", 6.0);
+//	ParticleCfg<Electron>::config.logEmax = cfg.get<double>("particle.electron.dim.energy.max", 15.0);
+//	ParticleCfg<Electron>::config.nE = cfg.get<int>("particle.electron.dim.energy.samples", nEnergyPoints);
+//
+////Data of photons
+//
+//	ParticleCfg<Photon>::config.logEmin = cfg.get<double>("particle.photon.dim.energy.min", -6.0);
+//	ParticleCfg<Photon>::config.logEmax = cfg.get<double>("particle.photon.dim.energy.max", 12.0);
+//	ParticleCfg<Photon>::config.nE = cfg.get<int>("particle.photon.dim.energy.samples", nEnergyPoints);
 
 	//parameters.targetPhotonEmin = pow(10.0, parameters.photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
 	//parameters.targetPhotonEmax = pow(10.0, parameters.photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV

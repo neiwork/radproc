@@ -18,13 +18,10 @@ double losses(double E, double r, Particle& p, State& st)
 	//double r = i->par.R;
 	double B = parameters.magneticField; //VER no funciona i->par.magneticField;
 	
-	switch (p.type)	{
-	case PT_electron:
-
+	if(p.id == "electron")	{
 		return  lossesSyn(E, B, p) +
 				adiabaticLosses(E, r, cLight) +
 				lossesAnisotropicIC(E, p, r);
-			break;
 	}
 
 	//	case PT_proton:
@@ -32,6 +29,6 @@ double losses(double E, double r, Particle& p, State& st)
 //			+ lossesPhotoHadronic(E,particle,state.tpf);
 //		break;
 //	}
-//	throw 0;
+	throw 0;
 }
 

@@ -13,5 +13,8 @@
     <ClCompile Include="TestJetAGNResults.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

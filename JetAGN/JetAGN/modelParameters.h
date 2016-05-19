@@ -2,9 +2,12 @@
 
 #include <fmath\mathematics.h>
 #include <fparticle\Particle.h>
+#include <boost/property_tree/ptree.hpp>
 
-class Electron : public ParticleCfg<Electron> {};
-class Photon : public ParticleCfg<Photon> {};
+namespace bpt = boost::property_tree;
+//
+//class Electron : public ParticleCfg<Electron> {};
+//class Photon : public ParticleCfg<Photon> {};
 
 const DimensionCoord
 	DIM_E = 0,
@@ -12,7 +15,7 @@ const DimensionCoord
 	DIM_T = 2;
 
 /* define the inital values of the global parameters*/
-void setParameters(void );
+void setParameters( bpt::ptree& parcfg );
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax);
 

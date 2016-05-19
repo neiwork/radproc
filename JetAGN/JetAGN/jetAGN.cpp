@@ -22,15 +22,23 @@
 
 
 
+
+
+
+
+#include <boost/property_tree/json_parser.hpp>
+
+namespace bpt = boost::property_tree;
+
 int jetAGN()
 {
-	try
-	{
-		//testBinarySearch();
+	try {
+		bpt::ptree parcfg;
+		bpt::read_json("parameters.json", parcfg);
 
-		setParameters();
+		setParameters(parcfg);
 
-		State model;
+		State model(parcfg);
 
 	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
 		//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));

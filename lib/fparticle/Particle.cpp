@@ -9,20 +9,31 @@ namespace {
 		}
 	}
 }
-//si la inicializo asi entonces el modelo NO depende del tiempo
-Particle::Particle(ParticleType t, double m, double emin, double emax, int nE)
-	:injection(ps,false), // these PSVs are not initialized immediately, only after this PS has been constructed
-	distribution(ps,false)
+////si la inicializo asi entonces el modelo NO depende del tiempo
+//Particle::Particle(ParticleType t, double m, double emin, double emax)
+//	:injection(ps,false), // these PSVs are not initialized immediately, only after this PS has been constructed
+//	distribution(ps,false)
+//{
+//	type = t;
+//	mass = m;
+//	logEmin = emin;
+//	logEmax = emax;
+//}
+
+Particle::Particle(const std::string& id)
+:id{ id },
+ mass{ 0 },
+ injection{ ps, false }, // these PSVs are not initialized immediately, only after this PS has been constructed
+ distribution{ ps, false }
 {
-	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
-
-	type = t;
-	mass = m;
-	logEmin = emin;
-	logEmax = emax;
-
-	ps.add(new Dimension(nE + 1, bind(initializeEnergyPoints, _1, emin, emax)));
 }
+
+void Particle::configure(boost::property_tree::ptree& cfg) {
+	mass = cfg.get<double>("mass", mass);
+	logEmin = cfg.get<double>("dim.energy.min", logEmin);
+	logEmax= cfg.get<double>("dim.energy.max", logEmax);
+}
+
 //
 //
 ////si la inicializo asi entonces el modelo depende del tiempo  (o es inhomogeneo?? )
@@ -57,15 +68,15 @@ void Particle::initialize() {
 
 void Particle::initializeEnergyPoints(Vector& v, double logEmin, double logEmax)
 {
-	double Emax  = 1.6e-12*pow(10,logEmax);    
-	double Emin  = 1.6e-12*pow(10,logEmin);
+	double Emax = 1.6e-12*pow(10, logEmax);
+	double Emin = 1.6e-12*pow(10, logEmin);
 
-	double E_int = pow((10*Emax/Emin),(1.0/(v.size()-1)));
+	double E_int = pow((10 * Emax / Emin), (1.0 / (v.size() - 1)));
 
 	v[0] = Emin;
 
-	for (size_t i=1; i < v.size() ; ++i){  
-		v[i] = v[i-1]*E_int;
+	for (size_t i = 1; i < v.size(); ++i){
+		v[i] = v[i - 1] * E_int;
 	}
 
 }
