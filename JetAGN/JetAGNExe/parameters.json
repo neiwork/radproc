@@ -1,6 +1,12 @@
 {
-	"startT":3.0e3,
 	
+	"startT":3.0e3,
+	"Lj": 1.0e43,
+	"openingAngle": 0.1,
+	"Gamma": 10,
+	"accEfficiency": 0.1,
+	"primaryIndex": 2.0,
+
 	"particle": {
 		"default": {
 			"mass":0,

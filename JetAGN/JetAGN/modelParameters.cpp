@@ -75,26 +75,26 @@ void setParameters(bpt::ptree& cfg)
 
 	parameters.starT = cfg.get<double>("starT",3.0e3);
 
-	parameters.Lj = 1.0e43;
-	parameters.openingAngle = 0.1;  //jet opening angle
+	parameters.Lj = cfg.get<double>("Lj", 1.0e43);
+	parameters.openingAngle = cfg.get<double>("openingAngle", 0.1);  //jet opening angle
 
 //	parameters.B0 = sqrt(8.0*parameters.Lj / cLight) / parameters.openingAngle;  //ojo que esto es Bo*z0
 
 //	Rsp = 1.0e14; //distance to stagnation point
 
-	parameters.Gamma = 10;
+	parameters.Gamma = cfg.get<double>("Gamma", 10);
 
 	double inc = 10.0*pi / 180; //ang obs del jet
 	double beta = 1.0 - 1.0 / P2(parameters.Gamma);
 	parameters.Dlorentz = 1.0 / (parameters.Gamma*(1.0 - cos(inc)*beta));
 
-	parameters.accEfficiency = 0.1;
+	parameters.accEfficiency = cfg.get<double>("accEfficiency", 0.1);
 
 	//magneticField = fmagneticField(z0,B0);  //el primero lo calculo en r = z0
 	//density = nWindDensity(Rc, starR); //el primero lo calculo en r = Rc
 
 // Data of electrons and protons
-	parameters.primaryIndex = 2.0;
+	parameters.primaryIndex = cfg.get<double>("primaryIndex", 2.0);
 	//factor_qrel   = 3.0; 
 
 //	const auto nEnergyPoints = cfg.get<int>("particle.default.dim.energy.samples", 10);
