@@ -1,6 +1,6 @@
 #include "RungeKutta.h"
 
-int RK_N = 50;
+
 
 namespace {
 	void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)
@@ -21,10 +21,13 @@ namespace {
 double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como argumento los cuatro limites
 //de las integrales y la funcion a integrar																														
 {
-	int n = RK_N;  //recordar que el numero de puntos en los que interpolo 
+
+	int n_x = 100;  //recordar que el numero de puntos en los que interpolo 
 	//no puede ser mayor al numero de puntos de la funcion
 
-	double x_int = pow((b / a), (1.0 / n));
+	int n_y = 50;
+
+	double x_int = pow((b / a), (1.0 / n_x));
 
 	double J1(0.0), J2(0.0), J3(0.0);
 
@@ -32,7 +35,7 @@ double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como arg
 	{
 		double x = a;
 
-		for (int i = 0; i < n; ++i)     //le saco el n para que se multiplique n veces y no n+1
+		for (int i = 0; i < n_x; ++i)     //le saco el n para que se multiplique n veces y no n+1
 		{
 			double dx = x*(x_int - 1);
 
@@ -43,26 +46,26 @@ double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como arg
 				//		{ if (E > sup)
 			{
 
-				double y_int = pow((sup / inf), (1.0 / n));
+				double y_int = pow((sup / inf), (1.0 / n_y));
 
 				double K1(0.0), K2(0.0), K3(0.0);
 
 				double y = inf;
 
-				for (int j = 0; j < n; ++j)
+				for (int j = 0; j < n_y; ++j)
 				{
 					double dy = y*(y_int - 1);
 
 					double L1 = f(x, y)*dy;
 
-					if (L1 > 0.0) { incremento(j, 0, n - 1, K1, K2, K3, L1); }
+					if (L1 > 0.0) { incremento(j, 0, n_y - 1, K1, K2, K3, L1); }
 
 					y = y*y_int;
 				}
 
 				double L2 = (K1 + 2 * K2 + 4 * K3)*dx / 3;
 
-				if (L2 > 0.0) { incremento(i, 0, n - 1, J1, J2, J3, L2); }
+				if (L2 > 0.0) { incremento(i, 0, n_x - 1, J1, J2, J3, L2); }
 				//		}
 			}
 
@@ -82,6 +85,7 @@ double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como arg
 
 double RungeKuttaSimple(double a, double b, fun1 f)
 {
+	int RK_N = 100;
 	int n = RK_N;
 
 	double x_int = pow((b / a), (1.0 / n));

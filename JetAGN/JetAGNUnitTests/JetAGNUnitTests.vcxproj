@@ -85,6 +85,7 @@
     <ClCompile Include="TestJetAGNResults.cpp" />
     <ClCompile Include="TestParamSpaceValues.cpp" />
     <ClCompile Include="TestParticle.cpp" />
+    <ClCompile Include="TestRungeKutta.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\flosses\flosses.vcxproj">
