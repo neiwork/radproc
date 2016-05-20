@@ -84,6 +84,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="injection.cpp" />
+    <ClCompile Include="ioutil.cpp" />
     <ClCompile Include="losses.cpp" />
     <ClCompile Include="lossesAnisotropicIC.cpp" />
     <ClCompile Include="luminosityAnisotropicIC.cpp" />
@@ -118,6 +119,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="injection.h" />
+    <ClInclude Include="ioutil.h" />
     <ClInclude Include="jetAGN.h" />
     <ClInclude Include="losses.h" />
     <ClInclude Include="lossesAnisotropicIC.h" />

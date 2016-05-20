@@ -8,9 +8,6 @@
 #include <iostream>
 #include <algorithm>
 
-//ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
-//ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
-
 double fmagneticField(double z, double B_o)
 {
 	return B_o/z;
@@ -65,7 +62,7 @@ void derive_parameters_r(double E, double z, double t)
 	//Rsp = stagnationPoint(z);
 }
 
-void setParameters(bpt::ptree& cfg)
+void setParameters(boost::property_tree::ptree& cfg)
 {
 	
 	//double mBH = 1.0e7*solarMass;  //black hole mass

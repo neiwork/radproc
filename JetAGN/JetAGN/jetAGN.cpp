@@ -13,6 +13,7 @@
 
 #include "write.h"
 #include "checks.h"
+#include "ioutil.h"
 
 
 #include <fparticle\Particle.h>
@@ -20,25 +21,15 @@
 #include <fparameters\Dimension.h>
 #include <fmath\physics.h>
 
-
-
-
-
-
-
-#include <boost/property_tree/json_parser.hpp>
-
-namespace bpt = boost::property_tree;
-
 int jetAGN()
 {
+	std::string folder{ prepareOutputfolder() };
+
 	try {
-		bpt::ptree parcfg;
-		bpt::read_json("parameters.json", parcfg);
+		boost::property_tree::ptree cfg{ readConfig() };
 
-		setParameters(parcfg);
-
-		State model(parcfg);
+		setParameters(cfg);
+		State model(cfg);
 
 	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
 		//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));
@@ -59,7 +50,7 @@ int jetAGN()
 	
 		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
 		//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-		writeRandTParamSpace("electronDist_RT_2.txt", model.electron.distribution, model.electron.ps[0].size() - 5);
+		writeRandTParamSpace(getFileName(cfg,folder,"electronDist"), model.electron.distribution, model.electron.ps[0].size() - 5);
 		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
@@ -68,7 +59,7 @@ int jetAGN()
 		//	return model.electron.injection.get(i);
 		//});
 
-		processes(model, "ntLuminosity_LR2.txt");
+		processes(model, getFileName(cfg,folder,"luminosity"));
 
 	}
 	catch (std::runtime_error& e)

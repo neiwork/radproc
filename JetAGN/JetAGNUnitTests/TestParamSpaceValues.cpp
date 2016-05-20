@@ -8,7 +8,6 @@
 
 #include <iostream>
 
-
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace JetAGNUnitTests

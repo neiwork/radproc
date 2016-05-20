@@ -7,6 +7,11 @@
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
 
+	"file": {
+		"luminosity":"ntLuminosity_LR2.txt",
+		"electronDist":"electronDist_RT_2.txt"
+	},
+
 	"particle": {
 		"default": {
 			"mass":0,

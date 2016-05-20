@@ -8,23 +8,18 @@
 //ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
 
 State::State(boost::property_tree::ptree& cfg) :
- nph(photon.ps, false),
+ //nph(photon.ps, false),
  electron{ "electron" },
  photon{ "photon" }
 {
 	particles.push_back(&electron);
-	//particles.push_back(&proton);
-	//particles.push_back(&pion);
-	//particles.push_back(&muon);
 	particles.push_back(&photon);
-	//particles.push_back(&secondaryElectron);
-	//particles.push_back(&positron);
 
 	for (auto p : particles) {
 		initializeParticle(*p,cfg);
 	}
 
-	nph.initialize();
+	//nph.initialize();
 	//tpf = nph.dimInterpolator(0);
 }
 

@@ -48,6 +48,9 @@
     <ClCompile Include="targetFields.cpp" />
     <ClCompile Include="cilindricIntegral.cpp" />
     <ClCompile Include="jetAGN.cpp" />
+    <ClCompile Include="ioutil.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -91,6 +94,9 @@
     <ClInclude Include="targetFields.h" />
     <ClInclude Include="cilindricIntegral.h" />
     <ClInclude Include="jetAGN.h" />
+    <ClInclude Include="ioutil.h">
+      <Filter>extras</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

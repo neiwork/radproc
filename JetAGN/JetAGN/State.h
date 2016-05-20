@@ -4,25 +4,18 @@
 #include <fparticle/Particle.h>
 #include <fmath\mathematics.h>
 #include <fmath\physics.h>
+#include <boost/property_tree/ptree.hpp>
 
 class State {
 public:
 	std::vector<Particle*> particles;
 
 	Particle electron;
-	//Proton proton;
-	//Pion pion;
-	//Muon muon;
 	Particle photon;
-	//SecondaryElectron secondaryElectron;
-	//Positron positron;
-
-	ParamSpaceValues nph;
-	//fun1 tpf;
 
 	State(boost::property_tree::ptree& cfg);
 	
-	Dimension* createDimension(Particle& p, std::string dimid, std::function<void(Vector&, double, double)> initializer, boost::property_tree::ptree& cfg);
+	static Dimension* createDimension(Particle& p, std::string dimid, std::function<void(Vector&, double, double)> initializer, boost::property_tree::ptree& cfg);
 
-	void initializeParticle(Particle& p, boost::property_tree::ptree& cfg);
+	static void initializeParticle(Particle& p, boost::property_tree::ptree& cfg);
 };
