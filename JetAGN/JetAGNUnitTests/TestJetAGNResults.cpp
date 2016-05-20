@@ -10,6 +10,7 @@
 #include <JetAGN/checks.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using boost::property_tree::ptree;
 
 namespace JetAGNUnitTests
 {
@@ -37,7 +38,7 @@ namespace JetAGNUnitTests
 
 		TEST_METHOD(TestStateConfiguration)
 		{
-			auto cfg = config();
+			ptree cfg{ config() };
 			setParameters(cfg);
 			State model(cfg);
 			
@@ -48,7 +49,7 @@ namespace JetAGNUnitTests
 
 		TEST_METHOD(TestEnergyDimensionValues11)
 		{
-			auto cfg = config();
+			ptree cfg{config()};
 			cfg.put<int>("particle.default.dim.energy.samples", 11);
 
 			setParameters(cfg);
@@ -63,7 +64,7 @@ namespace JetAGNUnitTests
 
 		TEST_METHOD(TestInjection)
 		{
-			auto cfg = config();
+			ptree cfg{config()};
 			setParameters(cfg);
 			State model(cfg);
 
@@ -78,7 +79,7 @@ namespace JetAGNUnitTests
 		{
 			// OVERRIDE DISCRETIZATION TO MAKE SURE TEST RUNS FAST
 			// >>
-			auto cfg = config();
+			ptree cfg{config()};
 			setParameters(cfg);
 			State model(cfg);
 			// <<
