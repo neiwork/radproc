@@ -44,7 +44,7 @@ void injection(Particle& p, State& st)
 
 	const double RMIN = p.ps[DIM_R].first();
 	const double RMAX = p.ps[DIM_R].last();
-	const double N_R = p.ps[DIM_R].size()-1;
+	const int N_R = p.ps[DIM_R].size()-1;
 
 	//volumen total del jet
 	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, parameters.openingAngle))*RMAX
