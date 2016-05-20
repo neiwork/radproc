@@ -29,7 +29,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 
 	const double RMIN = pps[DIM_R].first();
 	const double RMAX = pps[DIM_R].last();
-	const double N_R = pps[DIM_R].size()-1;
+	const int N_R = pps[DIM_R].size()-1;
 
 	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
