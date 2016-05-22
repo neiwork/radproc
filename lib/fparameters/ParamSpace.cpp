@@ -4,13 +4,6 @@
 #include "Dimension.h"
 #include "SpaceCoord.h"
 
-//#include <fmath/interpolation.h>
-//#include <iterator>
-//#include <iostream>
-//#include <iomanip>
-//#include <stdexcept>
-//#include <sstream>
-
 #include <omp.h>
 
 void ParamSpace::updateDerivations(const SpaceIterator& i) const {
