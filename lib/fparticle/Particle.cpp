@@ -21,7 +21,7 @@ namespace {
 //}
 
 Particle::Particle(const std::string& id)
-:id{ id },
+:id(id),
  mass{ 0 },
  injection{ ps, false }, // these PSVs are not initialized immediately, only after this PS has been constructed
  distribution{ ps, false }
