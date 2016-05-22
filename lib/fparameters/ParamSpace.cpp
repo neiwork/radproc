@@ -72,5 +72,6 @@ void ParamSpace::ix2dim(int ix, SpaceCoord& si) const
 {
 	for (size_t i = 0; i < dimensions.size(); ++i) {
 		si[i] = ix % dimensions[i]->size();
+		ix /= dimensions[i]->size();
 	}
 }
