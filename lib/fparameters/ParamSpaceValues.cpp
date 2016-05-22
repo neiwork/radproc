@@ -16,11 +16,21 @@ void ParamSpaceValues::initialize()
 	values.resize(ps.size());
 }
 
+void ParamSpaceValues::initialize(double fillValue)
+{
+	values.resize(ps.size(),fillValue);
+}
+
 ParamSpaceValues::ParamSpaceValues(const ParamSpace& ps, bool initialize):ps(ps)
 {
 	if (initialize) {
 		this->initialize();
 	}
+}
+
+ParamSpaceValues::ParamSpaceValues(const ParamSpace& ps, double fillValue) :ps(ps)
+{
+	initialize(fillValue);
 }
 
 

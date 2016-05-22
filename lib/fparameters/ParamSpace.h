@@ -26,8 +26,9 @@ public:
 
 	void ix2dim(int ix, SpaceCoord& si) const;
 
-	void iterate(Parameters& pars, std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions = {}) const;
+	//void iterate(Parameters& pars, std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions = {}) const;
 	void iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions = {}) const;
+	void parallelize(std::function<void(const SpaceIterator&)> body) const;
 
 	ParamSpace(){};
 

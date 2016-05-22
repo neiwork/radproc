@@ -11,6 +11,7 @@
 //#include <stdexcept>
 //#include <sstream>
 
+#include <omp.h>
 
 void ParamSpace::updateDerivations(const SpaceIterator& i) const {
 	for (auto d : derivations) {
@@ -22,6 +23,18 @@ void ParamSpace::iterate(std::function<void(const SpaceIterator&)> body, std::in
 {
 	SpaceIterator it(*this,fixedDimensions);
 	while (it.next()) {
+		updateDerivations(it);
+		body(it);
+	}
+}
+
+void ParamSpace::parallelize(std::function<void(const SpaceIterator&)> body) const
+{
+	const size_t sz{ size() };
+	#pragma omp parallel
+	for (size_t i = 0; i < sz; ++i) {
+		SpaceIterator it(*this);
+		ix2dim(i, it.coord);
 		updateDerivations(it);
 		body(it);
 	}

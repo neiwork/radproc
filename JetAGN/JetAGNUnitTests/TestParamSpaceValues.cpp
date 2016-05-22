@@ -6,6 +6,7 @@
 #include <fparameters/SpaceIterator.h>
 #include <JetAGN/checks.h>
 
+#include <numeric>
 #include <iostream>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -43,5 +44,16 @@ namespace JetAGNUnitTests
 			Assert::AreEqual(correctResult, resultWithFallback, L"interpolate did not work correctly using fallback coordinates.", LINE_INFO());
 		}
 
+		TEST_METHOD(TestParallelize)
+		{
+			ParamSpace ps;
+			ps.add(new Dimension(2, zeroToN));
+			ps.add(new Dimension(3, zeroToN));
+			ParamSpaceValues m(ps, 0.0);
+			ps.parallelize([&](const SpaceIterator& i){
+				m.set(i, 1.0);
+			});
+			Assert::AreEqual<double>(6.0, std::accumulate(m.values.begin(), m.values.end(), 0.0), L"Parallelize didn't work", LINE_INFO());
+		}
 	};
 }
