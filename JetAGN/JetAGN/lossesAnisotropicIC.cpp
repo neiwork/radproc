@@ -101,12 +101,16 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 	if (eps_min < eps_max)
 	{
+		// compute this interdependencies before parallelizing
 		double xs[n] = { eps_min };
 		for (int i_x = 1; i_x < n; ++i_x) {
 			xs[i_x] = xs[i_x - 1] * x_int;
 		}
 
-		#pragma omp parallel for
+		// { now each iteration knows its corresponding x in xs[i_x] }
+		// { the only sincronization point is the accumulation in L3 }
+		// { we use the reduction directive to specify this: }
+		#pragma omp parallel for reduction(+:L3)
 		for (int i_x = 0; i_x < n; ++i_x)     //le saco el n para que se multiplique n veces y no n+1
 		{
 			double x = xs[i_x];
@@ -157,7 +161,7 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 						////////////////////////////
 
-						L1 = L1 + Q*dy;
+						L1 += Q*dy;
 
 						//if (L1 > 0.0) { 
 						//incremento(i_y, 0, n - 1, Y1, Y2, Y3, L1);// }
@@ -166,7 +170,7 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 					}
 
 					//double L2 = (Y1 + 2.0 * Y2 + 4.0 * Y3) *dt / 3.0;
-					L2 = L2 + L1*dt;
+					L2 += L1*dt;
 
 					//if (L2 > 0.0) { 
 					//incremento(i_t, 0, n - 1, T1, T2, T3, L2); //}			
@@ -180,17 +184,12 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 			//			//}
 			//
 			//double L3 = (T1 + 2.0 * T2 + 4.0 * T3)*dx / 3.0;
-			//L3 = L3 + L2*dx;
-			xs[i_x] = L2*dx;
+			L3 += L2*dx;
 
 			//if (L3 > 0.0) { 
 			//incremento(i_x, 0, n - 1, X1, X2, X3, L3); //}
 
 			//x = x*x_int;
-		}
-
-		for (int i_x = 1; i_x < n; ++i_x) {
-			L3 += xs[i_x];
 		}
 
 		//double L4 = (X1 + 2.0 * X2 + 4.0 * X3) / 3.0;
