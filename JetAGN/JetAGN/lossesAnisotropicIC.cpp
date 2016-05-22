@@ -92,7 +92,7 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 
 double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f)
 {
-	int n = 20;
+	const int n = 20;
 
 	double x_int = pow((eps_max / eps_min), (1.0 / n));
 
@@ -101,10 +101,15 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 	if (eps_min < eps_max)
 	{
-		double x = eps_min;
+		double xs[n] = { eps_min };
+		for (int i_x = 1; i_x < n; ++i_x) {
+			xs[i_x] = xs[i_x - 1] * x_int;
+		}
 
+		#pragma omp parallel for
 		for (int i_x = 0; i_x < n; ++i_x)     //le saco el n para que se multiplique n veces y no n+1
 		{
+			double x = xs[i_x];
 			double dx = x*(x_int - 1);
 
 			double t_min = pi / 2;//   //t_min=0.0
@@ -175,12 +180,17 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 			//			//}
 			//
 			//double L3 = (T1 + 2.0 * T2 + 4.0 * T3)*dx / 3.0;
-			L3 = L3 + L2*dx;
+			//L3 = L3 + L2*dx;
+			xs[i_x] = L2*dx;
 
 			//if (L3 > 0.0) { 
 			//incremento(i_x, 0, n - 1, X1, X2, X3, L3); //}
 
-			x = x*x_int;
+			//x = x*x_int;
+		}
+
+		for (int i_x = 1; i_x < n; ++i_x) {
+			L3 += xs[i_x];
 		}
 
 		//double L4 = (X1 + 2.0 * X2 + 4.0 * X3) / 3.0;
