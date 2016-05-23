@@ -74,13 +74,18 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 
 
 	double integral = 
-		intTriple(E, a, b, r, 
-		[E](double w0, double theta){
-		return cAniIC(w0, theta, E); },
-		[E](double w0, double theta){
-		return dAniIC(w0, theta, E); },
-		[E, r](double x, double t, double y){
-		return fLosses(x, t, y, E, r); });
+		intTriple(
+			E, a, b, r, 
+			[E](double w0, double theta){
+				return cAniIC(w0, theta, E);
+			},
+			[E](double w0, double theta){
+				return dAniIC(w0, theta, E);
+			},
+			[E, r](double x, double t, double y){
+				return fLosses(x, t, y, E, r);
+			}
+		);
 
 
 	return integral*cLight; //en erg/s
