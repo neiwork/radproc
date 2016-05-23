@@ -17,7 +17,8 @@ namespace {
 	}
 }
 
-double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f, const RKOpt& opt)    //paso como argumento los cuatro limites
+RungeKuttaOpt DefOpt_RungeKutta{ 50, 50 };
+double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f, const RungeKuttaOpt& opt)    //paso como argumento los cuatro limites
 //de las integrales y la funcion a integrar																														
 {
 
@@ -82,7 +83,8 @@ double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f, const RKOpt& opt) 
 
 }
 
-double RungeKuttaSimple(double a, double b, fun1 f, const RKOpt& opt)
+RungeKuttaOpt DefOpt_RungeKuttaSimple{ 50, -1 };
+double RungeKuttaSimple(double a, double b, fun1 f, const RungeKuttaOpt& opt)
 {
 	int RK_N = opt.samples_x;
 	int n = RK_N;

@@ -88,32 +88,31 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 }
 
 
+
+
 //esta integral no es un runge Kutta; directamente hice la suma de todas las contribuciones
 
-double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f)
+IntTripleOpt DefOpt_IntTriple{ 20, 20, 20 };
+double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f, const IntTripleOpt& opt)
 {
-	const int n = 20;
+	const int Xs{ opt.samples_x };
+	const int Ts{ opt.samples_t };
+	const int Ys{ opt.samples_y };
 
-	double x_int = pow((eps_max / eps_min), (1.0 / n));
+	double x_int = pow((eps_max / eps_min), (1.0 / Xs));
 
 //	double X1(0.0), X2(0.0), X3(0.0);
 	double L3 = 0.0;
 
 	if (eps_min < eps_max)
 	{
-		// compute this interdependencies before parallelizing
-		double xs[n] = { eps_min };
-		for (int i_x = 1; i_x < n; ++i_x) {
-			xs[i_x] = xs[i_x - 1] * x_int;
-		}
-
-		// { now each iteration knows its corresponding x in xs[i_x] }
+		// [hook]
 		// { the only sincronization point is the accumulation in L3 }
 		// { we use the reduction directive to specify this: }
 		#pragma omp parallel for reduction(+:L3)
-		for (int i_x = 0; i_x < n; ++i_x)     //le saco el n para que se multiplique n veces y no n+1
+		for (int i_x = 0; i_x < Xs; ++i_x)     //le saco el n para que se multiplique n veces y no n+1
 		{
-			double x = xs[i_x];
+			double x = eps_min*pow(x_int,i_x);
 			double dx = x*(x_int - 1);
 
 			double t_min = pi / 2;//   //t_min=0.0
@@ -122,14 +121,14 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 			//	if (t_min < t_max)
 			//	{
 
-			double t_int = pow((t_max / t_min), (1.0 / n));
+			double t_int = pow((t_max / t_min), (1.0 / Ts));
 
 //			double T1(0.0), T2(0.0), T3(0.0);
 			double L2 = 0.0;
 
 			double t = t_min;
 
-			for (int i_t = 0; i_t < n; ++i_t)
+			for (int i_t = 0; i_t < Ts; ++i_t)
 			{
 				double dt = t*(t_int - 1);
 
@@ -139,7 +138,7 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 				if (inf < sup)
 				{
 
-					double y_int = pow((sup / inf), (1.0 / n));
+					double y_int = pow((sup / inf), (1.0 / Ys));
 
 //					double Y1(0.0), Y2(0.0), Y3(0.0);
 
@@ -147,7 +146,7 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 
 					double y = inf;
 
-					for (int i_y = 0; i_y < n; ++i_y)
+					for (int i_y = 0; i_y < Ys; ++i_y)
 					{
 						double dy = y*(y_int - 1);
 
@@ -189,6 +188,8 @@ double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun
 			//if (L3 > 0.0) { 
 			//incremento(i_x, 0, n - 1, X1, X2, X3, L3); //}
 
+			// [hook] we can't do this in parallel version since it would introduce
+			// a dependency between iterations:
 			//x = x*x_int;
 		}
 

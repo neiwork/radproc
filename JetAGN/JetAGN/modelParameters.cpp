@@ -2,7 +2,11 @@
 
 #include "State.h"
 
+#include "lossesAnisotropicIC.h"
+
 #include <fmath\interpolation.h>
+#include <fmath\RungeKutta.h>
+
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
 #include <iostream>
@@ -118,6 +122,14 @@ void setParameters(boost::property_tree::ptree& cfg)
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
+	DefOpt_IntTriple.samples_x = cfg.get<int>("integrate-3.samples.x", DefOpt_IntTriple.samples_x);
+	DefOpt_IntTriple.samples_t = cfg.get<int>("integrate-3.samples.t", DefOpt_IntTriple.samples_t);
+	DefOpt_IntTriple.samples_y = cfg.get<int>("integrate-3.samples.y", DefOpt_IntTriple.samples_y);
+
+	DefOpt_RungeKutta.samples_x = cfg.get<int>("runge-kutta-2.samples.x", DefOpt_RungeKutta.samples_x);
+	DefOpt_RungeKutta.samples_y = cfg.get<int>("runge-kutta-2.samples.y", DefOpt_RungeKutta.samples_y);
+
+	DefOpt_RungeKuttaSimple.samples_x = cfg.get<int>("runge-kutta-1.samples.x", DefOpt_RungeKuttaSimple.samples_x);
 }
 
 
