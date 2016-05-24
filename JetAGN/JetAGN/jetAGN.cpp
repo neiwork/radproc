@@ -21,6 +21,8 @@
 #include <fparameters\Dimension.h>
 #include <fmath\physics.h>
 
+#include <boost/property_tree/ptree.hpp>
+
 int jetAGN()
 {
 	std::string folder{ prepareOutputfolder() };

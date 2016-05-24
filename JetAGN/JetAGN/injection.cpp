@@ -11,8 +11,9 @@
 #include <fmath\RungeKutta.h>
 #include <fmath\physics.h>
 
-#include <iostream>
+#include <boost/property_tree/ptree.hpp>
 
+#include <iostream>
 
 double powerLaw(double E, double Emin, double Emax)
 {

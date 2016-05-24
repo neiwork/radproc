@@ -5,12 +5,12 @@
 #include "cilindricIntegral.h"
 
 #include <flosses\nonThermalLosses.h>
-//#include <fmath\RungeKutta.h>
 #include <fparameters\parameters.h>
 
 #include <fmath\physics.h>
 
 
+#include <boost/property_tree/ptree.hpp>
 
 double dLnt(double z)  //esta es la función que depende del número de estrellas a tiempo t
 {

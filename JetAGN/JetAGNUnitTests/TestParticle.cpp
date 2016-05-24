@@ -2,6 +2,8 @@
 
 #include <fparticle/Particle.h>
 
+#include <boost/property_tree/ptree.hpp>
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace JetAGNUnitTests

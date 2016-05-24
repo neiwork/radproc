@@ -4,7 +4,7 @@
 #include <fparticle/Particle.h>
 #include <fmath\mathematics.h>
 #include <fmath\physics.h>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 class State {
 public:

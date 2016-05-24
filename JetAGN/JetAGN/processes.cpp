@@ -14,6 +14,8 @@
 
 #include <fmath\physics.h>
 
+#include <boost/property_tree/ptree.hpp>
+
 double Llab(double Lint)
 {
 	static const double Dlorentz = GCFG.get<double>("Dlorentz");

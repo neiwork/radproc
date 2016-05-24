@@ -1,7 +1,6 @@
 #pragma once
 
-#include <boost/property_tree/ptree.hpp>
-#include <string>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 /** creates the output folder and returns its location */
 std::string prepareOutputfolder();

@@ -2,16 +2,12 @@
 
 //#include "crossSectionInel.h"
 //#include "dataLosses.h"
+
 #include "targetFields.h"
-//#include "modelParameters.h"
 #include <fmath\physics.h>
 #include <fparameters/parameters.h>
 
-
-
-//void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R);
-
-
+#include <boost/property_tree/ptree.hpp>
 
 double b_theta(double theta, double w0, double E)
 {

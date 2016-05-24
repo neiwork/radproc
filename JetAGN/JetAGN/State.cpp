@@ -3,9 +3,7 @@
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 
-//ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
-//
-//ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
+#include <boost/property_tree/ptree.hpp>
 
 State::State(boost::property_tree::ptree& cfg) :
  electron{ "electron" },

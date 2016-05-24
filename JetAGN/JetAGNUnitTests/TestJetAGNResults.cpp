@@ -9,6 +9,8 @@
 #include <JetAGN/checkPower.h>
 #include <JetAGN/checks.h>
 
+#include <boost/property_tree/ptree.hpp>
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using boost::property_tree::ptree;
 

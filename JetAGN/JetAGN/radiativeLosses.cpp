@@ -12,14 +12,7 @@
 
 #include <fparameters/parameters.h>
 
-//#include "losses.h"
-//#include <flosses\lossesHadronics.h>
-//#include <flosses\lossesPhotoHadronic.h>
-//#include <flosses\lossesBrem.h>
-//#include <fmath\interpolation.h>
-
-
-
+#include <boost/property_tree/ptree.hpp>
 
 void radiativeLosses(State& st)
 {

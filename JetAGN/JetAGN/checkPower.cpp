@@ -1,14 +1,15 @@
 #include "checkPower.h"
 
+#include "write.h"
+
 #include <fparameters/ParamSpaceValues.h>
 #include <fparameters/ParamSpace.h>
 #include <fparameters/Dimension.h>
 #include <fparameters/parameters.h>
 
-#include "write.h"
-
 #include <fmath\physics.h>
 
+#include <boost/property_tree/ptree.hpp>
 
 double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
 {

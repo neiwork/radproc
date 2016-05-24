@@ -4,7 +4,7 @@
 
 #include <fmath/physics.h>
 
-
+#include <boost/property_tree/ptree.hpp>
 
 double adiabaticLosses(double E, double z, double vel_lat)  //en [erg/s]
 {
