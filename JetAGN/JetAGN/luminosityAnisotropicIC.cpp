@@ -72,7 +72,7 @@ double fLumi(double x, double theta, double y, double E,  const Particle& p, con
 		distCreator = 0.0;
 	}
 	else{
-		distCreator = p.distribution.interpolate({ { 0, x }}, &distCoord); //  { DIM_T, t } });// VER
+		distCreator = p.distribution.interpolate({ { DIM_E, x }}, &distCoord); //  { DIM_T, t } });// VER
 	}
 
 //	double distCreator = p.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);

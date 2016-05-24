@@ -151,7 +151,7 @@ void write(const std::string& archive, Vector salida, Particle particle)
 	std::ofstream fileWritten;
 	fileWritten.open(archive.c_str(), std::ios::out);
 
-	for (size_t i = 0; i < particle.eDim()->size(); ++i){
+	for (int i = 0; i < particle.eDim()->size(); ++i){
 
 		double E_eV = (particle.eDim()->values[i] / 1.6e-12);
 

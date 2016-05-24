@@ -12,9 +12,17 @@
 #include <iostream>
 #include <algorithm>
 
-double fmagneticField(double z, double B_o)
+inline double computeModelB0(double Lj, double openingAngle) {
+	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
+}
+
+inline double fmagneticField(double z, double B_o)
 {
-	return B_o/z;
+	return B_o / z;
+}
+
+double computeMagField(double z) {
+	return fmagneticField(z, computeModelB0(parameters.Lj, parameters.openingAngle));
 }
 
 double jetRadius(double z, double openingAngle)
@@ -52,19 +60,15 @@ double stagnationPoint(double z)
 
 }
 
-double computeModelB0(double Lj, double openingAngle) {
-	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
-}
-
-void derive_parameters_r(double E, double z, double t)
-{
-	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
-	//parameters.radius = jetRadius(z, parameters.openingAngle);
-	parameters.magneticField = fmagneticField(z, B0);
-	//electronLogEmax = log10(eEmax(z, magneticField));
-
-	//Rsp = stagnationPoint(z);
-}
+//void derive_parameters_r(double E, double z, double t)
+//{
+//	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
+//	//parameters.radius = jetRadius(z, parameters.openingAngle);
+//	parameters.magneticField = fmagneticField(z, B0);
+//	//electronLogEmax = log10(eEmax(z, magneticField));
+//
+//	//Rsp = stagnationPoint(z);
+//}
 
 void setParameters(boost::property_tree::ptree& cfg)
 {

@@ -11,20 +11,16 @@
 #include <iostream>
 #include <map>
 
-double losses(double E, double r, Particle& p, State& st)
+double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i)
 {	
-	//SpaceIterator* i = p.ps.current; //VER
-	
 	//double r = i->par.R;
-	double B = parameters.magneticField; //VER no funciona i->par.magneticField;
-	
+	double B = st.magf.get(i); // parameters.magneticField;
 	if(p.id == "electron")	{
 		return  lossesSyn(E, B, p) +
 				adiabaticLosses(E, r, cLight) +
 				lossesAnisotropicIC(E, p, r);
 	}
-
-	//	case PT_proton:
+//	case PT_proton:
 //		return  lossesSyn(E, particle) + lossesHadronics(E, particle)
 //			+ lossesPhotoHadronic(E,particle,state.tpf);
 //		break;

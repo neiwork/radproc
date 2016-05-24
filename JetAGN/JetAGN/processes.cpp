@@ -77,15 +77,15 @@ void processes(State& st, const std::string& filename)
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
-		double E = i.val(DIM_E);
-		double eSyn   = luminositySynchrotron(E, st.electron, i.coord); //estos devuelven erg/s/cm^3, integrar!
-		double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
-		double eICcmb = luminosityIC(E, st.electron, i.coord, 
-			[E](double E){return cmbBlackBody(E); }, EphminCMB);
+		const double E = i.val(DIM_E);
+		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s/cm^3, integrar!
+		const double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
+		const double eICcmb = luminosityIC( E, st.electron, i.coord, cmbBlackBody, EphminCMB);
 
 		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
 		QicCMB.set(i, eICcmb);
+
 	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
 
 
@@ -101,7 +101,7 @@ void processes(State& st, const std::string& filename)
 		<< '\t' << "log(LicCMB/erg s-1)"
 		<< std::endl;
 
-		for (size_t E_ix = 0; E_ix < pps[0].size(); E_ix++) {  
+		for (int E_ix = 0; E_ix < pps[0].size(); E_ix++) {  
 
 			//E*L(E) = delta^4 E'*L'(E') and E=delta*E'
 			//variables primadas ->FF

@@ -21,13 +21,13 @@ double powerLaw(double E, double Emin, double Emax)
 }
 
 
-double normalization(Particle& p, const SpaceCoord& distCoord)
+double normalization(Particle& p, double z, double magf)
 {
-	int i_z = distCoord[1];
-	double z = p.ps[1][i_z];
+	//int i_z = distCoord[1];
+	//double z = p.ps[1][i_z];
 
 	double Emin = p.emin();
-	double Emax = eEmax(z, parameters.magneticField);
+	double Emax = eEmax(z, magf);
 
 	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
@@ -54,7 +54,8 @@ void injection(Particle& p, State& st)
 
 
 	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
-		
+		const double magf{ st.magf.get(i) };
+		const double r{ i.val(DIM_R) };
 		if (i.its[2].canPeek(-1)) 
 		{
 			return 0.0;
@@ -62,8 +63,8 @@ void injection(Particle& p, State& st)
 		else //if (t_position = 0) solo inyecto particulas a tiempo 0
 		{
 			double Emin = p.emin();
-			double Emax = eEmax(i.val(DIM_R), parameters.magneticField);
-			double Q0 = normalization(p, i.coord);
+			double Emax = eEmax(r,magf);
+			double Q0 = normalization(p,r,magf);
 		
 			double z = i.val(DIM_R);			
 			double dz = z*(z_int - 1);

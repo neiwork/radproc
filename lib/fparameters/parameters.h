@@ -7,7 +7,7 @@ public:
 
 	// <derivados>
 
-		double magneticField{ 0 };
+		//double magneticField{ 0 };
 		
 	// </derivados>
 

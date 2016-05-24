@@ -203,14 +203,14 @@ void testSpaceIterator2() {
 	// iterate the dimensions, and for each combination of values; 
 	// compute a value and store it appropriate location in PSV
 	electron.ps.iterate([&m](const SpaceIterator& i){
-		m.set(i, (i.val(DIM_E) + parameters.magneticField) * 2);
+		m.set(i, (i.val(DIM_E)) * 2);
 	});
 
 
 	// DEBUG >>>>>>>>>>>>>
 	electron.ps.iterate([](const SpaceIterator& i){
 		// read values from the parameters object (shows how they iterate);
-		std::cout << i.val(DIM_E) << ", " << parameters.magneticField;
+		std::cout << i.val(DIM_E);
 
 		// example: gets value at the previous position of the iterator of dimension 0
 		// (also checks if we can -- i.e. current index > 0)

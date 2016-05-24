@@ -36,12 +36,12 @@ void radiativeLosses(State& st)
 	
 	st.electron.ps.iterate([&st, &files, &out](const SpaceIterator& i){
 
-
+		const double magf{ st.magf.get(i) };
 		double fmtE = log10(i.val(DIM_E) / 1.6e-12);
 		double logR = log10(i.val(DIM_R)/pc);
 		//double logT = log10(i.val(DIM_T));
 
-		double B = parameters.magneticField; // i.par.magneticField; VER por qué no funciona
+		double B = magf; // i.par.magneticField; VER por qué no funciona
 
 		double Reff = 10.0*stagnationPoint(i.val(DIM_R));
 		double vel_lat = cLight*parameters.openingAngle;

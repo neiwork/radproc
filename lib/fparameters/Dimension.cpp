@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-size_t Dimension::size() const
+int Dimension::size() const
 {
 	return values.size();
 }
@@ -18,13 +18,13 @@ size_t Dimension::size() const
 //	//}
 //}
 
-Dimension::Dimension(size_t size, std::function<void(Vector&)> initializer) 
+Dimension::Dimension(int size, std::function<void(Vector&)> initializer) 
 {
 	values.resize(size, 0.0);
 	initializer(values);
 }
 
-const double& Dimension::operator[](const size_t& index) const
+const double& Dimension::operator[](const int& index) const
 {
 	return values[index];
 }
