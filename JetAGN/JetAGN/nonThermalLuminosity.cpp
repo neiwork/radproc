@@ -15,23 +15,29 @@
 double dLnt(double z)  //esta es la función que depende del número de estrellas a tiempo t
 {
 	
-	//double Tstar = 3.0e3; 
-	double E = P2(electronMass*cLight2) / (boltzmann*parameters.starT);
+	static const double starT = GCFG.get<double>("starT", 3.0e3);
+	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	static const double Gamma = GCFG.get<double>("Gamma", 10);
+	static const double Lj = GCFG.get<double>("Lj", 1.0e43);
+	static const double accEfficiency = GCFG.get<double>("accEfficiency", 0.1);
+	static const double Dlorentz = GCFG.get<double>("Dlorentz");
 
-	double Sj = pi*P2(jetRadius(z, parameters.openingAngle));
+	double E = P2(electronMass*cLight2) / (boltzmann*starT);
+
+	double Sj = pi*P2(jetRadius(z, openingAngle));
 	double stagPoint = stagnationPoint(z);
 	double So = 100.0*pi*P2(stagPoint);
 
-	double vel_lat = cLight*parameters.openingAngle;
+	double vel_lat = cLight*openingAngle;
 
 	double tad = adiabaticLosses(E, z, vel_lat) / E; //ad esta en erg/s
 
-	double wph = parameters.Lj / (cLight*4.0*Sj);
+	double wph = Lj / (cLight*4.0*Sj);
 	double trad = 4.0*cLight*thomson*wph*E / P2(electronMass*cLight2);
 
 	double frad = 1.0 / (1.0 + tad / trad);
 
-	double Lnt = parameters.accEfficiency*parameters.Lj*(So / Sj)*frad*pow(parameters.Dlorentz, 4) / P2(parameters.Gamma);
+	double Lnt = accEfficiency*Lj*(So / Sj)*frad*pow(Dlorentz, 4) / P2(Gamma);
 
 	double f = starDensity(z)*Lnt; //saque el Sj
 

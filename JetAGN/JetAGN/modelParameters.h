@@ -14,7 +14,7 @@ const DimensionCoord
 	DIM_T = 2;
 
 /* define the inital values of the global parameters*/
-void setParameters( boost::property_tree::ptree& parcfg );
+void prepareGlobalCfg();
 
 void initializeRPoints(Vector& v, double Rmin, double Rmax);
 

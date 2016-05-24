@@ -1,3 +1,3 @@
 #include "parameters.h"
 
-Parameters parameters;
+boost::property_tree::ptree GCFG;

@@ -1,5 +1,7 @@
 #pragma once
-#include "parameters.h"
+
+#include <vector>
+#include <functional>
 
 class SpaceCoord;
 class Dimension;

@@ -1,28 +1,5 @@
 #pragma once
 
-#include <fmath\mathematics.h>
+#include <boost/property_tree/ptree.hpp>
 
-class Parameters {
-public:
-
-	// <derivados>
-
-		//double magneticField{ 0 };
-		
-	// </derivados>
-
-	double accEfficiency{ 0 };
-	double starT{ 0 };
-
-	//jet data
-	double openingAngle{ 0 };
-	double Gamma{ 0 };
-	double Dlorentz{ 0 };
-	double Lj{ 0 };
-
-	// power law config
-	double primaryIndex{ 0 };
-
-};
-
-extern Parameters parameters;
+extern boost::property_tree::ptree GCFG;

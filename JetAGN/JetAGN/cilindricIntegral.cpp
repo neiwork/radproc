@@ -8,7 +8,8 @@
 
 double intCilindric(double zMin, double zMax, fun1 fun)
 {
-	double theta = parameters.openingAngle;
+	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	const double theta = openingAngle;
 
 	double integral =
 		RungeKuttaSimple(zMin, zMax, [theta,fun](double z){

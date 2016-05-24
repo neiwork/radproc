@@ -10,13 +10,14 @@
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 
+#include <fparameters/parameters.h>
 
-//#include <omp.h>
 #include <fmath\physics.h>
 
 double Llab(double Lint)
 {
-	return Lint*pow(parameters.Dlorentz, 4.0);
+	static const double Dlorentz = GCFG.get<double>("Dlorentz");
+	return Lint*pow(Dlorentz, 4.0);
 }
 
 /* Takes [emi] =  E^2*[Q(E)] and calculates int(2.0*pi*P2(jetR)*emi dz); 
@@ -25,6 +26,8 @@ for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
 
 double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_ix)
 {
+	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+
 	double sum = 0.0;
 
 	const double RMIN = pps[DIM_R].first();
@@ -40,7 +43,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 		double dz = z[i]*(z_int - 1);
 		
 		//volumen de la celda i
-		double vol_i = pi*P2(jetRadius(z[i], parameters.openingAngle))*dz;;
+		double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
 
 		double E = pps[0][E_ix];
 		double T = pps[2][t_ix];
@@ -61,6 +64,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 
 void processes(State& st, const std::string& filename)
 {
+	static const double Dlorentz = GCFG.get<double>("Dlorentz");
 
 	show_message(msgStart, Module_luminosities);
 
@@ -111,7 +115,7 @@ void processes(State& st, const std::string& filename)
 			double E = pps[0][E_ix];
 			double t = pps[2][t_ix];  //t es el ultimo valor
 
-			double Elab = E*parameters.Dlorentz; //Dlorentz=delta
+			double Elab = E*Dlorentz; //Dlorentz=delta
 
 			double Lsyn   = emiToLumi(pps, Qsyn, E_ix, t_ix);
 			double Lic    = emiToLumi(pps, Qic, E_ix, t_ix);

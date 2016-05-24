@@ -16,7 +16,9 @@
 
 double powerLaw(double E, double Emin, double Emax)
 {
-	double result = pow(E, (-parameters.primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
+	static const double primaryIndex = GCFG.get<double>("primaryIndex", 2.0);
+	
+	double result = pow(E, (-primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
 	return result;
 }
 
@@ -40,6 +42,8 @@ double normalization(Particle& p, double z, double magf)
 
 void injection(Particle& p, State& st)
 {
+	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+
 	show_message(msgStart, Module_electronInjection);
 
 	const double RMIN = p.ps[DIM_R].first();
@@ -47,8 +51,8 @@ void injection(Particle& p, State& st)
 	const int N_R = p.ps[DIM_R].size()-1;
 
 	//volumen total del jet
-	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, parameters.openingAngle))*RMAX
-		- P2(jetRadius(RMIN, parameters.openingAngle))*RMIN);
+	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
+		- P2(jetRadius(RMIN, openingAngle))*RMIN);
 
 	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
@@ -69,7 +73,7 @@ void injection(Particle& p, State& st)
 			double z = i.val(DIM_R);			
 			double dz = z*(z_int - 1);
 			//volumen de la celda i
-			double vol_i = pi*P2(jetRadius(z, parameters.openingAngle))*dz;
+			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
 
 			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol_i / vol;
 
