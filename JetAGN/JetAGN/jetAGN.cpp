@@ -49,8 +49,8 @@ int jetAGN()
 		distribution(model.electron, model);
 	
 		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
-		//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-		writeRandTParamSpace(getFileName(cfg,folder,"electronDist"), model.electron.distribution, model.electron.ps[0].size() - 5);
+		writeEandTParamSpace(getFileName(cfg, folder, "electronDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
+		writeRandTParamSpace(getFileName(cfg,folder,"electronDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
 		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 

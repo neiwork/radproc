@@ -8,8 +8,9 @@
 	"primaryIndex": 2.0,
 
 	"file": {
-		"luminosity":"ntLuminosity_LR2.txt",
-		"electronDist":"electronDist_RT_2.txt"
+		"luminosity":"ntLuminosity.txt",
+      "electronDist_ET":"electronDist_ET.txt",
+		"electronDist_RT":"electronDist_RT.txt"
 	},
 
 	"particle": {
@@ -17,17 +18,17 @@
 			"mass":0,
 			"dim": {
 				"energy":{
-					"samples":11
+					"samples":20
 				},
 				"radius":{
 					"min":1.0,
 					"max":1.0e3,
-					"samples":5
+					"samples":10
 				},
 				"time":{
 					"min":1.0,
 					"max":1.0e3,
-					"samples":5
+					"samples":10
 				}
 			}
 		},
