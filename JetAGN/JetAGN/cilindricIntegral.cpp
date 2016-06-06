@@ -9,7 +9,7 @@
 
 double intCilindric(double zMin, double zMax, fun1 fun)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
 	const double theta = openingAngle;
 
 	double integral =

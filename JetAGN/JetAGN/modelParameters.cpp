@@ -23,8 +23,8 @@ inline double fmagneticField(double z, double B_o)
 }
 
 double computeMagField(double z) {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
-	static const double Lj = GCFG.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
 
 	return fmagneticField(z, computeModelB0(Lj, openingAngle));
 }
@@ -36,9 +36,9 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
-	static const double Gamma = GCFG.get<double>("Gamma", 10);
-	static const double accEfficiency = GCFG.get<double>("accEfficiency", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
 
 	double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
@@ -59,8 +59,8 @@ double eEmax(double z, double B)
 
 double stagnationPoint(double z)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
-	static const double Lj = GCFG.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
 
 	double Mdot_wind = 1.0e-8*solarMass / yr;
 	double v_wind = 2.0e7;
@@ -90,9 +90,9 @@ double computeDlorentz(double gamma) {
 
 void prepareGlobalCfg()
 {
-	static const double Gamma = GCFG.get<double>("Gamma", 10);
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
 
-	GCFG.put("Dlorentz", GCFG.get<double>("Dlorentz", computeDlorentz(Gamma)));
+	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
 
 	//parameters.starT = cfg.get<double>("starT", 3.0e3);
 
@@ -125,11 +125,11 @@ void prepareGlobalCfg()
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	DefOpt_IntLosses.samples_x = GCFG.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);
-	DefOpt_IntLosses.samples_t = GCFG.get<int>("integrate-losses.samples.t", DefOpt_IntLosses.samples_t);
-	DefOpt_IntLosses.samples_y = GCFG.get<int>("integrate-losses.samples.y", DefOpt_IntLosses.samples_y);
+	DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);
+	DefOpt_IntLosses.samples_t = GlobalConfig.get<int>("integrate-losses.samples.t", DefOpt_IntLosses.samples_t);
+	DefOpt_IntLosses.samples_y = GlobalConfig.get<int>("integrate-losses.samples.y", DefOpt_IntLosses.samples_y);
 
-	fmath_configure(GCFG);
+	fmath_configure(GlobalConfig);
 }
 
 

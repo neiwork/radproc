@@ -18,7 +18,7 @@
 
 double Llab(double Lint)
 {
-	static const double Dlorentz = GCFG.get<double>("Dlorentz");
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	return Lint*pow(Dlorentz, 4.0);
 }
 
@@ -28,7 +28,7 @@ for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
 
 double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_ix)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
 
 	double sum = 0.0;
 
@@ -66,7 +66,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 
 void processes(State& st, const std::string& filename)
 {
-	static const double Dlorentz = GCFG.get<double>("Dlorentz");
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
 	show_message(msgStart, Module_luminosities);
 
@@ -76,8 +76,6 @@ void processes(State& st, const std::string& filename)
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
-	timestamp_stream(file);
-
 	double EphminS(0.0), EphminCMB(0.0);
 	targetPhotonEnergies(EphminS, EphminCMB);
 
@@ -94,11 +92,7 @@ void processes(State& st, const std::string& filename)
 
 	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
 
-
-
 	const ParamSpace& pps = st.photon.ps;
-
-	timestamp_stream(file);
 
 	file << "log(E/eV)"
 		//<< '\t' << "log(t/s)"

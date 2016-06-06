@@ -9,7 +9,7 @@
 
 double starDensity(double z)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
 
 	double Nrg = 4.0e7;
 
@@ -34,8 +34,8 @@ double starDensity(double z)
 double starBlackBody(double E, double r)
 {
 
-	static const double starT = GCFG.get<double>("starT", 3.0e3);
-	static const double starR = GCFG.get<double>("starR", 1.0e13);
+	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
+	static const double starR = GlobalConfig.get<double>("starR", 1.0e13);
 
 	double Epeak = boltzmann*starT;
 	double Ephmin = Epeak / 100.0;
@@ -72,8 +72,8 @@ double cmbBlackBody(double E)
 
 void targetPhotonEnergies(double& EphminS, double& EphminCMB)
 {
-	static const double starT = GCFG.get<double>("starT", 3.0e3);
-	static const double Tcmb = GCFG.get<double>("targetPhotonEnergies-Tcmb", 2.7);
+	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
+	static const double Tcmb = GlobalConfig.get<double>("targetPhotonEnergies-Tcmb", 2.7);
 
 	double EpS = boltzmann*starT;
 	EphminS = EpS / 100.0;

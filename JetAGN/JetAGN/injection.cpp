@@ -17,7 +17,7 @@
 
 double powerLaw(double E, double Emin, double Emax)
 {
-	static const double primaryIndex = GCFG.get<double>("primaryIndex", 2.0);
+	static const double primaryIndex = GlobalConfig.get<double>("primaryIndex", 2.0);
 	
 	double result = pow(E, (-primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
 	return result;
@@ -43,7 +43,7 @@ double normalization(Particle& p, double z, double magf)
 
 void injection(Particle& p, State& st)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
 
 	show_message(msgStart, Module_electronInjection);
 

@@ -28,9 +28,9 @@ int jetAGN()
 	std::string folder{ prepareOutputfolder() };
 
 	try {
-		GCFG = readConfig();
+		GlobalConfig = readConfig();
 		prepareGlobalCfg();
-		State model(GCFG.get_child("model"));
+		State model(GlobalConfig.get_child("model"));
 
 	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
 		//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));
@@ -42,7 +42,7 @@ int jetAGN()
 
 		injection(model.electron, model);
 
-		std::cout << "checking injected power" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
+		std::cout << "checking injected power:" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
 
 	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
 	//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
@@ -51,7 +51,7 @@ int jetAGN()
 	
 		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
 		//writeEandTParamSpace("electronDist_ET.txt", model.electron.distribution, nR/2);
-		writeRandTParamSpace(getFileName(GCFG,folder,"electronDist"), model.electron.distribution, model.electron.ps[0].size() - 5);
+		writeRandTParamSpace(getFileName(GlobalConfig,folder,"electronDist"), model.electron.distribution, model.electron.ps[0].size() - 5);
 		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
 
 
@@ -60,7 +60,7 @@ int jetAGN()
 		//	return model.electron.injection.get(i);
 		//});
 
-		processes(model, getFileName(GCFG, folder, "luminosity"));
+		processes(model, getFileName(GlobalConfig, folder, "luminosity"));
 
 	}
 	catch (std::runtime_error& e)

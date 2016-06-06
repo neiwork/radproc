@@ -16,8 +16,8 @@
 
 void radiativeLosses(State& st)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
-	static const double accEfficiency = GCFG.get<double>("accEfficiency", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
 	
 	std::vector<File*> files;
 	OFM out;

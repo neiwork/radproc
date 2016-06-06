@@ -2,4 +2,4 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-boost::property_tree::ptree GCFG;
+boost::property_tree::ptree GlobalConfig;

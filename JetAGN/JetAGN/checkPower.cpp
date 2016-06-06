@@ -13,7 +13,7 @@
 
 double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
 {
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
 
 	double sum = 0.0;
 

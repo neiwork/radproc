@@ -15,12 +15,12 @@
 double dLnt(double z)  //esta es la función que depende del número de estrellas a tiempo t
 {
 	
-	static const double starT = GCFG.get<double>("starT", 3.0e3);
-	static const double openingAngle = GCFG.get<double>("openingAngle", 0.1);
-	static const double Gamma = GCFG.get<double>("Gamma", 10);
-	static const double Lj = GCFG.get<double>("Lj", 1.0e43);
-	static const double accEfficiency = GCFG.get<double>("accEfficiency", 0.1);
-	static const double Dlorentz = GCFG.get<double>("Dlorentz");
+	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
 	double E = P2(electronMass*cLight2) / (boltzmann*starT);
 

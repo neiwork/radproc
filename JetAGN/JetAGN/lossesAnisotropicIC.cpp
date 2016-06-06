@@ -11,8 +11,8 @@
 
 double b_theta(double theta, double w0, double E)
 {
-	static const double Gamma = GCFG.get<double>("Gamma", 10);
-	static const double Dlorentz = GCFG.get<double>("Dlorentz");
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
 	//corregido es 1.0 - cos(theta') escrito en funcion de theta sin primar
 	double Dstar = 1.0 / (Gamma - 1.0);
@@ -65,7 +65,7 @@ double fLosses(double x, double t, double y, double E, double r)
 
 double lossesAnisotropicIC(double E, Particle& particle, double r)
 {
-	static const double starT = GCFG.get<double>("starT",3.0e3);
+	static const double starT = GlobalConfig.get<double>("starT",3.0e3);
 
 	double mass = particle.mass;
 
