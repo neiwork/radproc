@@ -53,7 +53,7 @@ void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 	
 	file << "log(r)=" << logR << '\t' ;
 
-	for (int t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
+	for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
 		double time = data.ps[2][t_ix];
 		file << "t=" << log10(time) << '\t';
 	}
@@ -94,7 +94,7 @@ void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 
 	file << "log(E)=" << logE << '\t' ;
 
-	for (int t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
+	for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
 		double time = data.ps[2][t_ix];
 		file << "t=" << log10(time) << '\t';
 	}
@@ -146,24 +146,62 @@ void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& da
 }
 
 
-void write(const std::string& archive, Vector salida, Particle particle)
+void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 {
-	std::ofstream fileWritten;
-	fileWritten.open(archive.c_str(), std::ios::out);
+	std::ofstream file;
+	file.open(filename.c_str(), std::ios::out);
 
-	for (size_t i = 0; i < particle.eDim()->size(); ++i){
+	file << "log(z/pc)" << '\t';
 
-		double E_eV = (particle.eDim()->values[i] / 1.6e-12);
-
-		fileWritten << log10(E_eV);
-
-		double result = salida[i];
-
-		fileWritten << "\t" << log10(result) << std::endl;
-
+	for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
+		double time = data.ps[2][t_ix];
+		file << "t=" << log10(time) << '\t';
 	}
 
-	fileWritten.close();
+	const double Emin = data.ps[DIM_E].first();
+
+	const double RMIN = data.ps[DIM_R].first();
+	const double RMAX = data.ps[DIM_R].last();
+	const int N_R = data.ps[DIM_R].size() - 1;
+
+	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
+
+	for (size_t r_ix = 0; r_ix < data.ps[1].size()-1; r_ix++) {
+
+		file << std::endl;
+
+		double z = data.ps[1][r_ix];
+		double logR =  log10(z / pc);
+
+		double dz = z * (z_int - 1);
+
+		//volumen de la celda i
+		double vol_i = pi*P2(jetRadius(z, parameters.openingAngle))*dz;;
+
+		double Emax = eEmax(z, parameters.magneticField);
+
+		file << logR << '\t';
+
+		for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
+
+			double sum = 0.0;
+
+			for (size_t E_ix = 0; E_ix < data.ps[0].size(); E_ix++) {
+
+				double E = data.ps[0][E_ix];
+				double T = data.ps[2][t_ix];
+
+				double dist = data.interpolate({ { DIM_E, E }, { DIM_R, z }, { DIM_T, T } });
+
+				sum = sum + dist*E*vol_i;
+			}
+
+			file << log10(sum*parameters.Gamma) << '\t';
+			       //multiplico nuevamente por Gamma para obtener la Ent en el sist lab
+		}
+
+	}
+	file.close();
 }
 
 

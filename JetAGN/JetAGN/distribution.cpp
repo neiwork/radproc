@@ -58,12 +58,21 @@ void distribution(Particle& p, State& st)
 				double Eeff = effectiveE(E, Emax, t, r, p, st);
 				double dist1(0.0), dist2(0.0);
 
-				//if (t_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
-				//{
-					dist1 = timeDistribution(E, r, t, p, st, Eeff);
-				//}
-				//else //if (t_ix != 0)
-				if (t_ix != 0)
+
+				double tp = t / parameters.Gamma; //time in the FF
+				
+				//a: unico emisor
+
+				if (t_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
+				{
+				dist1 = timeDistribution(E, r, t, p, st, Eeff);
+				}
+				else 
+
+				//b: emisores para todo z
+				//dist1 = timeDistribution(E, r, t, p, st, Eeff);
+				//if (t_ix != 0)
+
 				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
 					//if (i.its[2].canPeek(-1)) 
 

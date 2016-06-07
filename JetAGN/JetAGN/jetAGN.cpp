@@ -48,10 +48,10 @@ int jetAGN()
 	
 		distribution(model.electron, model);
 	
-		//writeAllSpaceParam("electronDist.txt", model.electron.distribution);
+		writeAllSpaceParam(getFileName(cfg, folder, "electronDist"), model.electron.distribution);
 		writeEandTParamSpace(getFileName(cfg, folder, "electronDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
 		writeRandTParamSpace(getFileName(cfg,folder,"electronDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
-		//writeEnergyFunction("electronDist_E.txt", model.electron.distribution, 1, nR);
+		writeEnt(getFileName(cfg, folder, "E_NT_r"), model.electron.distribution);
 
 
 		//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades

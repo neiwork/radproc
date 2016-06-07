@@ -9,8 +9,10 @@
 
 	"file": {
 		"luminosity":"ntLuminosity.txt",
+      "electronDist":"electronDist.txt",
       "electronDist_ET":"electronDist_ET.txt",
-		"electronDist_RT":"electronDist_RT.txt"
+		"electronDist_RT":"electronDist_RT.txt",
+      "E_NT_r":"E_NT_r.txt"
 	},
 
 	"particle": {

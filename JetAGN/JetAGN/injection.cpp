@@ -34,7 +34,8 @@ double normalization(Particle& p, const SpaceCoord& distCoord)
 	});  //integra E*Q(E)  entre Emin y Emax
 	
 	double Q0 = dLnt(z) / (int_E);  //factor de normalizacion de la inyeccion
-	return Q0;
+	return Q0 / parameters.Gamma;
+	//N'(E')dE' = N(E)dE  ==> E'_nt = int( E'N(E')dE') = E_nt/Gamma;
 }
 
 
@@ -78,8 +79,10 @@ void injection(Particle& p, State& st)
 	});
 
 	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
+	double Lnt_total_pri = Lnt_total/parameters.Gamma;
 	
 	std::cout << "Lnt total" << '\t' << Lnt_total << std::endl;
+	std::cout << "Lnt FF total" << '\t' << Lnt_total_pri << std::endl;
 
 	show_message(msgEnd, Module_electronInjection);
 }
