@@ -15,6 +15,27 @@
       "E_NT_r":"E_NT_r.txt"
 	},
 
+	"runge-kutta-1": {
+		"samples": {
+			"x": 50
+		}
+	},
+
+	"runge-kutta-2": {
+		"samples": { 
+			"x": 50,
+			"y": 50
+		}
+	},
+
+	"integrate-3": {
+		"samples": {
+			"x": 20,
+			"t": 20,
+			"y": 20
+		}
+	},
+
 	"particle": {
 		"default": {
 			"mass":0,

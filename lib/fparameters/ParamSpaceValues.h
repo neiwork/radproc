@@ -19,12 +19,14 @@ public:
 	Vector values;
 
 	ParamSpaceValues(const ParamSpace& ps, bool initialize = true);
+	ParamSpaceValues(const ParamSpace& ps, double fillValue );
 	ParamSpaceValues(const ParamSpace& ps, std::function<double(const SpaceIterator& i)> initializer);
 	ParamSpaceValues(const ParamSpaceValues& ps);
 
 	ParamSpaceValues& operator =(const ParamSpaceValues& ps);
 
 	void initialize();
+	void initialize( double fillValue );
 
 	void fill(const std::function<double(const SpaceIterator& i)>& f, std::initializer_list<int> fixed = {});
 

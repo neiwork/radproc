@@ -1,9 +1,8 @@
 #include "RungeKutta.h"
 
 
-
 namespace {
-	void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)
+	void inline incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R)
 	{
 			double floaT = entero;
 			double aux = fmod(floaT,2.0);
@@ -18,14 +17,15 @@ namespace {
 	}
 }
 
-double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como argumento los cuatro limites
+RungeKuttaOpt DefOpt_RungeKutta{ 50, 50 };
+double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f, const RungeKuttaOpt& opt)    //paso como argumento los cuatro limites
 //de las integrales y la funcion a integrar																														
 {
 
-	int n_x = 100;  //recordar que el numero de puntos en los que interpolo 
+	int n_x = opt.samples_x;  //recordar que el numero de puntos en los que interpolo 
 	//no puede ser mayor al numero de puntos de la funcion
 
-	int n_y = 50;
+	int n_y = opt.samples_y;
 
 	double x_int = pow((b / a), (1.0 / n_x));
 
@@ -83,9 +83,10 @@ double RungeKutta(double a, double b, fun1 c, fun1 d, fun2 f)    //paso como arg
 
 }
 
-double RungeKuttaSimple(double a, double b, fun1 f)
+RungeKuttaOpt DefOpt_RungeKuttaSimple{ 50, -1 };
+double RungeKuttaSimple(double a, double b, fun1 f, const RungeKuttaOpt& opt)
 {
-	int RK_N = 100;
+	int RK_N = opt.samples_x;
 	int n = RK_N;
 
 	double x_int = pow((b / a), (1.0 / n));

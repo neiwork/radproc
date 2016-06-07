@@ -25,7 +25,7 @@
 class Particle {
 public:
 
-	std::string id;
+	const std::string id;
 
 	double mass;
 
@@ -38,9 +38,6 @@ public:
 	template<typename T> T getpar(boost::property_tree::ptree& cfg, const std::string &path, const T& def = T{}) {
 		return cfg.get<T>("particle." + id + "." + path, cfg.get<T>("particle.default." + path, def));
 	}
-
-	//Particle(std::string t, double m, double emin, double emax);
-	//Particle(const ParticleConfig& pcfg) :Particle(pcfg.type, pcfg.mass, pcfg.logEmin, pcfg.logEmax){};
 
 	Particle(const std::string& id);
 	
@@ -56,11 +53,3 @@ public:
 
 	Dimension* eDim() const;
 };
-//
-//
-//template <class ConfigHolder>
-//class ParticleCfg : public Particle {
-//public:
-//	static ParticleConfig config;
-//	ParticleCfg():Particle(ParticleCfg::config) {}
-//};

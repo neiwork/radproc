@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TestJetAGNResults.cpp" />
+    <ClCompile Include="TestParamSpace.cpp" />
     <ClCompile Include="TestParamSpaceValues.cpp" />
     <ClCompile Include="TestParticle.cpp" />
     <ClCompile Include="TestRungeKutta.cpp" />

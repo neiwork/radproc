@@ -4,13 +4,7 @@
 #include "Dimension.h"
 #include "SpaceCoord.h"
 
-//#include <fmath/interpolation.h>
-//#include <iterator>
-//#include <iostream>
-//#include <iomanip>
-//#include <stdexcept>
-//#include <sstream>
-
+#include <omp.h>
 
 void ParamSpace::updateDerivations(const SpaceIterator& i) const {
 	for (auto d : derivations) {
@@ -22,6 +16,18 @@ void ParamSpace::iterate(std::function<void(const SpaceIterator&)> body, std::in
 {
 	SpaceIterator it(*this,fixedDimensions);
 	while (it.next()) {
+		updateDerivations(it);
+		body(it);
+	}
+}
+
+void ParamSpace::parallelize(std::function<void(const SpaceIterator&)> body) const
+{
+	const size_t sz{ size() };
+	#pragma omp parallel
+	for (size_t i = 0; i < sz; ++i) {
+		SpaceIterator it(*this);
+		ix2dim(i, it.coord);
 		updateDerivations(it);
 		body(it);
 	}
@@ -59,5 +65,6 @@ void ParamSpace::ix2dim(int ix, SpaceCoord& si) const
 {
 	for (size_t i = 0; i < dimensions.size(); ++i) {
 		si[i] = ix % dimensions[i]->size();
+		ix /= dimensions[i]->size();
 	}
 }

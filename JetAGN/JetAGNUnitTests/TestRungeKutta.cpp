@@ -31,7 +31,7 @@ namespace RungeKuttaTests
 
 		TEST_METHOD(TestDoubleIntegral)
 		{
-			double integral = RungeKutta(1.0, 2.0, min, max, f);
+			double integral = RungeKutta(1.0, 2.0, min, max, f, {100,50});
 			double expected = 7.0;
 			
 
