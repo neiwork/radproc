@@ -40,11 +40,13 @@ int jetAGN()
 	//	radiativeLosses(model);
 
 		injection(model.electron, model);
+		
 
 		std::cout << "checking injected power" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
 
 	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
-	//	writeEnergyFunction("electronInj_E.txt", model.electron.injection, 1, 1); //escribe Q(E), para r(0) y t(0)
+		writeEnergyFunction("electronInj_E_r0.txt", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
+		writeEnergyFunction("electronInj_E_rmax.txt", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para r(0) y t(0)
 	
 		distribution(model.electron, model);
 	
@@ -59,7 +61,7 @@ int jetAGN()
 		//	return model.electron.injection.get(i);
 		//});
 
-		processes(model, getFileName(cfg,folder,"luminosity"));
+		//processes(model, getFileName(cfg,folder,"luminosity"));
 
 	}
 	catch (std::runtime_error& e)

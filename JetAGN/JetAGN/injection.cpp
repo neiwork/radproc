@@ -56,7 +56,11 @@ void injection(Particle& p, State& st)
 
 	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
 		
-		if (i.its[2].canPeek(-1)) 
+		/* injector en z=0 */
+		if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1))
+
+		/* injectores para todo z */
+		//if (i.its[2].canPeek(-1))                         
 		{
 			return 0.0;
 		}

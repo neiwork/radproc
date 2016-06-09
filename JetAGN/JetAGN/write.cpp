@@ -171,7 +171,7 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 		file << std::endl;
 
 		double z = data.ps[1][r_ix];
-		double logR =  log10(z / pc);
+		double logR =  (z / pc);
 
 		double dz = z * (z_int - 1);
 

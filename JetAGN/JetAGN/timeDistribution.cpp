@@ -24,7 +24,9 @@ double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State
 	Eeffmax = Emax;
 	double Eeff = Eeffmin;
 
-	Eeff_int = pow((Eeffmax / Eeffmin), 0.01);  //0.00001
+	double nEeff = 100;
+
+	Eeff_int = pow((Eeffmax / Eeffmin), 1.0/nEeff);  //0.00001
 	sum_Eeff = 0.0;
 
 	while ((sum_Eeff <= t) && (Eeff <= Eeffmax))	{// for (int k=0; k<=100000; ++k)	{
@@ -53,7 +55,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 	double EpMax = Eeff;
 	double Ep = EpMin;
 
-	int nEp = 50;
+	int nEp = 100;
 	double Ep_int = pow((EpMax / EpMin), 1.0 / nEp);  //0.001
 
 	double dEp(0.0), inj(0.0);
@@ -68,7 +70,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 			inj = 0.0;
 		}
 		else{
-			inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, t} }); //paso los valores E,r,t en donde quiero evaluar Q
+			inj = p.injection.interpolate({ { DIM_E, Ep }, { DIM_R, r }, { DIM_T, tmin} }); //paso los valores E,r,t en donde quiero evaluar Q
 			//interpolDoble(Ep, Time[j]-tau, Ee, Time, injection);  //chequear que ande!
 		}
 
