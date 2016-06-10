@@ -10,7 +10,7 @@ double starDensity(double z)
 {
 	double Nrg = 4.0e7;
 
-	double pseda = 2.0; // 2.0;
+	double pseda = 1.0; // 2.0;
 
 	double mBH = 1.0e7*solarMass;  //black hole mass
 	double rg = mBH*gravitationalConstant / cLight2;

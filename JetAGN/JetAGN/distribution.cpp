@@ -55,14 +55,22 @@ void distribution(Particle& p, State& st)
 
 				double Emax = eEmax(r, parameters.magneticField);
 				
-				double Eeff = effectiveE(E, Emax, t, r, p, st);
-				double dist1(0.0), dist2(0.0);
+				double tp = t / parameters.Gamma; //time in the FF
 
-				if (t_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
-				{
-					dist1 = timeDistribution(E, r, t, p, st, Eeff);
-				}
-				else //if (t_ix != 0)
+				double Eeff = effectiveE(E, Emax, tp, r, p, st);
+				double dist1(0.0), dist2(0.0);
+								
+				//a: unico emisor
+				//NO!! la condicion de unico injector debe esta en Q
+				//if (z_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
+				//{
+				dist1 = timeDistribution(E, r, tp, p, st, Eeff);
+				//}
+
+				//b: emisores para todo z
+				//dist1 = timeDistribution(E, r, tp, p, st, Eeff);
+				
+				if (t_ix != 0)
 				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
 					//if (i.its[2].canPeek(-1)) 
 
