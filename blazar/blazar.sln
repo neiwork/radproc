@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blazar", "blazar\blazar.vcxproj", "{58F360E7-7216-4542-867A-4E9F391DD506}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flosses", "..\lib\flosses\flosses.vcxproj", "{C85692B2-CA76-4FA7-AE5A-4BFB381513AF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fluminosities", "..\lib\fluminosities\fluminosities.vcxproj", "{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fmath", "..\lib\fmath\fmath.vcxproj", "{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fparameters", "..\lib\fparameters\fparameters.vcxproj", "{D40DF49F-3C0D-401C-9F40-10170C1307AA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fparticle", "..\lib\fparticle\fparticle.vcxproj", "{634888AE-9178-404D-8E22-8E1D5D6B4F3C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "runBlazar", "runBlazar\runBlazar.vcxproj", "{C9AA4A61-C056-474F-8670-310FC23F98AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58F360E7-7216-4542-867A-4E9F391DD506}.Debug|Win32.ActiveCfg = Debug|Win32
+		{58F360E7-7216-4542-867A-4E9F391DD506}.Debug|Win32.Build.0 = Debug|Win32
+		{58F360E7-7216-4542-867A-4E9F391DD506}.Release|Win32.ActiveCfg = Release|Win32
+		{58F360E7-7216-4542-867A-4E9F391DD506}.Release|Win32.Build.0 = Release|Win32
+		{C85692B2-CA76-4FA7-AE5A-4BFB381513AF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C85692B2-CA76-4FA7-AE5A-4BFB381513AF}.Debug|Win32.Build.0 = Debug|Win32
+		{C85692B2-CA76-4FA7-AE5A-4BFB381513AF}.Release|Win32.ActiveCfg = Release|Win32
+		{C85692B2-CA76-4FA7-AE5A-4BFB381513AF}.Release|Win32.Build.0 = Release|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Debug|Win32.Build.0 = Debug|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Release|Win32.ActiveCfg = Release|Win32
+		{F3D01362-4E4B-4F3F-9F1B-A5BA28DF9DB7}.Release|Win32.Build.0 = Release|Win32
+		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Debug|Win32.Build.0 = Debug|Win32
+		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Release|Win32.ActiveCfg = Release|Win32
+		{6D9AE1EB-3467-4970-A4EF-4B19236FBD4B}.Release|Win32.Build.0 = Release|Win32
+		{D40DF49F-3C0D-401C-9F40-10170C1307AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D40DF49F-3C0D-401C-9F40-10170C1307AA}.Debug|Win32.Build.0 = Debug|Win32
+		{D40DF49F-3C0D-401C-9F40-10170C1307AA}.Release|Win32.ActiveCfg = Release|Win32
+		{D40DF49F-3C0D-401C-9F40-10170C1307AA}.Release|Win32.Build.0 = Release|Win32
+		{634888AE-9178-404D-8E22-8E1D5D6B4F3C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{634888AE-9178-404D-8E22-8E1D5D6B4F3C}.Debug|Win32.Build.0 = Debug|Win32
+		{634888AE-9178-404D-8E22-8E1D5D6B4F3C}.Release|Win32.ActiveCfg = Release|Win32
+		{634888AE-9178-404D-8E22-8E1D5D6B4F3C}.Release|Win32.Build.0 = Release|Win32
+		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Debug|Win32.Build.0 = Debug|Win32
+		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Release|Win32.ActiveCfg = Release|Win32
+		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
