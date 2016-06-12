@@ -21,15 +21,16 @@
 #include <fparameters\Dimension.h>
 #include <fmath\physics.h>
 
+#include <boost/property_tree/ptree.hpp>
+
 int jetAGN()
 {
 	std::string folder{ prepareOutputfolder() };
 
 	try {
-		boost::property_tree::ptree cfg{ readConfig() };
-
-		setParameters(cfg);
-		State model(cfg);
+		GlobalConfig = readConfig();
+		prepareGlobalCfg();
+		State model(GlobalConfig.get_child("model"));
 
 	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
 		//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));
@@ -42,7 +43,7 @@ int jetAGN()
 		injection(model.electron, model);
 		
 
-		std::cout << "checking injected power" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
+		std::cout << "checking injected power:" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
 
 	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
 		writeEnergyFunction("electronInj_E_r0.txt", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
@@ -50,10 +51,10 @@ int jetAGN()
 	
 		distribution(model.electron, model);
 	
-		writeAllSpaceParam(getFileName(cfg, folder, "electronDist"), model.electron.distribution);
-		writeEandTParamSpace(getFileName(cfg, folder, "electronDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
-		writeRandTParamSpace(getFileName(cfg,folder,"electronDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
-		writeEnt(getFileName(cfg, folder, "E_NT_r"), model.electron.distribution);
+		writeAllSpaceParam(getFileName(folder, "electronDist"), model.electron.distribution);
+		writeEandTParamSpace(getFileName(folder, "electronDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
+		writeRandTParamSpace(getFileName(folder,"electronDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
+		writeEnt(getFileName(folder, "E_NT_r"), model.electron.distribution);
 
 
 		//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades

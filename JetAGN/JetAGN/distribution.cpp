@@ -9,10 +9,13 @@
 #include <fmath\physics.h>
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
-
+#include <fparameters\parameters.h>
+#include <boost/property_tree/ptree.hpp>
 
 void distribution(Particle& p, State& st)
 {
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+
 	show_message(msgStart, Module_electronDistribution);
 
 	const ParamSpace& ps{ p.ps };
@@ -41,7 +44,10 @@ void distribution(Particle& p, State& st)
 			});      //ver si quizas lo puedo copiar en t-1 que es donde lo necesito
 
 			p.ps.iterate([&](const SpaceIterator& i){
-				double E = i.val(DIM_E);
+				const double E = i.val(DIM_E);
+				const double r = i.val(DIM_R);
+				const double t = i.val(DIM_T);
+				const double magf = st.magf.get(i);
 				//
 				// equivale a:
 				//	i.its[0].val();
@@ -50,21 +56,19 @@ void distribution(Particle& p, State& st)
 				// equivalia a:
 				//	 ex i.par.T;
 
-				double r = i.val(DIM_R);
-				double t = i.val(DIM_T); 
 
-				double Emax = eEmax(r, parameters.magneticField);
+				double Emax = eEmax(r, magf);
 				
-				double tp = t / parameters.Gamma; //time in the FF
+				double tp = t / Gamma; //time in the FF
 
-				double Eeff = effectiveE(E, Emax, tp, r, p, st);
+				double Eeff = effectiveE(E, Emax, tp, r, p, st, i);
 				double dist1(0.0), dist2(0.0);
 								
 				//a: unico emisor
 				//NO!! la condicion de unico injector debe esta en Q
 				//if (z_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
 				//{
-				dist1 = timeDistribution(E, r, tp, p, st, Eeff);
+				dist1 = timeDistribution(E, r, tp, p, st, Eeff, i);
 				//}
 
 				//b: emisores para todo z
@@ -75,7 +79,7 @@ void distribution(Particle& p, State& st)
 					//if (i.its[2].canPeek(-1)) 
 
 					double dist = N2.interpolate({ { DIM_E, Eeff }, { DIM_R, r }, { DIM_T, i.its[2].peek(-1) } });
-					double ratioLosses = losses(Eeff, r, p, st) / losses(E, r, p, st);
+					double ratioLosses = losses(Eeff, r, p, st, i) / losses(E, r, p, st, i);
 					dist2 = dist*ratioLosses;
 				}
 

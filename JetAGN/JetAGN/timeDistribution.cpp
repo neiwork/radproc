@@ -16,7 +16,7 @@
 #include <fstream>
 
 
-double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State& st)
+double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State& st, const SpaceCoord& i)
 {
 	double Eeffmin, Eeffmax, Eeff_int, sum_Eeff, dEeff, dtau_eff;
 
@@ -32,7 +32,7 @@ double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State
 	while ((sum_Eeff <= t) && (Eeff <= Eeffmax))	{// for (int k=0; k<=100000; ++k)	{
 
 		dEeff = Eeff*(Eeff_int - 1.0);
-		dtau_eff = dEeff / losses(Eeff, r, p, st);
+		dtau_eff = dEeff / losses(Eeff, r, p, st, i);
 		sum_Eeff = sum_Eeff + dtau_eff;
 
 		//	if (sum_Eeff > times[j]) goto
@@ -45,9 +45,10 @@ double effectiveE(double Ee, double Emax, double t, double r, Particle& p, State
 
 }
 
-double timeDistribution(double Ee, double r, double t, Particle& p, State& st, double Eeff)
+double timeDistribution(double Ee, double r, double t, Particle& p, State& st, double Eeff, const SpaceCoord& i)
 { 
-	double Emax = eEmax(r, parameters.magneticField);
+	const double magneticField{ st.magf.get(i) };
+	double Emax = eEmax(r, magneticField);
 	double tmin = st.electron.ps[2][0]; //en teoria esto no es necesario, porque solo llamo a etsa funcion en el tmin
 	//chequear que t == tmin
 
@@ -62,7 +63,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 	double sum_Ep = 0.0;
 
-	for (size_t l=0; l < nEp; ++l)	{
+	for (int l=0; l < nEp; ++l)	{
 
 		dEp = Ep*(Ep_int-1.0);
 
@@ -80,7 +81,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 	}
 
-	double perdidas = losses(Ee, r, p, st);
+	double perdidas = losses(Ee, r, p, st, i);
 
 	double total = sum_Ep / perdidas;
 				

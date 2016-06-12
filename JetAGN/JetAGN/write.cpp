@@ -6,6 +6,7 @@
 #include <fparameters\SpaceIterator.h>
 #include <fparameters\Dimension.h>
 #include <fparameters\parameters.h>
+#include <boost/property_tree/ptree.hpp>
 
 //namespace {
 	double safeLog10( double x ) {
@@ -148,10 +149,17 @@ void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& da
 
 void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
 
+//<<<<<<< HEAD
 	file << "log(z/pc)" << '\t';
+//=======
+//	for (int i = 0; i < particle.eDim()->size(); ++i){
+//>>>>>>> globals
 
 	for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
 		double time = data.ps[2][t_ix];
@@ -176,9 +184,10 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 		double dz = z * (z_int - 1);
 
 		//volumen de la celda i
-		double vol_i = pi*P2(jetRadius(z, parameters.openingAngle))*dz;;
+		double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;;
 
-		double Emax = eEmax(z, parameters.magneticField);
+		// [av] ver: no se usaba?
+		//double Emax = eEmax(z, magneticField);
 
 		file << logR << '\t';
 
@@ -196,7 +205,7 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 				sum = sum + dist*E*vol_i;
 			}
 
-			file << log10(sum*parameters.Gamma) << '\t';
+			file << log10(sum*Gamma) << '\t';
 			       //multiplico nuevamente por Gamma para obtener la Ent en el sist lab
 		}
 

@@ -5,7 +5,7 @@
 
 
 /* losses gives the energy loss for particle b(E)=dE/dt */ 
-double losses(double E, double r, Particle& particle, State& state);
+double losses(double E, double r, Particle& particle, State& state, const SpaceCoord& i);
 
 double adiabaticLosses(double E, double z, Particle& particle);
 

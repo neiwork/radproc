@@ -10,13 +10,16 @@
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 
+#include <fparameters/parameters.h>
 
-//#include <omp.h>
 #include <fmath\physics.h>
+
+#include <boost/property_tree/ptree.hpp>
 
 double Llab(double Lint)
 {
-	return Lint*pow(parameters.Dlorentz, 4.0);
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	return Lint*pow(Dlorentz, 4.0);
 }
 
 /* Takes [emi] =  E^2*[Q(E)] and calculates int(2.0*pi*P2(jetR)*emi dz); 
@@ -25,6 +28,8 @@ for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
 
 double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_ix)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+
 	double sum = 0.0;
 
 	const double RMIN = pps[DIM_R].first();
@@ -40,7 +45,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 		double dz = z[i]*(z_int - 1);
 		
 		//volumen de la celda i
-		double vol_i = pi*P2(jetRadius(z[i], parameters.openingAngle))*dz;;
+		double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
 
 		double E = pps[0][E_ix];
 		double T = pps[2][t_ix];
@@ -61,6 +66,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 
 void processes(State& st, const std::string& filename)
 {
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
 	show_message(msgStart, Module_luminosities);
 
@@ -70,29 +76,23 @@ void processes(State& st, const std::string& filename)
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
-	timestamp_stream(file);
-
 	double EphminS(0.0), EphminCMB(0.0);
 	targetPhotonEnergies(EphminS, EphminCMB);
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
-		double E = i.val(DIM_E);
-		double eSyn   = luminositySynchrotron(E, st.electron, i.coord); //estos devuelven erg/s/cm^3, integrar!
-		double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
-		double eICcmb = luminosityIC(E, st.electron, i.coord, 
-			[E](double E){return cmbBlackBody(E); }, EphminCMB);
+		const double E = i.val(DIM_E);
+		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s/cm^3, integrar!
+		const double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
+		const double eICcmb = luminosityIC( E, st.electron, i.coord, cmbBlackBody, EphminCMB);
 
 		Qsyn.set(i, eSyn);
 		Qic.set(i, eIC);
 		QicCMB.set(i, eICcmb);
+
 	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
 
-
-
 	const ParamSpace& pps = st.photon.ps;
-
-	timestamp_stream(file);
 
 	file << "log(E/eV)"
 		//<< '\t' << "log(t/s)"
@@ -101,7 +101,7 @@ void processes(State& st, const std::string& filename)
 		<< '\t' << "log(LicCMB/erg s-1)"
 		<< std::endl;
 
-		for (size_t E_ix = 0; E_ix < pps[0].size(); E_ix++) {  
+		for (int E_ix = 0; E_ix < pps[0].size(); E_ix++) {  
 
 			//E*L(E) = delta^4 E'*L'(E') and E=delta*E'
 			//variables primadas ->FF
@@ -111,7 +111,7 @@ void processes(State& st, const std::string& filename)
 			double E = pps[0][E_ix];
 			double t = pps[2][t_ix];  //t es el ultimo valor
 
-			double Elab = E*parameters.Dlorentz; //Dlorentz=delta
+			double Elab = E*Dlorentz; //Dlorentz=delta
 
 			double Lsyn   = emiToLumi(pps, Qsyn, E_ix, t_ix);
 			double Lic    = emiToLumi(pps, Qic, E_ix, t_ix);

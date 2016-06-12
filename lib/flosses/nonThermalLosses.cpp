@@ -1,16 +1,19 @@
 #include "nonThermalLosses.h"
 
+#include <fparameters/parameters.h>
 
+#include <fmath/physics.h>
 
-#include <fmath\physics.h>
-
-
+#include <boost/property_tree/ptree.hpp>
 
 double adiabaticLosses(double E, double z, double vel_lat)  //en [erg/s]
 {
-	double jetRadius = z*parameters.openingAngle;
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
 
-	return 2.0*parameters.Gamma*(vel_lat*E / (3.0*jetRadius));
+	double jetRadius = z*openingAngle;
+
+	return 2.0*Gamma*(vel_lat*E / (3.0*jetRadius));
 	//termina quedando return 2.0*cLight*E / (3.0*z);
 }
 

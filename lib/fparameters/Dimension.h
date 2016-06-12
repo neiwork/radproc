@@ -16,12 +16,12 @@ public:
 		return values.back();
 	};
 
-	Dimension(size_t size, std::function<void(Vector&)> initializer);
+	Dimension(int size, std::function<void(Vector&)> initializer);
 
 	//void update(Parameters& pars, size_t index);
 
-	const double& operator[](const size_t& index) const;
+	const double& operator[](const int& index) const;
 
-	size_t size() const;
+	int size() const;
 };
 

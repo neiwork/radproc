@@ -9,12 +9,24 @@
 
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
+#include <fmath\configure.h>
 #include <iostream>
 #include <algorithm>
 
-double fmagneticField(double z, double B_o)
+inline double computeModelB0(double Lj, double openingAngle) {
+	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
+}
+
+inline double fmagneticField(double z, double B_o)
 {
-	return B_o/z;
+	return B_o / z;
+}
+
+double computeMagField(double z) {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+
+	return fmagneticField(z, computeModelB0(Lj, openingAngle));
 }
 
 double jetRadius(double z, double openingAngle)
@@ -24,11 +36,15 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
-	double Reff = 10.0*stagnationPoint(z);
-	double vel_lat = cLight*parameters.openingAngle;
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
 
-	double Emax_ad = parameters.accEfficiency*3.0*jetRadius(z, parameters.openingAngle)*cLight*electronCharge*B / (vel_lat*parameters.Gamma);
-	double Emax_syn = electronMass*cLight2*sqrt(parameters.accEfficiency*6.0*pi*electronCharge / (thomson*B));
+	double Reff = 10.0*stagnationPoint(z);
+	double vel_lat = cLight*openingAngle;
+
+	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
+	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 	double Emax_hillas = electronCharge*B*Reff;
 	double min1 = std::min(Emax_syn, Emax_syn);
 
@@ -43,72 +59,59 @@ double eEmax(double z, double B)
 
 double stagnationPoint(double z)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+
 	double Mdot_wind = 1.0e-8*solarMass / yr;
 	double v_wind = 2.0e7;
 
-	double stagPoint = sqrt(Mdot_wind*v_wind*cLight / (4.0*parameters.Lj))*jetRadius(z,parameters.openingAngle);
+	double stagPoint = sqrt(Mdot_wind*v_wind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
 
 	return stagPoint;
 
 }
 
-double computeModelB0(double Lj, double openingAngle) {
-	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
+//void derive_parameters_r(double E, double z, double t)
+//{
+//	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
+//	//parameters.radius = jetRadius(z, parameters.openingAngle);
+//	parameters.magneticField = fmagneticField(z, B0);
+//	//electronLogEmax = log10(eEmax(z, magneticField));
+//
+//	//Rsp = stagnationPoint(z);
+//}
+
+double computeDlorentz(double gamma) {
+	double inc = 10.0*pi / 180; //ang obs del jet
+	double beta = 1.0 - 1.0 / P2(gamma);
+	double Dlorentz = 1.0 / (gamma*(1.0 - cos(inc)*beta));
+	return Dlorentz;
 }
 
-void derive_parameters_r(double E, double z, double t)
+void prepareGlobalCfg()
 {
-	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
-	//parameters.radius = jetRadius(z, parameters.openingAngle);
-	parameters.magneticField = fmagneticField(z, B0);
-	//electronLogEmax = log10(eEmax(z, magneticField));
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
 
-	//Rsp = stagnationPoint(z);
-}
+	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
 
-void setParameters(boost::property_tree::ptree& cfg)
-{
-	
+	//parameters.starT = cfg.get<double>("starT", 3.0e3);
+
+	//parameters.Lj = cfg.get<double>("Lj", 1.0e43);
+	//parameters.openingAngle = cfg.get<double>("openingAngle", 0.1); //jet opening angle
+	//parameters.Gamma = cfg.get<double>("Gamma", 10);
+	//parameters.accEfficiency = cfg.get<double>("accEfficiency", 0.1);
+	//parameters.primaryIndex = cfg.get<double>("primaryIndex", 2.0);
+
 	//double mBH = 1.0e7*solarMass;  //black hole mass
 	//double rg = mBH*gravitationalConstant / cLight2;
-
 	//double z0 = 50.0*rg; //50 * Rschw  //OJO! si cambian, cambiar tmb nonthermalLuminosity!!
-
-	parameters.starT = cfg.get<double>("starT",3.0e3);
-
-	parameters.Lj = cfg.get<double>("Lj", 1.0e43);
-	parameters.openingAngle = cfg.get<double>("openingAngle", 0.1);  //jet opening angle
-
-//	parameters.B0 = sqrt(8.0*parameters.Lj / cLight) / parameters.openingAngle;  //ojo que esto es Bo*z0
-
-//	Rsp = 1.0e14; //distance to stagnation point
-
-	parameters.Gamma = cfg.get<double>("Gamma", 10);
-
-	double inc = 10.0*pi / 180; //ang obs del jet
-	double beta = 1.0 - 1.0 / P2(parameters.Gamma);
-	parameters.Dlorentz = 1.0 / (parameters.Gamma*(1.0 - cos(inc)*beta));
-
-	parameters.accEfficiency = cfg.get<double>("accEfficiency", 0.1);
+	//	parameters.B0 = sqrt(8.0*parameters.Lj / cLight) / parameters.openingAngle;  //ojo que esto es Bo*z0
+	//	Rsp = 1.0e14; //distance to stagnation point
 
 	//magneticField = fmagneticField(z0,B0);  //el primero lo calculo en r = z0
 	//density = nWindDensity(Rc, starR); //el primero lo calculo en r = Rc
 
-// Data of electrons and protons
-	parameters.primaryIndex = cfg.get<double>("primaryIndex", 2.0);
 	//factor_qrel   = 3.0; 
-
-//	const auto nEnergyPoints = cfg.get<int>("particle.default.dim.energy.samples", 10);
-//
-//	ParticleCfg<Electron>::config.logEmin = cfg.get<double>("particle.electron.dim.energy.min", 6.0);
-//	ParticleCfg<Electron>::config.logEmax = cfg.get<double>("particle.electron.dim.energy.max", 15.0);
-//	ParticleCfg<Electron>::config.nE = cfg.get<int>("particle.electron.dim.energy.samples", nEnergyPoints);
-//
-////Data of photons
-//
-//	ParticleCfg<Photon>::config.logEmin = cfg.get<double>("particle.photon.dim.energy.min", -6.0);
-//	ParticleCfg<Photon>::config.logEmax = cfg.get<double>("particle.photon.dim.energy.max", 12.0);
-//	ParticleCfg<Photon>::config.nE = cfg.get<int>("particle.photon.dim.energy.samples", nEnergyPoints);
 
 	//parameters.targetPhotonEmin = pow(10.0, parameters.photonLogEmin)*1.6e-12;  //0.15e3*1.6e-12;  //photonEmin = 0.15 KeV 
 	//parameters.targetPhotonEmax = pow(10.0, parameters.photonLogEmax)*1.6e-12;  //150.0e3*1.6e-12;   //cutEnergy  = 150 KeV
@@ -122,14 +125,11 @@ void setParameters(boost::property_tree::ptree& cfg)
 //	timeMax = (rmax / cLight); // 1.0e11; // rmax / cLight;
 //	nTimes = 50;
 
-	DefOpt_IntTriple.samples_x = cfg.get<int>("integrate-3.samples.x", DefOpt_IntTriple.samples_x);
-	DefOpt_IntTriple.samples_t = cfg.get<int>("integrate-3.samples.t", DefOpt_IntTriple.samples_t);
-	DefOpt_IntTriple.samples_y = cfg.get<int>("integrate-3.samples.y", DefOpt_IntTriple.samples_y);
+	DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);
+	DefOpt_IntLosses.samples_t = GlobalConfig.get<int>("integrate-losses.samples.t", DefOpt_IntLosses.samples_t);
+	DefOpt_IntLosses.samples_y = GlobalConfig.get<int>("integrate-losses.samples.y", DefOpt_IntLosses.samples_y);
 
-	DefOpt_RungeKutta.samples_x = cfg.get<int>("runge-kutta-2.samples.x", DefOpt_RungeKutta.samples_x);
-	DefOpt_RungeKutta.samples_y = cfg.get<int>("runge-kutta-2.samples.y", DefOpt_RungeKutta.samples_y);
-
-	DefOpt_RungeKuttaSimple.samples_x = cfg.get<int>("runge-kutta-1.samples.x", DefOpt_RungeKuttaSimple.samples_x);
+	fmath_configure(GlobalConfig);
 }
 
 
@@ -192,9 +192,6 @@ void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 	}
 
 }
-
-
-
 
 /*
 

@@ -10,17 +10,15 @@
 #include <flosses\lossesIC.h>
 #include <fparameters\SpaceIterator.h>
 
-//#include "losses.h"
-//#include <flosses\lossesHadronics.h>
-//#include <flosses\lossesPhotoHadronic.h>
-//#include <flosses\lossesBrem.h>
-//#include <fmath\interpolation.h>
+#include <fparameters/parameters.h>
 
-
-
+#include <boost/property_tree/ptree.hpp>
 
 void radiativeLosses(State& st)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
+	
 	std::vector<File*> files;
 	OFM out;
 
@@ -36,15 +34,15 @@ void radiativeLosses(State& st)
 	
 	st.electron.ps.iterate([&st, &files, &out](const SpaceIterator& i){
 
-
+		const double magf{ st.magf.get(i) };
 		double fmtE = log10(i.val(DIM_E) / 1.6e-12);
 		double logR = log10(i.val(DIM_R)/pc);
 		//double logT = log10(i.val(DIM_T));
 
-		double B = parameters.magneticField; // i.par.magneticField; VER por qué no funciona
+		double B = magf; // i.par.magneticField; VER por qué no funciona
 
 		double Reff = 10.0*stagnationPoint(i.val(DIM_R));
-		double vel_lat = cLight*parameters.openingAngle;
+		double vel_lat = cLight*openingAngle;
 
 		double E = i.val(DIM_E);
 
@@ -60,7 +58,7 @@ void radiativeLosses(State& st)
 		
 		   
 		double eDif  = diffusionRate(i.val(DIM_E), i.val(DIM_R), B);
-		double eAcc = accelerationRate(i.val(DIM_E), B, parameters.accEfficiency);
+		double eAcc = accelerationRate(i.val(DIM_E), B, accEfficiency);
 		double eAdia = adiabaticLosses(i.val(DIM_E), i.val(DIM_R), vel_lat) / i.val(DIM_E);
 		
 	out["electronLosses"]->file << fmtE << "\t" << logR 

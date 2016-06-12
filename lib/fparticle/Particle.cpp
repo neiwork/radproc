@@ -1,6 +1,7 @@
 #include "Particle.h"
 
 #include <fparameters/Dimension.h>
+#include <boost/property_tree/ptree.hpp>
 
 namespace {
 	void zeroToN(Vector& v) {

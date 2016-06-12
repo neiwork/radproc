@@ -4,7 +4,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <sstream>
-
+#include <fparameters/parameters.h>
 using boost::property_tree::ptree;
 namespace fs = boost::filesystem;
 using boost::format;
@@ -41,6 +41,6 @@ ptree readConfig() {
 	return std::move(cfg);
 }
 
-std::string getFileName(boost::property_tree::ptree cfg, std::string outputFolder, std::string fileId) {
-	return outputFolder + FS + cfg.get<string>("file." + fileId);
+std::string getFileName(std::string outputFolder, std::string fileId) {
+	return outputFolder + FS + GlobalConfig.get<string>("file." + fileId);
 }

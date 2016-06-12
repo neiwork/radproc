@@ -3,15 +3,13 @@
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 
-//ParticleConfig ParticleCfg<Electron>::config{ PT_electron, electronMass, 0, 0, 0 };
-//
-//ParticleConfig ParticleCfg<Photon>::config{ PT_photon, 0, 0, 0, 0 };
+#include <boost/property_tree/ptree.hpp>
 
 State::State(boost::property_tree::ptree& cfg) :
- //nph(photon.ps, false),
  electron{ "electron" },
- photon{ "photon" }
-{
+ photon{ "photon" },
+ magf(photon.ps, false)
+ {
 	particles.push_back(&electron);
 	particles.push_back(&photon);
 
@@ -19,10 +17,11 @@ State::State(boost::property_tree::ptree& cfg) :
 		initializeParticle(*p,cfg);
 	}
 
-	//nph.initialize();
-	//tpf = nph.dimInterpolator(0);
+	magf.initialize();
+	magf.fill([&](const SpaceIterator& i){
+		return computeMagField(i.val(DIM_R));
+	});
 }
-
 
 Dimension* State::createDimension(Particle& p, std::string dimid, std::function<void(Vector&,double,double)> initializer, boost::property_tree::ptree& cfg) {
 	int samples = p.getpar<int>(cfg,"dim." + dimid + ".samples");
@@ -53,9 +52,10 @@ void State::initializeParticle(Particle& p, boost::property_tree::ptree& cfg)
 	int tR = p.getpar(cfg, "dim.time.samples", 5); // solo por ahora; y no deberia ser usado directamente desde otro lado
 	p.ps.add(new Dimension(tR, bind(initializeCrossingTimePoints, std::placeholders::_1, tmin, tmax)));
 
-	p.ps.addDerivation([](const SpaceIterator& i){
-		derive_parameters_r(i.val(DIM_E), i.val(DIM_R), i.val(DIM_T));
-	});
+
+	//p.ps.addDerivation([](const SpaceIterator& i){
+	//	derive_parameters_r(i.val(DIM_E), i.val(DIM_R), i.val(DIM_T));
+	//});
 
 	p.initialize();
 }

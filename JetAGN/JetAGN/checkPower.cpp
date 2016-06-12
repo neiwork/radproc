@@ -1,16 +1,20 @@
 #include "checkPower.h"
 
+#include "write.h"
+
 #include <fparameters/ParamSpaceValues.h>
 #include <fparameters/ParamSpace.h>
 #include <fparameters/Dimension.h>
-
-#include "write.h"
+#include <fparameters/parameters.h>
 
 #include <fmath\physics.h>
 
+#include <boost/property_tree/ptree.hpp>
 
 double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+
 	double sum = 0.0;
 
 	double T = dist.ps[2][t_ix];
@@ -22,7 +26,7 @@ double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
 		
 		double dz = z[i + 1] - z[i];
 
-		double jetR = jetRadius(z[i], parameters.openingAngle);
+		double jetR = jetRadius(z[i], openingAngle);
 
 		for (size_t j = 0; j < E.size() - 1; ++j) {
 

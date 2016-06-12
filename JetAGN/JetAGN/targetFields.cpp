@@ -1,13 +1,16 @@
 #include "targetFields.h"
 
-
 #include "modelParameters.h"
+
 #include <fmath\physics.h>
+#include <fparameters/parameters.h>
 
-
+#include <boost/property_tree/ptree.hpp>
 
 double starDensity(double z)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+
 	double Nrg = 4.0e7;
 
 	double pseda = 1.0; // 2.0;
@@ -21,7 +24,7 @@ double starDensity(double z)
 
 	double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
 
-	double Astar = Nrg / (pi*P2(parameters.openingAngle)*int_z);
+	double Astar = Nrg / (pi*P2(openingAngle)*int_z);
 
 	double n_s = Astar / pow(z, pseda);
 	return n_s;
@@ -31,10 +34,10 @@ double starDensity(double z)
 double starBlackBody(double E, double r)
 {
 
-	//double starT = 3.0e3;  //Ver, si cambia aca, cambiar en targetPhotonEnergies y en losses Ani
-	double starR = 1.0e13;
+	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
+	static const double starR = GlobalConfig.get<double>("starR", 1.0e13);
 
-	double Epeak = boltzmann*parameters.starT;
+	double Epeak = boltzmann*starT;
 	double Ephmin = Epeak / 100.0;
 	//double Ephmax = Epeak*10.0;
 
@@ -69,12 +72,13 @@ double cmbBlackBody(double E)
 
 void targetPhotonEnergies(double& EphminS, double& EphminCMB)
 {
-	//double starT = 3.0e3; //VER, si cambia aca, cambiar en starBlackBody
-	double EpS = boltzmann*parameters.starT;
+	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
+	static const double Tcmb = GlobalConfig.get<double>("targetPhotonEnergies-Tcmb", 2.7);
+
+	double EpS = boltzmann*starT;
 	EphminS = EpS / 100.0;
 	//double EphmaxS = EpS*Dlorentz * 100.0;
 
-	double Tcmb = 2.7;
 	double EpCMB = boltzmann*Tcmb;
 	EphminCMB = EpCMB / 100.0;
 	//double EphmaxCMB = EpCMB*Dlorentz * 100.0;

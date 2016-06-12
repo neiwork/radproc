@@ -8,23 +8,24 @@
 
 
 
-double fSyn(double x, double E, const Particle& creator, const SpaceCoord& distCoord)         //funcion a integrar   x=Ee; L=L(Ega)
+double fSyn(double x, double E, const Particle& creator, const ParamSpaceValues& magf, const SpaceCoord& psc)         //funcion a integrar   x=Ee; L=L(Ega)
 {
 	//double r = creator.ps.current->par.R;
 	//double t = creator.ps.current->par.T;
 
+	const double magneticField = magf.get(psc);
 	double distCreator;
 	if (x < creator.emin() || x> creator.emax()){
 		distCreator = 0.0;
 	}
 	else{
-		distCreator = creator.distribution.interpolate({ { 0, x } }, &distCoord	); //VER si solo le paso esta
+		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc	); //VER si solo le paso esta
 	}
 //	double distCreator = creator.dist(x);// interpol(x, Ecreator, Ncreator, Ncreator.size() - 1);
 
-	double cte = pow(3.0, 0.5)*P3(electronCharge)*parameters.magneticField / (planck*creator.mass*cLight2);
+	double cte = pow(3.0, 0.5)*P3(electronCharge)*magneticField / (planck*creator.mass*cLight2);
 
-	double Echar = 3 * electronCharge*planck*parameters.magneticField*P2(x) / (4 * pi*P3(creator.mass)*cLight*P2(cLight2));
+	double Echar = 3 * electronCharge*planck*magneticField*P2(x) / (4 * pi*P3(creator.mass)*cLight*P2(cLight2));
 	
 	double aux = E/Echar;  //aca el aux es el x real
 
@@ -34,11 +35,11 @@ double fSyn(double x, double E, const Particle& creator, const SpaceCoord& distC
 }
 
 
-double luminositySynchrotron(double E, const Particle& c, const SpaceCoord& distCoord)
+double luminositySynchrotron(double E, const Particle& c, const SpaceCoord& psc, const ParamSpaceValues& magf)
 {
 	
-	double integralS = RungeKuttaSimple(c.emin(), c.emax(), [&E, &c, &distCoord](double e){
-		return fSyn(e, E, c, distCoord);
+	double integralS = RungeKuttaSimple(c.emin(), c.emax(), [&](double e){
+		return fSyn(e, E, c, magf, psc);
 	});
 
 	double luminosityS = integralS*E; //multiplico por E asi obtengo luminosidad

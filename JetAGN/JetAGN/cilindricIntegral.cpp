@@ -4,14 +4,16 @@
 #include <fmath\RungeKutta.h>
 #include <fparameters\parameters.h>
 
+#include <boost/property_tree/ptree.hpp>
 
 
 double intCilindric(double zMin, double zMax, fun1 fun)
 {
-	double theta = parameters.openingAngle;
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	const double theta = openingAngle;
 
 	double integral =
-		RungeKuttaSimple(zMin, zMax, [theta,fun](double z){
+		RungeKuttaSimple(zMin, zMax, [&](double z){
 		return fun(z)*(pi*P2(jetRadius(z, theta)));
 	});
 

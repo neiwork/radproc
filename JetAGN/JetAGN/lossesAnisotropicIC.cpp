@@ -2,21 +2,21 @@
 
 //#include "crossSectionInel.h"
 //#include "dataLosses.h"
+
 #include "targetFields.h"
-//#include "modelParameters.h"
 #include <fmath\physics.h>
+#include <fparameters/parameters.h>
 
-
-
-//void incremento(int entero, int left, int right, double &A1, double &A2, double &A3, double R);
-
-
+#include <boost/property_tree/ptree.hpp>
 
 double b_theta(double theta, double w0, double E)
 {
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+
 	//corregido es 1.0 - cos(theta') escrito en funcion de theta sin primar
-	double Dstar = 1.0 / (parameters.Gamma - 1.0);
-	double corregido = (1.0 - cos(theta))*parameters.Dlorentz*Dstar;
+	double Dstar = 1.0 / (Gamma - 1.0);
+	double corregido = (1.0 - cos(theta))*Dlorentz*Dstar;
 	double b = 2.0 * (corregido)*w0*E / P2(electronMass*cLight2);
 	return b;
 }
@@ -65,12 +65,12 @@ double fLosses(double x, double t, double y, double E, double r)
 
 double lossesAnisotropicIC(double E, Particle& particle, double r)
 {
+	static const double starT = GlobalConfig.get<double>("starT",3.0e3);
+
 	double mass = particle.mass;
 
-
-	//double starT = 3.0e3; 
-	double a = 1.0e-3*boltzmann*parameters.starT;      //energia minima de los fotones en erg
-	double b = 1.0e3*boltzmann*parameters.starT;    //energia maxima de los fotones en erg
+	double a = 1.0e-3*boltzmann*starT;      //energia minima de los fotones en erg
+	double b = 1.0e3*boltzmann*starT;    //energia maxima de los fotones en erg
 
 
 	double integral = 
@@ -97,8 +97,8 @@ double lossesAnisotropicIC(double E, Particle& particle, double r)
 
 //esta integral no es un runge Kutta; directamente hice la suma de todas las contribuciones
 
-IntTripleOpt DefOpt_IntTriple{ 20, 20, 20 };
-double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f, const IntTripleOpt& opt)
+IntLossesOpt DefOpt_IntLosses{ 20, 20, 20 };
+double intTriple(double E, double eps_min, double eps_max, double r, fun2 c, fun2 d, fun3 f, const IntLossesOpt& opt)
 {
 	const int Xs{ opt.samples_x };
 	const int Ts{ opt.samples_t };

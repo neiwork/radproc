@@ -11,36 +11,44 @@
 #include <fmath\RungeKutta.h>
 #include <fmath\physics.h>
 
-#include <iostream>
+#include <boost/property_tree/ptree.hpp>
 
+#include <iostream>
 
 double powerLaw(double E, double Emin, double Emax)
 {
-	double result = pow(E, (-parameters.primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
+	static const double primaryIndex = GlobalConfig.get<double>("primaryIndex", 2.0);
+	
+	double result = pow(E, (-primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
 	return result;
 }
 
 
-double normalization(Particle& p, const SpaceCoord& distCoord)
+double normalization(Particle& p, double z, double magf)
 {
-	int i_z = distCoord[1];
-	double z = p.ps[1][i_z];
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+
+	//int i_z = distCoord[1];
+	//double z = p.ps[1][i_z];
 
 	double Emin = p.emin();
-	double Emax = eEmax(z, parameters.magneticField);
+	double Emax = eEmax(z, magf);
 
 	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
 	});  //integra E*Q(E)  entre Emin y Emax
 	
 	double Q0 = dLnt(z) / (int_E);  //factor de normalizacion de la inyeccion
-	return Q0 / parameters.Gamma;
+	return Q0 / Gamma;
 	//N'(E')dE' = N(E)dE  ==> E'_nt = int( E'N(E')dE') = E_nt/Gamma;
 }
 
 
 void injection(Particle& p, State& st)
 {
+	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+
 	show_message(msgStart, Module_electronInjection);
 
 	const double RMIN = p.ps[DIM_R].first();
@@ -48,32 +56,33 @@ void injection(Particle& p, State& st)
 	const int N_R = p.ps[DIM_R].size()-1;
 
 	//volumen total del jet
-	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, parameters.openingAngle))*RMAX
-		- P2(jetRadius(RMIN, parameters.openingAngle))*RMIN);
+	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
+		- P2(jetRadius(RMIN, openingAngle))*RMIN);
 
 	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
 
 	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
-		
+		const double magf{ st.magf.get(i) };
+		const double r{ i.val(DIM_R) };
 		/* injector en z=0 */
 		if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1))
 
-		/* injectores para todo z */
-		//if (i.its[2].canPeek(-1))                         
+			/* injectores para todo z */
+			//if (i.its[2].canPeek(-1))                         
 		{
 			return 0.0;
 		}
 		else //if (t_position = 0) solo inyecto particulas a tiempo 0
 		{
 			double Emin = p.emin();
-			double Emax = eEmax(i.val(DIM_R), parameters.magneticField);
-			double Q0 = normalization(p, i.coord);
+			double Emax = eEmax(r,magf);
+			double Q0 = normalization(p,r,magf);
 		
 			double z = i.val(DIM_R);			
 			double dz = z*(z_int - 1);
 			//volumen de la celda i
-			double vol_i = pi*P2(jetRadius(z, parameters.openingAngle))*dz;
+			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
 
 			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol_i / vol;
 
@@ -83,7 +92,7 @@ void injection(Particle& p, State& st)
 	});
 
 	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
-	double Lnt_total_pri = Lnt_total/parameters.Gamma;
+	double Lnt_total_pri = Lnt_total/Gamma;
 	
 	std::cout << "Lnt total" << '\t' << Lnt_total << std::endl;
 	std::cout << "Lnt FF total" << '\t' << Lnt_total_pri << std::endl;

@@ -6,17 +6,10 @@
 
 #include <omp.h>
 
-void ParamSpace::updateDerivations(const SpaceIterator& i) const {
-	for (auto d : derivations) {
-		d(i);
-	}
-}
-
 void ParamSpace::iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions) const
 {
 	SpaceIterator it(*this,fixedDimensions);
 	while (it.next()) {
-		updateDerivations(it);
 		body(it);
 	}
 }
@@ -28,7 +21,6 @@ void ParamSpace::parallelize(std::function<void(const SpaceIterator&)> body) con
 	for (size_t i = 0; i < sz; ++i) {
 		SpaceIterator it(*this);
 		ix2dim(i, it.coord);
-		updateDerivations(it);
 		body(it);
 	}
 }
@@ -36,11 +28,6 @@ void ParamSpace::parallelize(std::function<void(const SpaceIterator&)> body) con
 void ParamSpace::add(Dimension* dim)
 {
 	dimensions.push_back(dim);
-}
-
-void ParamSpace::addDerivation( const DerivationFun& f )
-{
-	derivations.push_back(f);
 }
 
 size_t ParamSpace::size() const

@@ -9,6 +9,8 @@
 #include <JetAGN/checkPower.h>
 #include <JetAGN/checks.h>
 
+#include <boost/property_tree/ptree.hpp>
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using boost::property_tree::ptree;
 
@@ -16,6 +18,8 @@ namespace JetAGNUnitTests
 {
 	/* Default parameter config for testing. */
 	boost::property_tree::ptree config() {
+
+		prepareGlobalCfg();
 
 		boost::property_tree::ptree cfg, dim;
 		dim.add<int>("energy.samples", 4);
@@ -38,22 +42,18 @@ namespace JetAGNUnitTests
 
 		TEST_METHOD(TestStateConfiguration)
 		{
-			ptree cfg{ config() };
-			setParameters(cfg);
-			State model(cfg);
+			State model(config());
 			
-			Assert::AreEqual<size_t>(4, model.electron.ps[0].size(), L"energy dimension size", LINE_INFO());
-			Assert::AreEqual<size_t>(3, model.electron.ps[1].size(), L"energy dimension size", LINE_INFO());
-			Assert::AreEqual<size_t>(3, model.electron.ps[2].size(), L"energy dimension size", LINE_INFO());
+			Assert::AreEqual<int>(4, model.electron.ps[0].size(), L"energy dimension size", LINE_INFO());
+			Assert::AreEqual<int>(3, model.electron.ps[1].size(), L"energy dimension size", LINE_INFO());
+			Assert::AreEqual<int>(3, model.electron.ps[2].size(), L"energy dimension size", LINE_INFO());
 		}
 
 		TEST_METHOD(TestEnergyDimensionValues11)
 		{
-			ptree cfg{config()};
-			cfg.put<int>("particle.default.dim.energy.samples", 11);
-
-			setParameters(cfg);
-			State model(cfg);
+			ptree modelcfg{ config() };
+			modelcfg.put<int>("particle.default.dim.energy.samples", 11);
+			State model(modelcfg);
 			
 			// check construction of standard 11-value energy vector
 			std::vector<double> expected{ { 1.6000000000000001e-006, 1.6000000000000003e-005, 0.00016000000000000007, 0.0016000000000000009, 0.016000000000000011, 0.16000000000000014, 1.6000000000000016, 16.000000000000018, 160.00000000000020, 1600.0000000000023, 16000.000000000025 } };
@@ -64,9 +64,7 @@ namespace JetAGNUnitTests
 
 		TEST_METHOD(TestInjection)
 		{
-			ptree cfg{config()};
-			setParameters(cfg);
-			State model(cfg);
+			State model(config());
 
 			injection(model.electron, model);
 
@@ -77,12 +75,7 @@ namespace JetAGNUnitTests
 
 		TEST_METHOD(TestDistribution)
 		{
-			// OVERRIDE DISCRETIZATION TO MAKE SURE TEST RUNS FAST
-			// >>
-			ptree cfg{config()};
-			setParameters(cfg);
-			State model(cfg);
-			// <<
+			State model(config());
 
 			injection(model.electron, model);
 			distribution(model.electron, model);
