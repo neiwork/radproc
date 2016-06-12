@@ -10,9 +10,6 @@
     <ClCompile Include="TestParamSpaceValues.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestJetAGNResults.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -20,6 +17,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestParamSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestJetAGNResultChecks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,26 +10,36 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="JetAGNResultChecks.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="JetAGNResultChecks.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JetAGN\JetAGN.vcxproj">
+      <Project>{253bc35d-9175-4fa1-838b-00749a433dfe}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{08188D68-C954-4BD1-B83E-61AEFB87F068}</ProjectGuid>
+    <ProjectGuid>{D5580C2C-4127-465D-9CCC-D98912BE82B2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>JetAGNUnitTests</RootNamespace>
+    <RootNamespace>JetAGNResultChecks</RootNamespace>
+    <ProjectName>JetAGNResultChecks</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -41,76 +51,41 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\external\boost_1_61_0;..;..\..\lib;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UNITTESTPRJ="$(ProjectDir).";WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\external\boost_1_61_0;..;..\..\lib;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UNITTESTPRJ="$(ProjectDir).";WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="TestJetAGNResultChecks.cpp" />
-    <ClCompile Include="TestParamSpace.cpp" />
-    <ClCompile Include="TestParamSpaceValues.cpp" />
-    <ClCompile Include="TestParticle.cpp" />
-    <ClCompile Include="TestRungeKutta.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\flosses\flosses.vcxproj">
-      <Project>{c85692b2-ca76-4fa7-ae5a-4bfb381513af}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\fluminosities\fluminosities.vcxproj">
-      <Project>{f3d01362-4e4b-4f3f-9f1b-a5ba28df9db7}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\fmath\fmath.vcxproj">
-      <Project>{6d9ae1eb-3467-4970-a4ef-4b19236fbd4b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\fparameters\fparameters.vcxproj">
-      <Project>{d40df49f-3c0d-401c-9f40-10170c1307aa}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\fparticle\fparticle.vcxproj">
-      <Project>{634888ae-9178-404d-8e22-8e1d5d6b4f3c}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\JetAGNResultChecks\JetAGNResultChecks.vcxproj">
-      <Project>{d5580c2c-4127-465d-9ccc-d98912be82b2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\JetAGN\JetAGN.vcxproj">
-      <Project>{253bc35d-9175-4fa1-838b-00749a433dfe}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
