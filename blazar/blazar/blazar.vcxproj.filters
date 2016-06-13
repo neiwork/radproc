@@ -3,9 +3,19 @@
   <ItemGroup>
     <ClCompile Include="blazar.cpp" />
     <ClCompile Include="ioutil.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="injection.cpp" />
+    <ClCompile Include="distribution.cpp" />
+    <ClCompile Include="photonInjection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blazar.h" />
     <ClInclude Include="ioutil.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="injection.h" />
+    <ClInclude Include="distribution.h" />
+    <ClInclude Include="photonInjection.h" />
   </ItemGroup>
 </Project>

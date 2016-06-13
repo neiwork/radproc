@@ -12,11 +12,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="blazar.cpp" />
+    <ClCompile Include="distribution.cpp" />
+    <ClCompile Include="injection.cpp" />
     <ClCompile Include="ioutil.cpp" />
+    <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="photonInjection.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blazar.h" />
+    <ClInclude Include="distribution.h" />
+    <ClInclude Include="injection.h" />
     <ClInclude Include="ioutil.h" />
+    <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="photonInjection.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\flosses\flosses.vcxproj">

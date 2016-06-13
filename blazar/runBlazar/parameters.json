@@ -5,20 +5,49 @@
 
 	"targetPhotonEnergies-Tcmb": 2.7,
 
+   "Mbh": 1.0e8,
 	"Lj": 1.0e43,
 	"openingAngle": 0.1,
 	"Gamma": 10,
+   "height": 500,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
 
 	"file": {
 		"luminosity":"ntLuminosity.txt",
-      "electronDist":"electronDist.txt",
-      "electronDist_ET":"electronDist_ET.txt",
-		"electronDist_RT":"electronDist_RT.txt",
-      "E_NT_r":"E_NT_r.txt"
+      "electronDist":"electronDist.txt"
 	},
 
+	"model": {
+		"particle": {
+			"default": {
+				"mass":0,
+				"dim": {
+					"energy":{
+						"samples":20
+					}
+				}
+			},
+			"photon": {
+				"dim":{
+					"energy": {
+						"min":-6.0,
+						"max":12.0
+					}
+				}
+			},
+			"electron": {
+				"mass":9.1094e-28,
+				"dim":{
+					"energy": {
+						"min":6.0,
+						"max":16.0
+					}
+				}
+			}
+		}
+	}
+   
 	"math": {
 		"runge-kutta-1": {
 			"samples": {
@@ -42,43 +71,4 @@
 		}
 	},
 
-	"model": {
-		"particle": {
-			"default": {
-				"mass":0,
-				"dim": {
-					"energy":{
-						"samples":20
-					},
-					"radius":{
-						"min":1.0,
-						"max":1.0e3,
-						"samples":10
-					},
-					"time":{
-						"min":1.0,
-						"max":1.0e3,
-						"samples":10
-					}
-				}
-			},
-			"photon": {
-				"dim":{
-					"energy": {
-						"min":-6.0,
-						"max":12.0
-					}
-				}
-			},
-			"electron": {
-				"mass":9.1094e-28,
-				"dim":{
-					"energy": {
-						"min":6.0,
-						"max":16.0
-					}
-				}
-			}
-		}
-	}
 }
