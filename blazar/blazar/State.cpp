@@ -19,7 +19,7 @@ State::State(boost::property_tree::ptree& cfg) :
 
 	magf.initialize();
 	magf.fill([&](const SpaceIterator& i){
-		return computeMagField(i.val(DIM_R));
+		return computeMagField(i.val(DIM_E));
 	});
 }
 
