@@ -15,14 +15,14 @@
 double dLnt(double z)  //esta es la función que depende del número de estrellas a tiempo t
 {
 	
-	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
-	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
+	static const double starT = GlobalConfig.get<double>("starT");
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double Lj = GlobalConfig.get<double>("Lj");
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
-	double E = 1.0e9*1.6e-12;  //elijo 1GeV que es la E a la cual las perdidas rad son importantes
+	double E = 1.0e6*1.6e-12;  //elijo 1GeV que es la E a la cual las perdidas rad son importantes
 	//con este valor reproduzco el 5x10^40 erg/s del paper de valenti
 	// electronMass*cLight2;// P2(electronMass*cLight2) / (boltzmann*parameters.starT);
 

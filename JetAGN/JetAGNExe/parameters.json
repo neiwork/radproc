@@ -2,7 +2,8 @@
 	
 	"starT":3.0e3,
 	"starR":1.0e13,
-
+   "pseda":1.0,
+   
 	"targetPhotonEnergies-Tcmb": 2.7,
 
 	"Lj": 1.0e43,

@@ -9,11 +9,11 @@
 
 double starDensity(double z)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	double Nrg = 4.0e7;
 
-	double pseda = 1.0; // 2.0;
+	static const double pseda = GlobalConfig.get<double>("pseda");
 
 	double mBH = 1.0e7*solarMass;  //black hole mass
 	double rg = mBH*gravitationalConstant / cLight2;

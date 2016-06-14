@@ -34,7 +34,8 @@ double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
 
 			double emissivity = dist.interpolate({ { DIM_E, E[j] }, { DIM_R, z[i] }, { DIM_T, T } });
 
-			double L1 = 2.0*pi*P2(jetR)*emissivity*E[j] * dE*dz;
+			//double L1 = 2.0*pi*P2(jetR)*emissivity*E[j] * dE*dz;
+			double L1 = emissivity*E[j] * dE;
 
 			sum = sum + L1;
 		}

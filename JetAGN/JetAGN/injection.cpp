@@ -56,20 +56,20 @@ void injection(Particle& p, State& st)
 	const int N_R = p.ps[DIM_R].size()-1;
 
 	//volumen total del jet
-	double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
-		- P2(jetRadius(RMIN, openingAngle))*RMIN);
+	//double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
+	//	- P2(jetRadius(RMIN, openingAngle))*RMIN);
 
 	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
 
-	p.injection.fill([&p, &st, &z_int, &vol](const SpaceIterator& i){
+	p.injection.fill([&](const SpaceIterator& i){
 		const double magf{ st.magf.get(i) };
 		const double r{ i.val(DIM_R) };
 		/* injector en z=0 */
-		if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1))
+		//if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1))
 
 			/* injectores para todo z */
-			//if (i.its[2].canPeek(-1))                         
+			if (i.its[2].canPeek(-1))                         
 		{
 			return 0.0;
 		}
@@ -84,7 +84,7 @@ void injection(Particle& p, State& st)
 			//volumen de la celda i
 			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
 
-			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol_i / vol;
+			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol_i;// / vol;
 
 			return total;
 		}
