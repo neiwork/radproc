@@ -4,6 +4,7 @@
 #include "injection.h"
 //#include "losses.h"
 
+#include "modelParameters.h"
 
 #include <fmath\physics.h>
 #include <flosses\lossesSyn.h>

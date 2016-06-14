@@ -1,5 +1,7 @@
 #include "photonInjection.h"
 
+#include "modelParameters.h"
+
 #include <fparameters\parameters.h>
 #include <fparameters\SpaceIterator.h>
 #include <fparameters\Dimension.h>

@@ -1,5 +1,7 @@
 #include "State.h"
 
+#include "modelParameters.h"
+
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 #include <fparameters\parameters.h>
