@@ -35,9 +35,9 @@ std::string prepareOutputfolder() {
 	return std::move(folder);
 }
 
-ptree readConfig() {
+ptree readConfig(std::string filename) {
 	ptree cfg;
-	boost::property_tree::read_json(FILE_CONFIG, cfg);
+	boost::property_tree::read_json(filename, cfg);
 	return std::move(cfg);
 }
 

@@ -5,6 +5,8 @@
 #include <JetAGN/modelParameters.h>
 #include <JetAGN/checks.h>
 #include <fparameters/Dimension.h>
+#include <fparameters/parameters.h>
+#include <JetAGN/ioutil.h>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -23,11 +25,12 @@ namespace JetAGNUnitTests
 
 	static ptree EXPECTED;
 
-	TEST_MODULE_INITIALIZE(loadExpectedResults) {
+	TEST_MODULE_INITIALIZE(loadConfig) {
 		std::string project_dir = project_dir_full;
 		project_dir.erase(0, 1); // erase the first quote
-		project_dir.erase(project_dir_full.size() - 2); // erase the last quote and the dot
+		project_dir.erase(project_dir_full.size() - 4); // erase the last quote and the dot
 		boost::property_tree::read_json(project_dir + "\\" + JetAGNResultChecks::RESULTS_FILENAME, EXPECTED);
+		GlobalConfig = readConfig(project_dir + "\\test-parameters.json");
 	}
 
 	TEST_CLASS(JetAGNResults)

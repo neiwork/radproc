@@ -4,6 +4,7 @@
 #include <JetAGN/injection.h>
 #include <JetAGN/checkPower.h>
 #include <fparameters/Dimension.h>
+#include <fparameters/parameters.h>
 #include <JetAGN/State.h>
 #include <JetAGN/modelParameters.h>
 #include <JetAGN/checks.h>
@@ -16,22 +17,8 @@ namespace JetAGNResultChecks {
 
 	/* Default parameter config for testing. */
 	boost::property_tree::ptree config() {
-
 		prepareGlobalCfg();
-
-		boost::property_tree::ptree cfg, dim;
-		dim.add<int>("energy.samples", 4);
-		dim.add<int>("radius.samples", 3);
-		dim.add<int>("time.samples", 3);
-		cfg.add_child("particle.default.dim", dim);
-
-		cfg.add<double>("particle.electron.mass", electronMass);
-		cfg.add<double>("particle.electron.dim.energy.min", 6.0);
-		cfg.add<double>("particle.electron.dim.energy.max", 15.0);
-		cfg.add<double>("particle.photon.dim.energy.min", -6.0);
-		cfg.add<double>("particle.photon.dim.energy.max", 12.0);
-
-		return std::move(cfg);
+		return GlobalConfig.get_child("model");
 	}
 
 	std::vector<double> computeDistribution() {
@@ -49,9 +36,7 @@ namespace JetAGNResultChecks {
 	}
 
 	std::vector<double> computeEnergyDimValues() {
-		ptree modelcfg{ config() };
-		modelcfg.put<int>("particle.default.dim.energy.samples", 11);
-		State model(modelcfg);
+		State model(config());
 		return std::move(model.electron.ps[0].values);
 	}
 
