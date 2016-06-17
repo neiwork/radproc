@@ -10,7 +10,7 @@ public:
 	std::vector<DimensionCoord> dims;
 
 	SpaceCoord(const ParamSpace& ps);
-	SpaceCoord(const size_t dimensions);
+	explicit SpaceCoord(const size_t dimensions);
 	SpaceCoord(std::initializer_list<DimensionCoord> dims);
 
 	const DimensionCoord& operator[](const size_t& index) const;

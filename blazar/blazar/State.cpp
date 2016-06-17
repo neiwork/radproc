@@ -1,7 +1,10 @@
 #include "State.h"
 
+#include "modelParameters.h"
+
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
+#include <fparameters\parameters.h>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -10,17 +13,16 @@ State::State(boost::property_tree::ptree& cfg) :
  photon{ "photon" },
  magf(photon.ps, false)
  {
-	particles.push_back(&electron);
+	 static const double zInt = GlobalConfig.get<double>("zInt", 0.1);
+	 
+	 particles.push_back(&electron);
 	particles.push_back(&photon);
 
 	for (auto p : particles) {
 		initializeParticle(*p,cfg);
 	}
 
-	magf.initialize();
-	magf.fill([&](const SpaceIterator& i){
-		return computeMagField(i.val(DIM_R));
-	});
+	magf.initialize(computeMagField(zInt));
 }
 
 Dimension* State::createDimension(Particle& p, std::string dimid, std::function<void(Vector&,double,double)> initializer, boost::property_tree::ptree& cfg) {

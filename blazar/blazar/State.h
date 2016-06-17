@@ -1,6 +1,5 @@
 #pragma once
 
-#include "modelParameters.h"
 #include <fparticle/Particle.h>
 #include <fmath\mathematics.h>
 #include <fmath\physics.h>

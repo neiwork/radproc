@@ -14,14 +14,22 @@
 	}
 //}
 
+std::string dataName(std::string id) {
+	return id + ".txt";
+}
 
+void generateViewScript(std::string filename) {
+	std::ofstream file;
+	file.open((filename+".bat").c_str(), std::ios::out);
+	file << "@../plot-svg-and-view.bat " + filename.substr(filename.find("\\")+1);
+	file.close();
+}
 
 
 void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data)
 {
-	
 	std::ofstream file;
-	file.open(filename.c_str(), std::ios::out);
+	file.open(dataName(filename).c_str(), std::ios::out);
 	//const ParamSpace* a = &(data.ps);
 	
 	// a.iterate;  no me deja hacer esta operacion
@@ -40,6 +48,7 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	});
 
 	file.close();
+	generateViewScript(filename);
 }
 
 
@@ -47,7 +56,7 @@ void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 {
 
 	std::ofstream file;
-	file.open(filename.c_str(), std::ios::out);
+	file.open(dataName(filename).c_str(), std::ios::out);
 
 	// version acotada
 	double logR = log10(data.ps[1][r]);
@@ -80,6 +89,7 @@ void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 		//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
 	}
 	file.close();
+	generateViewScript(filename);
 }
 
 
@@ -87,7 +97,7 @@ void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 {
 
 	std::ofstream file;
-	file.open(filename.c_str(), std::ios::out);
+	file.open(dataName(filename).c_str(), std::ios::out);
 
 	// version acotada
 	double logE = log10(data.ps[0][E]/1.6e-12);
@@ -119,13 +129,14 @@ void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 		//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
 	}
 	file.close();
+	generateViewScript(filename);
 }
 
 void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r, int t)
 {
 
 	std::ofstream file;
-	file.open(filename.c_str(), std::ios::out);
+	file.open(dataName(filename).c_str(), std::ios::out);
 
 	// version acotada
 	double logR = log10(data.ps[1][r]);
@@ -144,6 +155,7 @@ void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& da
 	//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
 
 	file.close();
+	generateViewScript(filename);
 }
 
 
@@ -153,7 +165,7 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	std::ofstream file;
-	file.open(filename.c_str(), std::ios::out);
+	file.open(dataName(filename).c_str(), std::ios::out);
 
 //<<<<<<< HEAD
 	file << "log(z/pc)" << '\t';
@@ -211,6 +223,7 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 
 	}
 	file.close();
+	generateViewScript(filename);
 }
 
 

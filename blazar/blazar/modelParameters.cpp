@@ -86,16 +86,16 @@ double computezInt(double Mbh, double height) {
 
 void prepareGlobalCfg()
 {
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	static const double Mbh = GlobalConfig.get<double>("Mbh");  //black hole mass in solar masses
 
 	static const double height = GlobalConfig.get<double>("height"); //height of interaction in rg units
 
 
-	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
+	GlobalConfig.put("Dlorentz", computeDlorentz(Gamma));
 
-	GlobalConfig.put("zInt", GlobalConfig.get<double>("zInt", computezInt(Mbh, height)));
+	GlobalConfig.put("zInt", computezInt(Mbh, height));
 
 	
 	//DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);
