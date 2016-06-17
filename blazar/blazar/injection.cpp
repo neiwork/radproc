@@ -64,7 +64,7 @@ void injection(Particle& p, State& st)
 
 	p.injection.fill([&](const SpaceIterator& i){
 		
-		double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol;
+		double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0;// *vol;
 
 		return total;
 	});

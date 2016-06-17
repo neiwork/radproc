@@ -19,7 +19,7 @@ inline double computeModelB0(double Lj, double openingAngle) {
 
 inline double fmagneticField(double z, double B_o)
 {
-	return B_o / z;
+	return 1.0e-2*B_o / z; //VER
 }
 
 double computeMagField(double z) {
@@ -48,8 +48,9 @@ double eEmax(double z, double B)
 	double Emax_hillas = electronCharge*B*size;
 	double min1 = std::min(Emax_syn, Emax_syn);
 
+	return min1;
 
-	return std::min(min1, Emax_hillas);
+	//return std::min(min1, Emax_hillas); VER
 		
 }
 

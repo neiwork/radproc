@@ -18,6 +18,7 @@
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="photonInjection.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blazar.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="photonInjection.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="write.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\flosses\flosses.vcxproj">

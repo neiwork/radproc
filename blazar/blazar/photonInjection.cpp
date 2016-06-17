@@ -41,7 +41,7 @@ void photonTarget(Particle& p, State& st)
 
 		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf);
 
-		double total = Qsyn*vol;
+		double total = Qsyn/(P2(E) *vol);
 
 		return total;
 	});
@@ -61,20 +61,19 @@ void photonDistribution(Particle& p, State& st)
 	//volumen 
 	double vol = pi*P2(jetRadius(zInt, openingAngle))*zInt;
 
+	const ParamSpaceValues psv = st.photon.injection;
 
-	p.injection.fill([&](const SpaceIterator& i){
+	p.distribution.fill([&](const SpaceIterator& i){
 
 		double E = i.val(DIM_E);
 
 		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf);
 
-		const ParamSpaceValues psv = st.photon.injection;
-
 		double Qic = luminosityIC(E, st.electron, i,
 			[&psv, &i](double E){return tpf(E, psv, i); }
 		, st.photon.emin());
 
-		double total = Qsyn*vol;
+		double total = (Qsyn + Qic);// *vol;
 
 		return total;
 	});
