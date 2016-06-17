@@ -56,7 +56,7 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 		//la integral de vol la reemplace por una suma sobre todo los z, 
 		//ya que N(E) esta multiplicado por el volumen de cada celda
 
-		sum = sum + emissivity*vol_i;
+		sum = sum + emissivity;// *vol_i;
 
 	}
 
