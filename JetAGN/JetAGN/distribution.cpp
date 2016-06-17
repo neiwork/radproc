@@ -37,7 +37,8 @@ void distribution(Particle& p, State& st)
 
 	for (int t_ix = 0; t_ix < p.ps[2].size(); t_ix++) {
 		 
-		for (int z_ix = 0; z_ix < p.ps[1].size(); z_ix++) { //z_ix <= t_ix; z_ix++) {
+		//for (int z_ix = 0; z_ix < p.ps[1].size(); z_ix++) { //emisores para todo z
+		for (int z_ix = 0; z_ix <= t_ix; z_ix++) {	//unico emisor en z=0
 
 			N2.ps.iterate([&](const SpaceIterator& i){
 				N2.set(i, p.distribution.get(i));  //copia del N  
@@ -63,16 +64,8 @@ void distribution(Particle& p, State& st)
 
 				double Eeff = effectiveE(E, Emax, tp, r, p, st, i);
 				double dist1(0.0), dist2(0.0);
-								
-				//a: unico emisor
-				//NO!! la condicion de unico injector debe esta en Q
-				//if (z_ix == 0) //la nueva condicion es por la inyeccion   //z_ix == 0)
-				//{
-				dist1 = timeDistribution(E, r, tp, p, st, Eeff, i);
-				//}
 
-				//b: emisores para todo z
-				//dist1 = timeDistribution(E, r, tp, p, st, Eeff);
+				dist1 = timeDistribution(E, r, tp, p, st, Eeff, i);
 				
 				if (t_ix != 0)
 				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1

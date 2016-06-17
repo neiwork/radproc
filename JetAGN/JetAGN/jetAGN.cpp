@@ -1,15 +1,15 @@
 #include <stdio.h>
 
-#include "state.h"
-#include "modelParameters.h"
-#include "radiativeLosses.h"
-#include "injection.h"
-////#include "photonInjection.h"
-#include "distribution.h"
-#include "processes.h"
-////#include "photonDistribution.h"
+
 
 #include "checkPower.h"
+#include "processes.h"
+#include "radiativeLosses.h"
+#include "nonThermalLuminosity.h"
+#include "distribution.h"
+#include "injection.h"
+#include "state.h"
+#include "modelParameters.h"
 
 #include "write.h"
 #include "checks.h"
@@ -19,6 +19,7 @@
 #include <fparticle\Particle.h>
 #include <fparameters\parameters.h>
 #include <fparameters\Dimension.h>
+#include <fparameters\SpaceIterator.h>
 #include <fmath\physics.h>
 
 #include <boost/property_tree/ptree.hpp>
@@ -39,6 +40,18 @@ int jetAGN()
 
 
 	//	radiativeLosses(model);
+
+
+		ParamSpaceValues psv(model.electron.ps);
+
+		psv.fill([&](const SpaceIterator& i){
+			double E = i.val(DIM_E);
+			double z = i.val(DIM_R);
+			return frad(E, z);
+		});
+
+		writeAllSpaceParam(folder+"\\frad", psv);
+
 
 		injection(model.electron, model);
 		

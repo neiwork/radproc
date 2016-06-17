@@ -1,5 +1,6 @@
 {
-	
+	"Mdot":1.0e-8,
+   "vWind":2.0e7,
 	"starT":3.0e3,
 	"starR":1.0e13,
    "pseda":1.0,

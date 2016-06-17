@@ -214,7 +214,7 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 
 				double dist = data.interpolate({ { DIM_E, E }, { DIM_R, z }, { DIM_T, T } });
 
-				sum = sum + dist*E*vol_i;
+				sum = sum + dist*E;// *vol_i;
 			}
 
 			file << log10(sum*Gamma) << '\t';

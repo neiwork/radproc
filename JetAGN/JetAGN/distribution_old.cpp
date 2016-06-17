@@ -80,16 +80,16 @@ void distribution(Particle& p, State& st)
 					else
 					{
 						double t_int = pow((timeMax / timeMin), (1.0 / nTimes));
-						timeStep = i.its[1].peek(0)*(t_int - 1.0); // VER
+						timeStep = i.its[1].peek(0)*(t_int - 1.0); 
 					}
-					//double timeStep = (timeMax - timeMin) / nTimes; //VER porque ahora NO es el mismo para todos
+					
 					double delta_t = timeStep / Gamma;
 					double delta_xk = i.its[1].peek(0) - i.its[1].peek(-1); // z[k] - z[k - 1];
 
 					SpaceCoord coord = i.moved({ 0, -1, 0 }); //N(ri-1)
 
 					//double ni_1 = p.distribution.get(coord) / delta_xk;
-					double ni_1 = Naux.get(coord) / delta_xk; //VER por que no dan lo mismo Naux y p.distribution
+					double ni_1 = Naux.get(coord) / delta_xk; 
 					double delta_xk1;
 
 					if (i.its[1].canPeek(1))
@@ -99,7 +99,7 @@ void distribution(Particle& p, State& st)
 					else
 					{
 						double r_int = pow((rmax / rmin), (1.0 / nR));
-						delta_xk1 = i.its[1].peek(0)*(r_int-1.0); // VER
+						delta_xk1 = i.its[1].peek(0)*(r_int-1.0); 
 					}
 					double ni = N_ri / delta_xk1;
 

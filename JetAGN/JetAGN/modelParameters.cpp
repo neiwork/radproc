@@ -23,10 +23,12 @@ inline double fmagneticField(double z, double B_o)
 }
 
 double computeMagField(double z) {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Lj = GlobalConfig.get<double>("Lj");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
-	return fmagneticField(z, computeModelB0(Lj, openingAngle));
+	double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
+	return Blab / P2(Gamma);  //este es el B en el sistema del jet
 }
 
 double jetRadius(double z, double openingAngle)
@@ -36,9 +38,9 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
 	double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
@@ -59,13 +61,14 @@ double eEmax(double z, double B)
 
 double stagnationPoint(double z)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Lj = GlobalConfig.get<double>("Lj");
 
-	double Mdot_wind = 1.0e-8*solarMass / yr;
-	double v_wind = 2.0e7;
+	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
+	static const double vWind = GlobalConfig.get<double>("vWind");
 
-	double stagPoint = sqrt(Mdot_wind*v_wind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
+
+	double stagPoint = sqrt(MdotWind*vWind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
 
 	return stagPoint;
 

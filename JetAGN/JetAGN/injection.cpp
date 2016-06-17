@@ -65,11 +65,10 @@ void injection(Particle& p, State& st)
 	p.injection.fill([&](const SpaceIterator& i){
 		const double magf{ st.magf.get(i) };
 		const double r{ i.val(DIM_R) };
-		/* injector en z=0 */
-		//if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1))
+		
+		if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1)) /* injector en z=0 */
+		//if (i.its[2].canPeek(-1))     /* injectores para todo z */                    
 
-			/* injectores para todo z */
-			if (i.its[2].canPeek(-1))                         
 		{
 			return 0.0;
 		}
@@ -90,6 +89,7 @@ void injection(Particle& p, State& st)
 		}
 
 	});
+
 
 	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
 	double Lnt_total_pri = Lnt_total/Gamma;
