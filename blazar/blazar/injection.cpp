@@ -50,16 +50,16 @@ void injection(Particle& p, State& st)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
-	static const double zInt = GlobalConfig.get<double>("zInt");
+	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });
 	double Emin = p.emin();
-	double Emax = eEmax(zInt, B);
+	double Emax = eEmax(Rdiss, B);
 
-	double Q0 = normalization(p, zInt, B);
+	double Q0 = normalization(p, Rdiss, B);
 	
 	//volumen 
-	double vol = pi*P2(jetRadius(zInt, openingAngle))*zInt;
+	double vol = pi*P2(jetRadius(Rdiss, openingAngle))*Rdiss;
 
 
 	p.injection.fill([&](const SpaceIterator& i){

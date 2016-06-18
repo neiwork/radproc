@@ -34,12 +34,13 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	
 	data.ps.iterate([&file, &data](const SpaceIterator& i){
 		double logE = log10(i.val(DIM_E) / 1.6e-12);
+		double lognu = log10(i.val(DIM_E) / planck);
 
 		double logQ = log10(data.get(i)); //log10(salida.values(i));  // values(i));
 //		salida.values(i);
 
 
-		file << logE << '\t' << 
+		file << logE << '\t' << lognu << '\t' << 
 			logQ << std::endl;
 			//logQ << std::endl;
 	});

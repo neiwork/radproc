@@ -19,12 +19,14 @@ inline double computeModelB0(double Lj, double openingAngle) {
 
 inline double fmagneticField(double z, double B_o)
 {
-	return 1.0e-2*B_o / z; //VER
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	double B = B_o / z / P2(Gamma); //VER
+	return B;// 1.0e-2*
 }
 
 double computeMagField(double z) {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Lj = GlobalConfig.get<double>("Lj");
 
 	return fmagneticField(z, computeModelB0(Lj, openingAngle));
 }
@@ -36,11 +38,14 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
+	//VER agregar tcross = size/cLight;
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-	double size = 0.0; //VER calcular el tama—o
+
+	double size = openingAngle*z;
+
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
@@ -91,12 +96,12 @@ void prepareGlobalCfg()
 
 	static const double Mbh = GlobalConfig.get<double>("Mbh");  //black hole mass in solar masses
 
-	static const double height = GlobalConfig.get<double>("height"); //height of interaction in rg units
+	static const double Rdiss_rg = GlobalConfig.get<double>("Rdiss_rg"); //height of interaction in rg units
 
 
 	GlobalConfig.put("Dlorentz", computeDlorentz(Gamma));
 
-	GlobalConfig.put("zInt", computezInt(Mbh, height));
+	GlobalConfig.put("Rdiss", computezInt(Mbh, Rdiss_rg));
 
 	
 	//DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);

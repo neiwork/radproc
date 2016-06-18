@@ -17,7 +17,7 @@
 void distribution(Particle& p, State& st)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double zInt = GlobalConfig.get<double>("zInt");
+	static const double zInt = GlobalConfig.get<double>("Rdiss");
 
 	const ParamSpace& ps{ p.ps };
 

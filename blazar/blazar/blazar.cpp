@@ -23,7 +23,7 @@ void blazar() {
 
 	std::string folder{ prepareOutputfolder() };
 
-	GlobalConfig = readConfig();
+	//GlobalConfig = readConfig();
 
 	GlobalConfig = readConfig();
 	prepareGlobalCfg();
