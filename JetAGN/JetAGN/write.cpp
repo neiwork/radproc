@@ -51,6 +51,32 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	generateViewScript(filename);
 }
 
+void writeEandRParamSpace(const std::string& filename, const ParamSpaceValues& data, int t)
+{
+
+	std::ofstream file;
+	file.open(dataName(filename).c_str(), std::ios::out);
+
+	// version acotada
+	//double time = log10(data.ps[1][t]);
+
+	for (int r_ix = 0; r_ix < data.ps[1].size(); r_ix++) {
+
+		double logR = log10(data.ps[1][r_ix] / pc);
+		
+		data.ps.iterate([&](const SpaceIterator& i){
+
+			double logE = log10(i.val(DIM_E) / 1.6e-12);
+
+			double logQ = safeLog10(data.get(i));
+
+			file << logE << '\t' << logR << '\t' << logQ << std::endl;;
+			
+		}, { -1, r_ix, t });  
+	}
+	file.close();
+	generateViewScript(filename);
+}
 
 void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int r)
 {

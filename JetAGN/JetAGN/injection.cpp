@@ -26,7 +26,7 @@ double powerLaw(double E, double Emin, double Emax)
 
 double normalization(Particle& p, double z, double magf)
 {
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	//int i_z = distCoord[1];
 	//double z = p.ps[1][i_z];
@@ -46,8 +46,8 @@ double normalization(Particle& p, double z, double magf)
 
 void injection(Particle& p, State& st)
 {
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	show_message(msgStart, Module_electronInjection);
 

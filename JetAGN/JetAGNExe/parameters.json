@@ -21,6 +21,46 @@
 		"E_NT_r":"E_NT_r"
 	},
 
+	"model": {
+		"particle": {
+			"default": {
+				"mass":0,
+				"dim": {
+					"energy":{
+						"samples":30
+					},
+					"radius":{
+						"min":1.0,
+						"max":1.0e3,
+						"samples":20
+					},
+					"time":{
+						"min":1.0,
+						"max":1.0e3,
+						"samples":20
+					}
+				}
+			},
+			"photon": {
+				"dim":{
+					"energy": {
+						"min":-6.0,
+						"max":12.0
+					}
+				}
+			},
+			"electron": {
+				"mass":9.1094e-28,
+				"dim":{
+					"energy": {
+						"min":6.0,
+						"max":14.0
+					}
+				}
+			}
+		}
+	},
+   
 	"math": {
 		"runge-kutta-1": {
 			"samples": {
@@ -41,46 +81,6 @@
 			"x": 20,
 			"t": 20,
 			"y": 20
-		}
-	},
-
-	"model": {
-		"particle": {
-			"default": {
-				"mass":0,
-				"dim": {
-					"energy":{
-						"samples":30
-					},
-					"radius":{
-						"min":1.0,
-						"max":1.0e3,
-						"samples":10
-					},
-					"time":{
-						"min":1.0,
-						"max":1.0e3,
-						"samples":10
-					}
-				}
-			},
-			"photon": {
-				"dim":{
-					"energy": {
-						"min":-6.0,
-						"max":12.0
-					}
-				}
-			},
-			"electron": {
-				"mass":9.1094e-28,
-				"dim":{
-					"energy": {
-						"min":6.0,
-						"max":16.0
-					}
-				}
-			}
 		}
 	}
 }

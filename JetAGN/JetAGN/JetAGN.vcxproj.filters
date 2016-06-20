@@ -51,6 +51,9 @@
     <ClCompile Include="ioutil.cpp">
       <Filter>extras</Filter>
     </ClCompile>
+    <ClCompile Include="maximumEnergy.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -95,6 +98,9 @@
     <ClInclude Include="cilindricIntegral.h" />
     <ClInclude Include="jetAGN.h" />
     <ClInclude Include="ioutil.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="maximumEnergy.h">
       <Filter>extras</Filter>
     </ClInclude>
   </ItemGroup>

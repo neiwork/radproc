@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 
-
+#include "maximumEnergy.h"
 #include "checkPower.h"
 #include "processes.h"
 #include "radiativeLosses.h"
@@ -50,8 +50,8 @@ int jetAGN()
 			return frad(E, z);
 		});
 
-		writeAllSpaceParam(folder+"\\frad", psv);
-
+		//writeEmax(folder + "\\Emax", model.electron);
+		//writeEandRParamSpace(folder + "\\frad", psv, model.electron.ps[DIM_T].size()-1);
 
 		injection(model.electron, model);
 		

@@ -63,6 +63,8 @@ void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 
 void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int E);
 
+void writeEandRParamSpace(const std::string& filename, const ParamSpaceValues& data, int t);
+
 void writeEnt(const std::string& filename, const ParamSpaceValues& data);
 
 /*It writes data as a function of energy for a given r and t*/
