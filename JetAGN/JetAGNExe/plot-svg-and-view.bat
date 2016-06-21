@@ -1,3 +1,3 @@
 @echo off
-gnuplot.exe -e "filename='%1'" ../plot-svg.gp
-start chrome ./%1.svg
+gnuplot.exe -e "filename='%1'" ../plot-svg-all-t.plt
+start chrome %~dpnx1.svg

@@ -7,15 +7,6 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
-//struct ParticleConfig {
-//public:
-//	ParticleType type;
-//	double mass;
-//	double logEmin;
-//	double logEmax;
-//	int nE;
-//};
-
 /*
 	Particle State
 	
@@ -39,6 +30,8 @@ public:
 	}
 
 	Particle(const std::string& id);
+	
+	Particle(Particle&& other);
 	
 	/* Creates the vectors for injection and distribution 
 	   according to the registered dimensions. */

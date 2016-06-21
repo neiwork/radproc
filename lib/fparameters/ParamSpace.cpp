@@ -55,3 +55,13 @@ void ParamSpace::ix2dim(int ix, SpaceCoord& si) const
 		ix /= dimensions[i]->size();
 	}
 }
+
+ParamSpace::ParamSpace()
+{
+
+}
+
+const Dimension& ParamSpace::operator[](const size_t& index) const
+{
+	return *dimensions[index];
+}

@@ -24,10 +24,27 @@ namespace {
 Particle::Particle(const std::string& id)
 :id(id),
  mass{ 0 },
- injection{ ps, false }, // these PSVs are not initialized immediately, only after this PS has been constructed
+injection{ ps, false }, // these PSVs are not initialized immediately, only after this PS has been constructed
  distribution{ ps, false }
 {
 }
+
+
+Particle::Particle(Particle&& other):
+	ps(other.ps),
+	injection(this->ps, false),
+	distribution(this->ps, false),
+	id(other.id),
+	mass(other.mass),
+	logEmax(other.logEmax),
+	logEmin(other.logEmin)
+{
+	injection.values = std::move(other.injection.values);
+	distribution.values = std::move(other.distribution.values);
+}
+
+
+
 
 void Particle::configure(boost::property_tree::ptree& cfg) {
 	mass = cfg.get<double>("mass", mass);

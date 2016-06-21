@@ -23,10 +23,8 @@ public:
 	void iterate(std::function<void(const SpaceIterator&)> body, std::initializer_list<int> fixedDimensions = {}) const;
 	void parallelize(std::function<void(const SpaceIterator&)> body) const;
 
-	ParamSpace(){};
+	ParamSpace();
 
-	const Dimension& operator[](const size_t& index) const {
-		return *dimensions[index];
-	}
+	const Dimension& operator[](const size_t& index) const;
 };
 
