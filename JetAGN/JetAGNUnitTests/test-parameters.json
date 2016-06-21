@@ -7,6 +7,7 @@
    
 	"targetPhotonEnergies-Tcmb": 2.7,
 
+   "injector":"multiple",
 	"Lj": 1.0e43,
 	"openingAngle": 0.1,
 	"Gamma": 10,

@@ -37,14 +37,9 @@
     <ClCompile Include="messages.cpp">
       <Filter>extras</Filter>
     </ClCompile>
-    <ClCompile Include="distribution_old.cpp">
-      <Filter>distribution</Filter>
-    </ClCompile>
-    <ClCompile Include="nonThermalLuminosity.cpp" />
     <ClCompile Include="checkPower.cpp">
       <Filter>distribution</Filter>
     </ClCompile>
-    <ClCompile Include="injection.cpp" />
     <ClCompile Include="targetFields.cpp" />
     <ClCompile Include="cilindricIntegral.cpp" />
     <ClCompile Include="jetAGN.cpp" />
@@ -53,6 +48,15 @@
     </ClCompile>
     <ClCompile Include="maximumEnergy.cpp">
       <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="injection.cpp">
+      <Filter>injection</Filter>
+    </ClCompile>
+    <ClCompile Include="nonThermalLuminosity.cpp">
+      <Filter>injection</Filter>
+    </ClCompile>
+    <ClCompile Include="dist_without_losses.cpp">
+      <Filter>distribution</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,7 +68,6 @@
     <ClInclude Include="read.h">
       <Filter>extras</Filter>
     </ClInclude>
-    <ClInclude Include="injection.h" />
     <ClInclude Include="radiativeLosses.h">
       <Filter>losses</Filter>
     </ClInclude>
@@ -90,7 +93,6 @@
     <ClInclude Include="messages.h">
       <Filter>extras</Filter>
     </ClInclude>
-    <ClInclude Include="nonThermalLuminosity.h" />
     <ClInclude Include="checkPower.h">
       <Filter>distribution</Filter>
     </ClInclude>
@@ -102,6 +104,12 @@
     </ClInclude>
     <ClInclude Include="maximumEnergy.h">
       <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="injection.h">
+      <Filter>injection</Filter>
+    </ClInclude>
+    <ClInclude Include="nonThermalLuminosity.h">
+      <Filter>injection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +124,9 @@
     </Filter>
     <Filter Include="AnisotropicIC">
       <UniqueIdentifier>{889e5101-cff2-4a56-bc50-8a7dbb95ae7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="injection">
+      <UniqueIdentifier>{58a1b500-4555-4856-b386-001bf6bdc2db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

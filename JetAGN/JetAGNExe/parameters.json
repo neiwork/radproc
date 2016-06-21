@@ -7,6 +7,7 @@
    
 	"targetPhotonEnergies-Tcmb": 2.7,
 
+   "injector":"multiple",
 	"Lj": 1.0e43,
 	"openingAngle": 0.1,
 	"Gamma": 10,
@@ -15,10 +16,10 @@
 
 	"file": {
 		"luminosity":"ntLuminosity",
-		"electronDist":"electronDist",
-		"electronDist_ET":"electronDist_ET",
-		"electronDist_RT":"electronDist_RT",
-		"E_NT_r":"E_NT_r"
+		"eDist":"eWOLDist",
+		"eDist_ET":"eWOLDist_ET",
+		"eDist_RT":"eWOLDist_RT",
+		"E_NT_r":"E_NT_WOL_r"
 	},
 
 	"model": {
@@ -32,12 +33,12 @@
 					"radius":{
 						"min":1.0,
 						"max":1.0e3,
-						"samples":20
+						"samples":10
 					},
 					"time":{
 						"min":1.0,
 						"max":1.0e3,
-						"samples":20
+						"samples":10
 					}
 				}
 			},
@@ -54,7 +55,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":14.0
+						"max":16.0
 					}
 				}
 			}

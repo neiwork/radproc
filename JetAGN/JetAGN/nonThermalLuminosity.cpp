@@ -13,6 +13,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 
+
 double frad(double E, double z)
 {
 	//static const double starT = GlobalConfig.get<double>("starT");

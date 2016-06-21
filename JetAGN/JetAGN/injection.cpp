@@ -62,13 +62,29 @@ void injection(Particle& p, State& st)
 	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
 
+	static const std::string injector = GlobalConfig.get<std::string>("injector");
+
+	bool multiple = (injector == "multiple");
+	bool single = (injector == "single");
+	bool condicion;
+
 	p.injection.fill([&](const SpaceIterator& i){
 		const double magf{ st.magf.get(i) };
 		const double r{ i.val(DIM_R) };
 		
-		if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1)) /* injector en z=0 */
-		//if (i.its[2].canPeek(-1))     /* injectores para todo z */                    
 
+		if (single)
+		{
+			condicion = i.its[2].canPeek(-1) || i.its[1].canPeek(-1);
+			//if (i.its[2].canPeek(-1) || i.its[1].canPeek(-1)) /* injector en z=0 */	
+		}
+		else if (multiple)
+		{
+			condicion = i.its[2].canPeek(-1);
+			//if (i.its[2].canPeek(-1))     /* injectores para todo z */
+		}
+
+		if (condicion)
 		{
 			return 0.0;
 		}

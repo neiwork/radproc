@@ -33,14 +33,8 @@ int jetAGN()
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
 
-	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
-		//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));
-			//model.nph.set(i, nph);
-		//});
-
 
 	//	radiativeLosses(model);
-
 
 		ParamSpaceValues psv(model.electron.ps);
 
@@ -55,18 +49,28 @@ int jetAGN()
 
 		injection(model.electron, model);
 		
+		double totalL = computeInjectedPower(model.electron.injection, 0);
 
-		std::cout << "checking injected power:" << '\t' << computeInjectedPower(model.electron.injection, 0) << std::endl;		
+		std::cout << "checking injected power:" << '\t' << totalL << std::endl;		
 
 	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
-		writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
-		writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para r(0) y t(0)
+		//writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
+		//writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para r(0) y t(0)
 	
+		
 		distribution(model.electron, model);
+		//distWOLosses(model.electron, model);
+		writeRandTParamSpace(getFileName(folder, "eDist_RT"), model.electron.distribution, model.electron.ps[0].size() / 2);
+
+		static const double Gamma = GlobalConfig.get<double>("Gamma");
+		double totalE = computeInjectedEnergy(model.electron.distribution); 
+		double totalE2 = totalL*(model.electron.ps[1].last() - model.electron.ps[1].first()) / (cLight*Gamma);
+		std::cout << "checking total energy:" << '\t' << totalE << '\t' << totalE2 << std::endl;
+
 	
-		writeAllSpaceParam(getFileName(folder, "electronDist"), model.electron.distribution);
-		writeEandTParamSpace(getFileName(folder, "electronDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
-		writeRandTParamSpace(getFileName(folder,"electronDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
+		writeAllSpaceParam(getFileName(folder, "eDist"), model.electron.distribution);
+		writeEandTParamSpace(getFileName(folder, "eDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
+		//writeRandTParamSpace(getFileName(folder,"eDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
 		writeEnt(getFileName(folder, "E_NT_r"), model.electron.distribution);
 
 
