@@ -1,9 +1,12 @@
 {
-	"Mbh": 1.0E+7,
+	"starT": 3.0E+3,
+	"starR": 1.0E+13,
+	"targetPhotonEnergies-Tcmb": 2.7,
+	"Mbh": 1.0E+8,
 	"Lj": 1.0E+43,
 	"openingAngle": 0.1,
 	"Gamma": 10,
-	"Rdiss_rg": 1000,
+	"height": 500,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
 	"file": {
@@ -24,7 +27,7 @@
 				"dim": {
 					"energy": {
 						"min": -6.0,
-						"max": 16.0
+						"max": 12.0
 					}
 				}
 			},

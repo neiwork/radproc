@@ -4,5 +4,5 @@
 
 
 
-//VER UNIDADES!!!
+
 void annihilationLine(Particle& photon, Particle& electron, Particle& secondaryElectron, Particle& positron); 

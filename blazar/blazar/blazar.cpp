@@ -1,11 +1,14 @@
 #include "blazar.h"
 #include "ioutil.h"
 
-#include "modelParameters.h"
-#include "State.h"
-#include "injection.h"
-#include "distribution.h"
+
+#include "write.h"
 #include "photonInjection.h"
+#include "photonInjection.h"
+#include "distribution.h"
+#include "injection.h"
+#include "State.h"
+#include "modelParameters.h"
 
 #include <fparameters/parameters.h>
 #include <fparticle/Particle.h>
@@ -20,7 +23,7 @@ void blazar() {
 
 	std::string folder{ prepareOutputfolder() };
 
-	GlobalConfig = readConfig();
+	//GlobalConfig = readConfig();
 
 	GlobalConfig = readConfig();
 	prepareGlobalCfg();
@@ -46,7 +49,8 @@ void blazar() {
 
 	photonDistribution(model.photon, model);
 
-	//escribir
+	writeAllSpaceParam(getFileName(folder, "electronDist"), model.electron.distribution);
+	writeAllSpaceParam(getFileName(folder, "SED"), model.photon.distribution);
 
 	
 

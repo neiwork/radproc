@@ -43,7 +43,7 @@ double difNlum(double theta, double w, double w0, double E, double r)   //funcio
 	// w -> variable de afuera
 	// w0 -> variable interna
 
-	double b = b_theta(theta, w0, w); //VER creo que es b_theta(theta, w0, w) //(theta, w0, E)
+	double b = b_theta(theta, w0, w); 
 	double z = E / w; 
 
 	//defino F(z)
@@ -64,7 +64,7 @@ double fLumi(double x, double theta, double y, double E,  const Particle& p, con
 	//double t = p.ps.current->par.T;
 
 	int i_r = distCoord[1];
-	double r = p.ps[1][i_r]; //p.ps.current->par.R; // distCoord.dims[1]; //VER!! no lo esta tomando bien, lo ve como 0
+	double r = p.ps[1][i_r]; 
 	
 	double distCreator;
 
@@ -72,7 +72,7 @@ double fLumi(double x, double theta, double y, double E,  const Particle& p, con
 		distCreator = 0.0;
 	}
 	else{
-		distCreator = p.distribution.interpolate({ { DIM_E, x }}, &distCoord); //  { DIM_T, t } });// VER
+		distCreator = p.distribution.interpolate({ { DIM_E, x }}, &distCoord); 
 	}
 
 //	double distCreator = p.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);
@@ -84,7 +84,7 @@ double fLumi(double x, double theta, double y, double E,  const Particle& p, con
 
 double luminosityAnisotropicIC(double E, Particle& particle, const SpaceCoord& distCoord, double phEmin)
 {
-	double r = distCoord.dims[1]; //VER!!
+	double r = distCoord.dims[1]; 
 
 	double mass = particle.mass;
 

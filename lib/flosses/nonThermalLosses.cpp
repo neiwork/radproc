@@ -8,12 +8,12 @@
 
 double adiabaticLosses(double E, double z, double vel_lat)  //en [erg/s]
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	double jetRadius = z*openingAngle;
 
-	return 2.0*Gamma*(vel_lat*E / (3.0*jetRadius));
+	return 2.0*(vel_lat*E / (3.0*jetRadius));// / Gamma; //ver si es * o / Gamma 
 	//termina quedando return 2.0*cLight*E / (3.0*z);
 }
 

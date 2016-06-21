@@ -19,7 +19,7 @@ double fSyn(double x, double E, const Particle& creator, const ParamSpaceValues&
 		distCreator = 0.0;
 	}
 	else{
-		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc	); //VER si solo le paso esta
+		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc	); 
 	}
 //	double distCreator = creator.dist(x);// interpol(x, Ecreator, Ncreator, Ncreator.size() - 1);
 

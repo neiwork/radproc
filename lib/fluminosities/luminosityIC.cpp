@@ -36,7 +36,7 @@ double fICemi(double u, double t, double E, const Particle& creator, const Space
 		distCreator = 0.0;
 	}
 	else{
-		distCreator = creator.distribution.interpolate({ { 0, u } }, &distCoord); //VER si solo le paso esta
+		distCreator = creator.distribution.interpolate({ { 0, u } }, &distCoord); 
 	}
 	//double distCreator = creator.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);
 
@@ -47,7 +47,7 @@ double fICemi(double u, double t, double E, const Particle& creator, const Space
 
 	double r = E/(s*u*(1-E/u));   //equivalente al q
 
-	double pepe = (tpf(t));
+	double pepe = (tpf(t));  //VER
 
 	double function = distCreator*(pepe/t)
             			*(2*r*log(r)+(1+2*r)*(1-r)+(1-r)*P2(r*s)/(2*(1+r*s)))/P2(u);

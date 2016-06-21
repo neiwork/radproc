@@ -23,10 +23,12 @@ inline double fmagneticField(double z, double B_o)
 }
 
 double computeMagField(double z) {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Lj = GlobalConfig.get<double>("Lj");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
-	return fmagneticField(z, computeModelB0(Lj, openingAngle));
+	double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
+	return Blab / P2(Gamma);  //este es el B en el sistema del jet
 }
 
 double jetRadius(double z, double openingAngle)
@@ -36,16 +38,16 @@ double jetRadius(double z, double openingAngle)
 
 double eEmax(double z, double B)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
 	double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
-	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
+	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat); //*Gamma
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
-	double Emax_hillas = electronCharge*B*Reff;
+	//double Emax_hillas = electronCharge*B*Reff;
 	double min1 = std::min(Emax_syn, Emax_syn);
 
 	//std::ofstream file;
@@ -53,19 +55,21 @@ double eEmax(double z, double B)
 
 	//std::cout << z << '\t' << Emax_ad << '\t' << Emax_syn << '\t' << Emax_hillas << '\t' << std::endl;
 
-	return std::min(min1, Emax_hillas);
+	//return std::min(min1, Emax_hillas);
+	return min1;
 		
 }
 
 double stagnationPoint(double z)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Lj = GlobalConfig.get<double>("Lj");
 
-	double Mdot_wind = 1.0e-8*solarMass / yr;
-	double v_wind = 2.0e7;
+	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
+	static const double vWind = GlobalConfig.get<double>("vWind");
 
-	double stagPoint = sqrt(Mdot_wind*v_wind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
+
+	double stagPoint = sqrt(MdotWind*vWind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
 
 	return stagPoint;
 

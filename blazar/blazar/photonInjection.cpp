@@ -25,14 +25,15 @@ void photonTarget(Particle& p, State& st)
 {
 //	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double zInt = GlobalConfig.get<double>("zInt");
+	static const double zInt = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });
 	double Emin = p.emin();
 	double Emax = eEmax(zInt, B);
 
-	//volumen 
-	double vol = pi*P2(jetRadius(zInt, openingAngle))*zInt;
+
+	//double vol = pi*P2(jetRadius(zInt, openingAngle))*zInt;
+	double radius = jetRadius(zInt, openingAngle);
 
 
 	p.injection.fill([&](const SpaceIterator& i){
@@ -41,7 +42,7 @@ void photonTarget(Particle& p, State& st)
 
 		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf);
 
-		double total = Qsyn*vol;
+		double total = Qsyn/(P2(E) *4.0*pi*P2(radius)*cLight); //lo paso a 1/erg cm^3
 
 		return total;
 	});
@@ -52,29 +53,28 @@ void photonDistribution(Particle& p, State& st)
 {
 	//	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double zInt = GlobalConfig.get<double>("zInt");
+	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });
 	double Emin = p.emin();
-	double Emax = eEmax(zInt, B);
+	double Emax = eEmax(Rdiss, B);
 
 	//volumen 
-	double vol = pi*P2(jetRadius(zInt, openingAngle))*zInt;
+	double vol = pi*P2(jetRadius(Rdiss, openingAngle))*Rdiss;
 
+	const ParamSpaceValues psv = st.photon.injection;
 
-	p.injection.fill([&](const SpaceIterator& i){
+	p.distribution.fill([&](const SpaceIterator& i){
 
 		double E = i.val(DIM_E);
 
 		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf);
 
-		const ParamSpaceValues psv = st.photon.injection;
-
 		double Qic = luminosityIC(E, st.electron, i,
 			[&psv, &i](double E){return tpf(E, psv, i); }
 		, st.photon.emin());
 
-		double total = Qsyn*vol;
+		double total = (Qsyn + Qic);// *vol;
 
 		return total;
 	});

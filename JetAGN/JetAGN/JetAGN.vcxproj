@@ -81,9 +81,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="distribution_old.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    <ClCompile Include="dist_without_losses.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="injection.cpp" />
     <ClCompile Include="ioutil.cpp" />
@@ -91,6 +91,7 @@
     <ClCompile Include="lossesAnisotropicIC.cpp" />
     <ClCompile Include="luminosityAnisotropicIC.cpp" />
     <ClCompile Include="jetAGN.cpp" />
+    <ClCompile Include="maximumEnergy.cpp" />
     <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="nonThermalLuminosity.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="losses.h" />
     <ClInclude Include="lossesAnisotropicIC.h" />
     <ClInclude Include="luminosityAnisotropicIC.h" />
+    <ClInclude Include="maximumEnergy.h" />
     <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="nonThermalLuminosity.h" />

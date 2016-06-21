@@ -1,11 +1,13 @@
 {
-	
+	"Mdot":1.0e-8,
+   "vWind":2.0e7,
 	"starT":3.0e3,
 	"starR":1.0e13,
    "pseda":1.0,
    
 	"targetPhotonEnergies-Tcmb": 2.7,
 
+   "injector":"multiple",
 	"Lj": 1.0e43,
 	"openingAngle": 0.1,
 	"Gamma": 10,
@@ -14,33 +16,10 @@
 
 	"file": {
 		"luminosity":"ntLuminosity",
-		"electronDist":"electronDist",
-		"electronDist_ET":"electronDist_ET",
-		"electronDist_RT":"electronDist_RT",
-		"E_NT_r":"E_NT_r"
-	},
-
-	"math": {
-		"runge-kutta-1": {
-			"samples": {
-				"x": 50
-			}
-		},
-
-		"runge-kutta-2": {
-			"samples": { 
-				"x": 50,
-				"y": 50
-			}
-		}
-	},
-
-	"integrate-losses": {
-		"samples": {
-			"x": 20,
-			"t": 20,
-			"y": 20
-		}
+		"eDist":"eWOLDist",
+		"eDist_ET":"eWOLDist_ET",
+		"eDist_RT":"eWOLDist_RT",
+		"E_NT_r":"E_NT_WOL_r"
 	},
 
 	"model": {
@@ -49,7 +28,7 @@
 				"mass":0,
 				"dim": {
 					"energy":{
-						"samples":20
+						"samples":30
 					},
 					"radius":{
 						"min":1.0,
@@ -80,6 +59,29 @@
 					}
 				}
 			}
+		}
+	},
+   
+	"math": {
+		"runge-kutta-1": {
+			"samples": {
+				"x": 50
+			}
+		},
+
+		"runge-kutta-2": {
+			"samples": { 
+				"x": 50,
+				"y": 50
+			}
+		}
+	},
+
+	"integrate-losses": {
+		"samples": {
+			"x": 20,
+			"t": 20,
+			"y": 20
 		}
 	}
 }
