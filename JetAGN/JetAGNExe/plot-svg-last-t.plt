@@ -10,4 +10,4 @@ set xlabel 'Log(z / pc)'
 set terminal svg size 800,600 fname 'Verdana' fsize 10
 set output filename.'.svg'
 
-plot for [i=2:COLUMNS] data using 1:i with line
+plot data using 1:COLUMNS with line
