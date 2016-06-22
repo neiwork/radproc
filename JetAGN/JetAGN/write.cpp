@@ -18,10 +18,12 @@ std::string dataName(std::string id) {
 	return id + ".txt";
 }
 
-void generateViewScript(std::string filename) {
+void generateViewScript(std::string path) {
+	std::string filename = path.substr(path.find("\\") + 1);
+	std::string folder = path.substr(0,path.find("\\"));
 	std::ofstream file;
-	file.open((filename+".bat").c_str(), std::ios::out);
-	file << "@../plot-svg-and-view.bat " + filename.substr(filename.find("\\")+1);
+	file.open((folder+"/plots/plot-"+filename+".bat").c_str(), std::ios::out);
+	file << "@../../plot-svg-and-view.bat " + filename;
 	file.close();
 }
 

@@ -31,6 +31,7 @@ std::string prepareOutputfolder() {
 	ptime now = second_clock::universal_time();
 	string folder{ FILE_OUTPUT_DIR_PFX + time2str(now) };
 	fs::create_directory(folder);
+	fs::create_directory(folder + "/plots");
 	fs::copy_file(FILE_CONFIG, folder + FS + FILE_CONFIG);
 	return std::move(folder);
 }
