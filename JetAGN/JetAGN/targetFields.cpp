@@ -10,23 +10,28 @@
 double starDensity(double z)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-
-	double Nrg = 4.0e7;
-
+	static const double h_d = GlobalConfig.get<double>("h_d")*pc;
+	static const double Nrg = GlobalConfig.get<double>("N_s");
 	static const double pseda = GlobalConfig.get<double>("pseda");
+
+	//double Nrg = 4.0e7;
+
+
 
 	double mBH = 1.0e7*solarMass;  //black hole mass
 	double rg = mBH*gravitationalConstant / cLight2;
 
 	double z0 = 50.0*rg;
-	double RintMax = 1.0e3*pc;
+	double RintMax = h_d;
 	double RintMin = z0;// rmin;// z0;
 
 	double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
 
 	double Astar = Nrg / (pi*P2(openingAngle)*int_z);
 
-	double n_s = Astar / pow(z, pseda);
+	//double n_s = 15.0 / P3(pc);// Astar / pow(z, pseda);
+	double n_s =  Astar / pow(z, pseda);
+	
 	return n_s;
 }
 

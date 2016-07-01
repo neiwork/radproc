@@ -106,12 +106,7 @@ void injection(Particle& p, State& st)
 
 	});
 
-
 	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
-	double Lnt_total_pri = Lnt_total/Gamma;
-	
-	std::cout << "Lnt total" << '\t' << Lnt_total << std::endl;
-	std::cout << "Lnt FF total" << '\t' << Lnt_total_pri << std::endl;
 
 	show_message(msgEnd, Module_electronInjection);
 }

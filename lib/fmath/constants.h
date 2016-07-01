@@ -33,6 +33,7 @@ const double bohrMagneton           = 9.27e-21;       //bohr magneton units?
 ///Astronomical Data
 
 const double solarMass				=  1.998e33;               //Solar mass (g)
+const double solarLuminosity		=  3.84e33;               //erg/s
 
 ///Unit conversion factors and others
 

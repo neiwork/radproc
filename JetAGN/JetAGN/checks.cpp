@@ -247,3 +247,56 @@ void testBinarySearch(){
 
 
 }
+
+
+
+double real(double x, double lambda)
+{
+	double n = 5.0 / 3.0;
+	return cos(lambda*x) / (1.0 + pow(x,n));
+}
+
+double ima(double x, double lambda)
+{
+	double n = 5.0 / 3.0;
+	return sin(lambda*x) / (1.0 + pow(x, n));
+}
+
+void kolmogorov()
+{
+	double sumR(0.0), sumI(0.0);
+
+	double a = 0.0;
+	double b = 1.0e4;
+	int n = 10000;
+	double h = (b - a) / n;
+
+	double Linf = 1.0e-3;
+	double Lsup = 1.0e9;
+	int nL = 1000;
+	double L_int = pow((Lsup / Linf), (1.0 / nL));
+
+	double lambda = Linf;
+
+	for (size_t j = 1; j < nL; ++j){
+
+		double dL = lambda*(L_int - 1.0);
+
+		double x = a;
+
+		for (size_t i = 0; i < n; ++i)
+		{
+			sumR = sumR + real(x, lambda)*h*dL;
+			sumI = sumI + ima(x, lambda)*h*dL;
+			x = x + h;
+
+		}
+
+		lambda = lambda * L_int;
+
+	}
+	//sumR = sumR*pi;
+	//sumI = sumI*pi;
+	std::cout << sumR/Lsup << '\t' << -sumI/Lsup << std::endl;
+
+}

@@ -1,18 +1,16 @@
 {
-	"Mdot":2.2e-9,
-   "vWind":2.0e7,
-	"starT":4.0e3,
-	"h_d":3.1e3,
-   "N_s":1.3e9,
-   "eph_s":57.7,
-   "pseda":0.8,
+	"h_d":100,
+   "I":2.8e-29,
+   "eph_s":2.0e-20,
+	"starT":1.05e4,
+   "pseda":1.0,
    
 	"targetPhotonEnergies-Tcmb": 2.7,
 
    "injector":"multiple",
-	"Lj": 1.0e44,
+   "Lj": 1.0e46,
 	"openingAngle": 0.1,
-   "inc": 20,
+   "inc": 0,
 	"Gamma": 10,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
@@ -35,12 +33,12 @@
 					},
 					"radius":{
 						"min":1.0,
-						"max":3.1e3,
+						"max":1.0e3,
 						"samples":10
 					},
 					"time":{
 						"min":1.0,
-						"max":3.1e3,
+						"max":1.0e3,
 						"samples":10
 					}
 				}

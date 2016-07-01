@@ -25,7 +25,7 @@ void initializeEnergyPoints(Vector& v, double logEmin, double logEmax);
 /* change_parameters changes the values of some parameters for the iteration on variable r*/
 //void derive_parameters_r(double E, double R, double T);
 
-double stagnationPoint(double z);
+//double stagnationPoint(double z);
 
 double computeMagField(double z);
 

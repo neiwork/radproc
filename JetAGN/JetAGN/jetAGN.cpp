@@ -33,16 +33,16 @@ int jetAGN()
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
 
-
+	//	kolmogorov();
 	//	radiativeLosses(model);
 
-		ParamSpaceValues psv(model.electron.ps);
+		//ParamSpaceValues psv(model.electron.ps);
 
-		psv.fill([&](const SpaceIterator& i){
-			double E = i.val(DIM_E);
-			double z = i.val(DIM_R);
-			return frad(E, z);
-		});
+		//psv.fill([&](const SpaceIterator& i){
+		//	double E = i.val(DIM_E);
+		//	double z = i.val(DIM_R);
+		//	return frad(E, z);
+		//});
 
 		//writeEmax(folder + "\\Emax", model.electron);
 		//writeEandRParamSpace(folder + "\\frad", psv, model.electron.ps[DIM_T].size()-1);

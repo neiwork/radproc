@@ -42,7 +42,7 @@ double eEmax(double z, double B)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-	double Reff = 10.0*stagnationPoint(z);
+	//double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat); //*Gamma
@@ -60,20 +60,20 @@ double eEmax(double z, double B)
 		
 }
 
-double stagnationPoint(double z)
-{
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double Lj = GlobalConfig.get<double>("Lj");
-
-	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
-	static const double vWind = GlobalConfig.get<double>("vWind");
-
-
-	double stagPoint = sqrt(MdotWind*vWind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
-
-	return stagPoint;
-
-}
+//double stagnationPoint(double z)
+//{
+//	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+//	static const double Lj = GlobalConfig.get<double>("Lj");
+//
+//	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
+//	static const double vWind = GlobalConfig.get<double>("vWind");
+//
+//
+//	double stagPoint = sqrt(MdotWind*vWind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
+//
+//	return stagPoint;
+//
+//}
 
 //void derive_parameters_r(double E, double z, double t)
 //{
@@ -86,9 +86,14 @@ double stagnationPoint(double z)
 //}
 
 double computeDlorentz(double gamma) {
-	double inc = 10.0*pi / 180; //ang obs del jet
+
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
+
+	double angle = std::max(openingAngle, inc);
+
 	double beta = 1.0 - 1.0 / P2(gamma);
-	double Dlorentz = 1.0 / (gamma*(1.0 - cos(inc)*beta));
+	double Dlorentz = 1.0 / (gamma*(1.0 - cos(angle)*beta));
 	return Dlorentz;
 }
 

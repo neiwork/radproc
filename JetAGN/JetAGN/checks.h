@@ -19,3 +19,6 @@ void testBinarySearch();
 void testMultiDimensionalInterpolate();
 
 void zeroToN(Vector& v);
+
+
+void kolmogorov();
