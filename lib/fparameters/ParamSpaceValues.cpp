@@ -86,7 +86,7 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 			else {
 				std::ostringstream errormsg;
 				errormsg << "Interpolation value " << id.value << " is not in range [ " << dimv.front() << " .. " << dimv.back() << " ] of dimension " << d << "." << std::endl;
-				throw std::runtime_error(errormsg.str());
+ 				throw std::runtime_error(errormsg.str());
 			}
 		}
 	}

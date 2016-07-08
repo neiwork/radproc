@@ -19,7 +19,8 @@ inline double computeModelB0(double Lj, double openingAngle) {
 
 inline double fmagneticField(double z, double B_o)
 {
-	return B_o / z;
+	static const double subEq = GlobalConfig.get<double>("subEq");
+	return subEq*B_o / z;
 }
 
 double computeMagField(double z) {
@@ -48,14 +49,14 @@ double eEmax(double z, double B)
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat); //*Gamma
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 	//double Emax_hillas = electronCharge*B*Reff;
-	double min1 = std::min(Emax_syn, Emax_syn);
+	double min1 = std::min(Emax_syn, Emax_ad);
 
 	//std::ofstream file;
 	//file.open("Emax.txt", std::ios::out);
 
-	//std::cout << z << '\t' << Emax_ad << '\t' << Emax_syn << '\t' << Emax_hillas << '\t' << std::endl;
+	//file << z << '\t' << Emax_ad << '\t' << Emax_syn  << '\t' << std::endl;
 
-	//return std::min(min1, Emax_hillas);
+	//return Emax_ad;
 	return min1;
 		
 }
@@ -92,7 +93,7 @@ double computeDlorentz(double gamma) {
 
 	double angle = std::max(openingAngle, inc);
 
-	double beta = 1.0 - 1.0 / P2(gamma);
+	double beta = sqrt(1.0 - 1.0 / P2(gamma));
 	double Dlorentz = 1.0 / (gamma*(1.0 - cos(angle)*beta));
 	return Dlorentz;
 }

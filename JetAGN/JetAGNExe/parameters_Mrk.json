@@ -1,10 +1,11 @@
 {
 	"h_d":23,
    "I":3.8e-28,
-   "eph_s":2.7e-19,
-	"starT":1.05e4,
+   "eph_s":3.2e-17,
+	"starT":3.0e4,
    "pseda":1.0,
    
+   "subEq":1.0e-3,
 	"targetPhotonEnergies-Tcmb": 2.7,
 
    "injector":"multiple",
@@ -16,7 +17,7 @@
 	"primaryIndex": 2.0,
 
 	"file": {
-		"luminosity":"ntLuminosity",
+		"luminosity":"ntLuminosity.txt",
 		"eDist":"eDist",
 		"eDist_ET":"eDist_ET",
 		"eDist_RT":"eDist_RT",
@@ -29,16 +30,16 @@
 				"mass":0,
 				"dim": {
 					"energy":{
-						"samples":30
+						"samples":20
 					},
 					"radius":{
 						"min":1.0,
-						"max":1.0e3,
+						"max":23.0,
 						"samples":10
 					},
 					"time":{
 						"min":1.0,
-						"max":1.0e3,
+						"max":23.0,
 						"samples":10
 					}
 				}
@@ -46,8 +47,8 @@
 			"photon": {
 				"dim":{
 					"energy": {
-						"min":-6.0,
-						"max":12.0
+						"min":-4.0,
+						"max":13.0
 					}
 				}
 			},
@@ -56,7 +57,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":16.0
+						"max":15.0
 					}
 				}
 			}
@@ -72,8 +73,8 @@
 
 		"runge-kutta-2": {
 			"samples": { 
-				"x": 50,
-				"y": 50
+				"x": 30,
+				"y": 30
 			}
 		}
 	},

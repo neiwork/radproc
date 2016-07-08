@@ -55,6 +55,8 @@ void injection(Particle& p, State& st)
 	const double RMAX = p.ps[DIM_R].last();
 	const int N_R = p.ps[DIM_R].size()-1;
 
+	//double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
+
 	//volumen total del jet
 	//double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
 	//	- P2(jetRadius(RMIN, openingAngle))*RMIN);
@@ -72,7 +74,6 @@ void injection(Particle& p, State& st)
 		const double magf{ st.magf.get(i) };
 		const double r{ i.val(DIM_R) };
 		
-
 		if (single)
 		{
 			condicion = i.its[2].canPeek(-1) || i.its[1].canPeek(-1);
@@ -106,7 +107,7 @@ void injection(Particle& p, State& st)
 
 	});
 
-	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
+	
 
 	show_message(msgEnd, Module_electronInjection);
 }

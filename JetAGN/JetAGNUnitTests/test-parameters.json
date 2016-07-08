@@ -1,13 +1,13 @@
 {
-	"Mdot":1.0e-8,
+	"Mdot":2.2e-9,
    "vWind":2.0e7,
-	"starT":3.0e3,
-	"starR":1.0e13,
-   "h_d":3.1e3,
+	"starT":4.0e3,
+	"h_d":3.1e3,
    "N_s":1.3e9,
    "eph_s":57.7,
-   "pseda":1.0,
+   "pseda":1,
    
+   "subEq":1.0,
 	"targetPhotonEnergies-Tcmb": 2.7,
 
    "injector":"multiple",
@@ -17,29 +17,6 @@
 	"Gamma": 10,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
-
-	"math": {
-		"runge-kutta-1": {
-			"samples": {
-				"x": 50
-			}
-		},
-
-		"runge-kutta-2": {
-			"samples": { 
-				"x": 50,
-				"y": 50
-			}
-		}
-	},
-
-	"integrate-losses": {
-		"samples": {
-			"x": 20,
-			"t": 20,
-			"y": 20
-		}
-	},
 
 	"model": {
 		"particle": {
@@ -73,6 +50,29 @@
 					}
 				}
 			}
+		}
+	},
+   
+   "math": {
+		"runge-kutta-1": {
+			"samples": {
+				"x": 50
+			}
+		},
+
+		"runge-kutta-2": {
+			"samples": { 
+				"x": 50,
+				"y": 50
+			}
+		}
+	},
+
+	"integrate-losses": {
+		"samples": {
+			"x": 20,
+			"t": 20,
+			"y": 20
 		}
 	}
 

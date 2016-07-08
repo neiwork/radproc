@@ -5,20 +5,21 @@
 	"h_d":3.1e3,
    "N_s":1.3e9,
    "eph_s":57.7,
-   "pseda":0.8,
+   "pseda":1,
    
+   "subEq":1.0,
 	"targetPhotonEnergies-Tcmb": 2.7,
 
    "injector":"multiple",
 	"Lj": 1.0e44,
 	"openingAngle": 0.1,
    "inc": 20,
-	"Gamma": 10,
+	"Gamma": 5,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
 
 	"file": {
-		"luminosity":"ntLuminosity",
+		"luminosity":"ntLuminosity.txt",
 		"eDist":"eDist",
 		"eDist_ET":"eDist_ET",
 		"eDist_RT":"eDist_RT",
@@ -36,20 +37,20 @@
 					"radius":{
 						"min":1.0,
 						"max":3.1e3,
-						"samples":10
+						"samples":14
 					},
 					"time":{
 						"min":1.0,
 						"max":3.1e3,
-						"samples":10
+						"samples":14
 					}
 				}
 			},
 			"photon": {
 				"dim":{
 					"energy": {
-						"min":-6.0,
-						"max":12.0
+						"min":-4.0,
+						"max":14.0
 					}
 				}
 			},
@@ -58,7 +59,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":16.0
+						"max":15.0
 					}
 				}
 			}

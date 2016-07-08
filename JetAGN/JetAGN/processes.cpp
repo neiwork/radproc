@@ -16,6 +16,13 @@
 
 #include <boost/property_tree/ptree.hpp>
 
+double tpf(double E, const ParamSpaceValues psv, const SpaceCoord& distCoord)
+{
+	double result = psv.interpolate({ { 0, E } }, &distCoord);
+	return result;
+}
+
+
 double Llab(double Lint)
 {
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
@@ -67,30 +74,50 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, int E_ix, int t_i
 void processes(State& st, const std::string& filename)
 {
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	static const double starT = GlobalConfig.get<double>("starT");
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	show_message(msgStart, Module_luminosities);
 
 	ParamSpaceValues Qsyn(st.photon.ps);
-	ParamSpaceValues Qic(st.photon.ps);
-	ParamSpaceValues QicCMB(st.photon.ps);
+	ParamSpaceValues QicS(st.photon.ps);
+	//ParamSpaceValues Qssc(st.photon.ps);
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
-	double EphminS(0.0), EphminCMB(0.0);
-	targetPhotonEnergies(EphminS, EphminCMB);
+	//double EphminS(0.0), EphminCMB(0.0);
+	//targetPhotonEnergies(EphminS, EphminCMB);
+
+	double EphminS = boltzmann*starT / 100.0;
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
 		const double E = i.val(DIM_E);
-		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s/cm^3, integrar!
-		const double eIC    = luminosityAnisotropicIC(E, st.electron, i.coord, EphminS);
-		const double eICcmb = luminosityIC( E, st.electron, i.coord, cmbBlackBody, EphminCMB);
+		const double r = i.val(DIM_R);
+		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
+		const double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
+			return starBlackBody(E, r); }, EphminS);
 
 		Qsyn.set(i, eSyn);
-		Qic.set(i, eIC);
-		QicCMB.set(i, eICcmb);
+		QicS.set(i, eICs);
 
 	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
+
+
+	//st.photon.ps.iterate([&](const SpaceIterator &i){
+
+	//	const double E = i.val(DIM_E);
+	//	const double r = i.val(DIM_R);
+
+	//	const double eSSC = luminosityIC(E, st.electron, i,
+	//		[&Qsyn, &i, &r](double E){return tpf(E, Qsyn, i) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
+	//	, st.photon.emin());
+
+	//		//const double eSSC = luminosityIC(E, st.electron, i.coord, [&](double E){
+	//		//	return luminositySynchrotron(E, st.electron, i.coord, st.magf) /
+	//		//		(P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }, st.photon.emin());
+	//			Qssc.set(i, eSSC);
+	//}, { -1, -1, (int)st.photon.ps[DIM_R].size() - 1 });
 
 	const ParamSpace& pps = st.photon.ps;
 
@@ -98,7 +125,7 @@ void processes(State& st, const std::string& filename)
 		//<< '\t' << "log(t/s)"
 		<< '\t' << "log(Lsyn/erg s-1)"
 		<< '\t' << "log(Lic/erg s-1)"
-		<< '\t' << "log(LicCMB/erg s-1)"
+		<< '\t' << "log(LiSSC/erg s-1)"
 		<< std::endl;
 
 		for (int E_ix = 0; E_ix < pps[0].size(); E_ix++) {  
@@ -114,16 +141,15 @@ void processes(State& st, const std::string& filename)
 			double Elab = E*Dlorentz; //Dlorentz=delta
 
 			double Lsyn   = emiToLumi(pps, Qsyn, E_ix, t_ix);
-			double Lic    = emiToLumi(pps, Qic, E_ix, t_ix);
-			double LicCMB = emiToLumi(pps, QicCMB, E_ix, t_ix);
-
+			double LicS = emiToLumi(pps, QicS, E_ix, t_ix);
+			//double Lssc = emiToLumi(pps, Qssc, E_ix, t_ix);
 
 			double fmtE = log10(Elab / 1.6e-12);
 
 			file << fmtE //<< '\t' << log10(t)
 				<< '\t' << safeLog10(Llab(Lsyn))
-				<< '\t' << safeLog10(Llab(Lic))
-				<< '\t' << safeLog10(Llab(LicCMB))
+				<< '\t' << safeLog10(Llab(LicS))
+				//<< '\t' << safeLog10(Llab(Lssc))
 				<< std::endl;
 
 		}

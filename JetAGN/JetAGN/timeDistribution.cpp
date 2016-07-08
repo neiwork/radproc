@@ -56,7 +56,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 	double EpMax = Eeff;
 	double Ep = EpMin;
 
-	int nEp = 100;
+	int nEp = 50;
 	double Ep_int = pow((EpMax / EpMin), 1.0 / nEp);  //0.001
 
 	double dEp(0.0), inj(0.0);

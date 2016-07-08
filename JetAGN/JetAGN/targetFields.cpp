@@ -2,6 +2,7 @@
 
 #include "modelParameters.h"
 
+#include <fmath\RungeKutta.h>
 #include <fmath\physics.h>
 #include <fparameters/parameters.h>
 
@@ -16,8 +17,6 @@ double starDensity(double z)
 
 	//double Nrg = 4.0e7;
 
-
-
 	double mBH = 1.0e7*solarMass;  //black hole mass
 	double rg = mBH*gravitationalConstant / cLight2;
 
@@ -25,36 +24,89 @@ double starDensity(double z)
 	double RintMax = h_d;
 	double RintMin = z0;// rmin;// z0;
 
-	double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
+	//double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
 
-	double Astar = Nrg / (pi*P2(openingAngle)*int_z);
+	double vol_frac = P2(openingAngle)/4.0;
+
+	double int_z = pow(RintMax, (3.0 - pseda))/ (3.0 - pseda);
+
+	double Astar = Nrg / (4.0 * pi*int_z); // (pi*P2(openingAngle)*int_z);
 
 	//double n_s = 15.0 / P3(pc);// Astar / pow(z, pseda);
 	double n_s =  Astar / pow(z, pseda);
 	
-	return n_s;
+	return n_s;// *vol_frac;
 }
 
 
-double starBlackBody(double E, double r)
+//double starBlackBody(double Ep, double r)  //Cyg A y Mrk
+//{
+//
+//	static const double starT = GlobalConfig.get<double>("starT");
+//	static const double eph_s = GlobalConfig.get<double>("eph_s");
+//	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
+//	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+//
+//	double E = Ep*Dlorentz;  //esta seria E_lab
+//
+//	double tcross = h_d / cLight;
+//	double wph = eph_s*tcross; 
+//
+//	double Epeak = boltzmann*starT;
+//	double Ephmin = Epeak / 1000.0;
+//	double Ephmax = Epeak*1000.0;
+//
+//	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&Ephmin,&Epeak](double E){
+//		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+//	});  
+//	
+//
+//	double normalizacion = wph / int_E; //wph / P2(Epeak); 
+//
+//	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+//
+//	//double nph = wph / P2(Epeak);
+//
+//
+//	//if (abs(E - Epeak) < 1.0e-3)
+//	//{
+//		return nph*P2(Dlorentz);
+//	//}
+//	//else
+//	//{
+//	//	return 0.0;
+//	//}
+//
+//	
+//}
+
+
+double starBlackBody(double Ep, double z)  //M87
 {
 
-	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
-	static const double starR = GlobalConfig.get<double>("starR", 1.0e13);
+	static const double starT = GlobalConfig.get<double>("starT");
+	static const double eph_s = GlobalConfig.get<double>("eph_s");
+	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	
+	double E = Ep*Dlorentz;  //esta seria E_lab
+
+	double wph = (eph_s*solarLuminosity)*starDensity(z)*z / cLight;  //para las gigantes rojas de M87 
 
 	double Epeak = boltzmann*starT;
 	double Ephmin = Epeak / 100.0;
-	//double Ephmax = Epeak*10.0;
+	double Ephmax = Epeak*100.0;
 
-	//8.0*pi/(P3(planck*cLight)*P2(starR / r); reemplazo esta constante por otra normalizacion
-	//double normalizacion = starDensity(r) / P3(Dlorentz*boltzmann*starT);
-	
-	double normalizacion = 2.0*P2(starR / r) / P3(planck*cLight);
+	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&](double E){
+		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+	});
 
-	double nph =  (P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1))
-		*normalizacion;
-	
-	return nph ; /// P2(Dlorentz)  
+	double normalizacion = wph / int_E;
+
+	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+		
+
+	return nph*P2(Dlorentz);
 }
 
 

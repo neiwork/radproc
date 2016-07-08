@@ -32,9 +32,8 @@ int jetAGN()
 		GlobalConfig = readConfig();
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
-
-	//	kolmogorov();
-	//	radiativeLosses(model);
+			
+		//radiativeLosses(model);
 
 		//ParamSpaceValues psv(model.electron.ps);
 
@@ -44,8 +43,8 @@ int jetAGN()
 		//	return frad(E, z);
 		//});
 
-		//writeEmax(folder + "\\Emax", model.electron);
 		//writeEandRParamSpace(folder + "\\frad", psv, model.electron.ps[DIM_T].size()-1);
+		//writeEmax(folder + "\\Emax", model.electron);
 
 		injection(model.electron, model);
 		
@@ -53,9 +52,9 @@ int jetAGN()
 
 		std::cout << "checking injected power:" << '\t' << totalL << std::endl;		
 
-	//	writeAllSpaceParam("electronInj.txt", model.electron.injection);
-		//writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
-		//writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para r(0) y t(0)
+		writeAllSpaceParam("electronInj.txt", model.electron.injection);
+		writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
+		writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para r(0) y t(0)
 	
 		
 		distribution(model.electron, model);
@@ -79,7 +78,7 @@ int jetAGN()
 		//	return model.electron.injection.get(i);
 		//});
 
-		//processes(model, getFileName(cfg,folder,"luminosity"));
+		processes(model, getFileName(folder,"luminosity"));
 
 	}
 	catch (std::runtime_error& e)

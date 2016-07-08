@@ -14,7 +14,7 @@
 
 void distribution(Particle& p, State& st)
 {
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	show_message(msgStart, Module_electronDistribution);
 

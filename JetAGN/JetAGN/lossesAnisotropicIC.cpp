@@ -47,7 +47,7 @@ double difN(double theta, double w, double w0, double E, double r)   //funcion a
 	//defino F(z)
 	double F = 1.0 + P2(z) / (2.0*(1.0 - z)) - 2.0*z / (b*(1.0 - z)) + 2.0*P2(z) / P2(b*(1.0 - z));
 
-	double nph = starBlackBody(w, r);
+	double nph = starBlackBody(w,r);
 	double invariant = nph / w;
 
 	double result = (3.0*thomson / (16.0*pi)) * P2(electronMass*cLight2 / E) * invariant * F;
