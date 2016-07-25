@@ -8,6 +8,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 
+
 double starDensity(double z)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
@@ -39,9 +40,8 @@ double starDensity(double z)
 }
 
 
-//double starBlackBody(double Ep, double r)  //Cyg A y Mrk
+//double starBlackBody(double Ep, double z)  //Cyg A y Mrk
 //{
-//
 //	static const double starT = GlobalConfig.get<double>("starT");
 //	static const double eph_s = GlobalConfig.get<double>("eph_s");
 //	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
@@ -50,7 +50,7 @@ double starDensity(double z)
 //	double E = Ep*Dlorentz;  //esta seria E_lab
 //
 //	double tcross = h_d / cLight;
-//	double wph = eph_s*tcross; 
+//	double wph = eph_s*tcross;
 //
 //	double Epeak = boltzmann*starT;
 //	double Ephmin = Epeak / 1000.0;
@@ -60,26 +60,47 @@ double starDensity(double z)
 //		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 //	});  
 //	
-//
-//	double normalizacion = wph / int_E; //wph / P2(Epeak); 
+//	double normalizacion = wph / int_E; 
 //
 //	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 //
-//	//double nph = wph / P2(Epeak);
+//	return nph*P2(Dlorentz);
 //
-//
-//	//if (abs(E - Epeak) < 1.0e-3)
-//	//{
-//		return nph*P2(Dlorentz);
-//	//}
-//	//else
-//	//{
-//	//	return 0.0;
-//	//}
-//
-//	
+//	//if (z > h_d){
+////	return nph*P2(Dlorentz)*P2(h_d / z);
 //}
-
+//
+//double starIR(double Ep, double z)  //Cyg A y Mrk
+//{
+//	static const double starT = GlobalConfig.get<double>("IRstarT");
+//	//static const double eph_s = GlobalConfig.get<double>("eph_s");
+//	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
+//	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+//
+//	double E = Ep*Dlorentz;  //esta seria E_lab
+//
+//	double tcross = h_d / cLight;
+//	
+//	//IR field
+//	double R_d = 300.0 * pc;
+//	double wph = 1.0e12*solarLuminosity / (cLight*pi*P2(R_d));
+//
+//	double Epeak = boltzmann*starT;
+//	double Ephmin = Epeak / 100.0;
+//	double Ephmax = Epeak*100.0;
+//
+//	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&Ephmin, &Epeak](double E){
+//		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+//	});
+//
+//	double normalizacion = wph / int_E;
+//
+//	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+//
+//	return nph*P2(Dlorentz);
+//
+//}
+	
 
 double starBlackBody(double Ep, double z)  //M87
 {
@@ -105,7 +126,6 @@ double starBlackBody(double Ep, double z)  //M87
 
 	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 		
-
 	return nph*P2(Dlorentz);
 }
 
@@ -127,17 +147,30 @@ double cmbBlackBody(double E)
 }
 
 
-void targetPhotonEnergies(double& EphminS, double& EphminCMB)
-{
-	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
-	static const double Tcmb = GlobalConfig.get<double>("targetPhotonEnergies-Tcmb", 2.7);
 
-	double EpS = boltzmann*starT;
-	EphminS = EpS / 100.0;
-	//double EphmaxS = EpS*Dlorentz * 100.0;
+//void targetPhotonEnergies(double& EphminS, double& EphminCMB)
+//{
+//	static const double starT = GlobalConfig.get<double>("starT", 3.0e3);
+//	static const double Tcmb = GlobalConfig.get<double>("targetPhotonEnergies-Tcmb", 2.7);
+//
+//	double EpS = boltzmann*starT;
+//	EphminS = EpS / 100.0;
+//	//double EphmaxS = EpS*Dlorentz * 100.0;
+//
+//	double EpCMB = boltzmann*Tcmb;
+//	EphminCMB = EpCMB / 100.0;
+//	//double EphmaxCMB = EpCMB*Dlorentz * 100.0;
+//
+//}
 
-	double EpCMB = boltzmann*Tcmb;
-	EphminCMB = EpCMB / 100.0;
-	//double EphmaxCMB = EpCMB*Dlorentz * 100.0;
 
-}
+
+//double gaussian(double x, double mu, double sigma)
+//{
+//	//here sigma es sigma^2 of the normal distribution
+//
+//	double factor = sqrt(2.0*pi*sigma);
+//
+//	return exp(-P2(x - mu) / (2.0*sigma)) / (factor*x);
+//
+//}

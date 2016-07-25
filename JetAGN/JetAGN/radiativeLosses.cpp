@@ -44,7 +44,7 @@ void radiativeLosses(State& st)
 		double logR = log10(r/pc);
 		//double logT = log10(i.val(DIM_T));
 
-		double B = magf; // i.par.magneticField; VER por qué no funciona
+		double B = magf; // i.par.magneticField;
 
 		//double Reff = 10.0*stagnationPoint(i.val(DIM_R));
 		double vel_lat = cLight*openingAngle;

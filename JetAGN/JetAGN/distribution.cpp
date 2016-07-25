@@ -76,21 +76,28 @@ void distribution(Particle& p, State& st)
 				
 				double tp = t / Gamma; //time in the FF
 
-				double Eeff = effectiveE(E, Emax, tp, r, p, st, i);
-				double dist1(0.0), dist2(0.0);
+				if (E < Emax){
+					double Eeff = effectiveE(E, Emax, tp, r, p, st, i);
+					double dist1(0.0), dist2(0.0);
 
-				dist1 = timeDistribution(E, r, tp, p, st, Eeff, i);
-				
-				if (t_ix != 0)
-				{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
-					//if (i.its[2].canPeek(-1)) 
+					dist1 = timeDistribution(E, r, tp, p, st, Eeff, i);
 
-					double dist = N2.interpolate({ { DIM_E, Eeff }, { DIM_R, r }, { DIM_T, i.its[2].peek(-1) } });
-					double ratioLosses = losses(Eeff, r, p, st, i) / losses(E, r, p, st, i);
-					dist2 = dist*ratioLosses;
+					if (t_ix != 0)
+					{	//estos son los puntos donde Q=0, y las particulas vienen de ti-1
+						//if (i.its[2].canPeek(-1)) 
+
+						double dist = N2.interpolate({ { DIM_E, Eeff }, { DIM_R, r }, { DIM_T, i.its[2].peek(-1) } });
+						double ratioLosses = losses(Eeff, r, p, st, i) / losses(E, r, p, st, i);
+						dist2 = dist*ratioLosses;
+					}
+
+					N12.set(i, dist1 + dist2); //lo cargo en N12 mientras interpolo de N2
+					//N12.set(i, dist1); //lo cargo en N12 mientras interpolo de N2
 				}
-
-				N12.set(i, dist1 + dist2); //lo cargo en N12 mientras interpolo de N2
+				else
+				{
+					N12.set(i, 0.0);  //si E>Emax entonces anulo la N
+				}
 
 			}, { -1, z_ix, t_ix });
 
@@ -126,6 +133,8 @@ void distribution(Particle& p, State& st)
 				}
 
 				p.distribution.set(i,dist3); // lleno p.distribution e interpolo en N12
+
+				//p.distribution.set(i, ni); // prueba
 				
 			} , { -1, z_ix, t_ix });
 

@@ -33,7 +33,7 @@ int jetAGN()
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
 			
-		//radiativeLosses(model);
+		radiativeLosses(model);
 
 		//ParamSpaceValues psv(model.electron.ps);
 
@@ -52,14 +52,14 @@ int jetAGN()
 
 		std::cout << "checking injected power:" << '\t' << totalL << std::endl;		
 
-		writeAllSpaceParam("electronInj.txt", model.electron.injection);
+		writeAllSpaceParam(folder+"\\electronInj.txt", model.electron.injection);
 		writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
-		writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para r(0) y t(0)
+		writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para rmax y t(0)
 	
 		
 		distribution(model.electron, model);
 		//distWOLosses(model.electron, model);
-		writeRandTParamSpace(getFileName(folder, "eDist_RT"), model.electron.distribution, model.electron.ps[0].size() / 2);
+		
 
 		static const double Gamma = GlobalConfig.get<double>("Gamma");
 		double totalE = computeInjectedEnergy(model.electron.distribution); 
@@ -69,7 +69,8 @@ int jetAGN()
 	
 		writeAllSpaceParam(getFileName(folder, "eDist"), model.electron.distribution);
 		writeEandTParamSpace(getFileName(folder, "eDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
-		//writeRandTParamSpace(getFileName(folder,"eDist_RT"), model.electron.distribution, model.electron.ps[0].size()/2);
+		writeRandTParamSpace(getFileName(folder, "eDist_RT"), model.electron.distribution, model.electron.ps[0].size() / 2);
+		writeEandRParamSpace(getFileName(folder, "eDist_final"), model.electron.distribution, model.electron.ps[2].size()-1);
 		writeEnt(getFileName(folder, "E_NT_r"), model.electron.distribution);
 
 
@@ -78,7 +79,7 @@ int jetAGN()
 		//	return model.electron.injection.get(i);
 		//});
 
-		processes(model, getFileName(folder,"luminosity"));
+		processes(model, getFileName(folder, "luminosity"));
 
 	}
 	catch (std::runtime_error& e)

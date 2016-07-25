@@ -22,8 +22,8 @@ double intCilindric(double zMin, double zMax, fun1 fun)
 
 	double z = zMin;
 	
-	std::ofstream file;
-	file.open("integral.txt", std::ios::out);
+	//std::ofstream file;
+	//file.open("integral.txt", std::ios::out);
 	
 
 	double L1 = 0.0;
@@ -34,14 +34,14 @@ double intCilindric(double zMin, double zMax, fun1 fun)
 
 		L1 = L1 + fun(z)*(pi*P2(jetRadius(z, theta)))*dz;  
 
-		file << z / pc << '\t' << L1 << std::endl;
+		//file << z / pc << '\t' << L1 << std::endl;
 
 		z = z*z_int;
 
 	}
 
 
-	file.close();
+	//file.close();
 
 	return L1;
 

@@ -58,6 +58,7 @@
     <ClCompile Include="dist_without_losses.cpp">
       <Filter>distribution</Filter>
     </ClCompile>
+    <ClCompile Include="SSC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="nonThermalLuminosity.h">
       <Filter>injection</Filter>
     </ClInclude>
+    <ClInclude Include="SSC.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

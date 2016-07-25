@@ -55,7 +55,7 @@ void injection(Particle& p, State& st)
 	const double RMAX = p.ps[DIM_R].last();
 	const int N_R = p.ps[DIM_R].size()-1;
 
-	//double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
+	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
 
 	//volumen total del jet
 	//double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
@@ -106,8 +106,6 @@ void injection(Particle& p, State& st)
 		}
 
 	});
-
-	
 
 	show_message(msgEnd, Module_electronInjection);
 }

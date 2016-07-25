@@ -5,7 +5,7 @@
 	"h_d":3.1e3,
    "N_s":1.3e9,
    "eph_s":57.7,
-   "pseda":1,
+   "pseda":2,
    
    "subEq":1.0,
 	"targetPhotonEnergies-Tcmb": 2.7,
@@ -23,6 +23,7 @@
 		"eDist":"eDist",
 		"eDist_ET":"eDist_ET",
 		"eDist_RT":"eDist_RT",
+      "eDist_final":"eDist_final",
 		"E_NT_r":"E_NT_r"
 	},
 
@@ -37,12 +38,12 @@
 					"radius":{
 						"min":1.0,
 						"max":3.1e3,
-						"samples":14
+						"samples":30
 					},
 					"time":{
 						"min":1.0,
 						"max":3.1e3,
-						"samples":14
+						"samples":30
 					}
 				}
 			},
@@ -69,14 +70,14 @@
 	"math": {
 		"runge-kutta-1": {
 			"samples": {
-				"x": 50
+				"x": 30
 			}
 		},
 
 		"runge-kutta-2": {
 			"samples": { 
-				"x": 50,
-				"y": 50
+				"x": 30,
+				"y": 30
 			}
 		}
 	},

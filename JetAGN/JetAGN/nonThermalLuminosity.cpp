@@ -29,9 +29,8 @@ double frad(double E, double z)
 	double tcross = h_d / cLight;
 
 
-	//double wph = (eph_s*solarLuminosity)*starDensity(z)*z/cLight;  //para las gigantes rojas de M87 
-	double wph = eph_s*tcross; // Lj / (cLight*4.0*Sj);
-
+	double wph = (eph_s*solarLuminosity)*starDensity(z)*z/cLight;  //para las gigantes rojas de M87 
+	//double wph = eph_s*tcross; 
 
 	double Sj = pi*P2(jetRadius(z, openingAngle));
 
@@ -117,8 +116,8 @@ double nonThermalLuminosity(double intRmin, double intRmax)
 	//double E = 1.0e9*1.6e-12;
 
 	double integral = intCilindric(intRmin, intRmax,
-		[&E](double z){return dLnt(z)*frad(E, z); });
-		//[&E](double z){return dLnt(z); });
+		//[&E](double z){return dLnt(z)*frad(E, z); });
+		[&E](double z){return dLnt(z); });
 	
 	double boost = pow(Dlorentz, 4) / P2(Gamma);
 	double Lnt_total = integral*boost;

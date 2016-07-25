@@ -13,7 +13,8 @@ double adiabaticLosses(double E, double z, double vel_lat)  //en [erg/s]
 
 	double jetRadius = z*openingAngle;
 
-	return Gamma*2.0*(vel_lat*E / (3.0*jetRadius));// / Gamma; //ver si es * o / Gamma 
+	return Gamma*2.0*(vel_lat*E / (3.0*jetRadius));  
+	//en el sist lab es sin Gamma
 	//termina quedando return 2.0*cLight*E / (3.0*z);
 }
 

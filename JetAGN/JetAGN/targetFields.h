@@ -8,4 +8,6 @@ double starDensity(double z);
 
 double starBlackBody(double E, double r);
 
-void targetPhotonEnergies(double& EphminS, double& EphminCMB);
+double starIR(double Ep, double z);
+
+//void targetPhotonEnergies(double& EphminS, double& EphminCMB);

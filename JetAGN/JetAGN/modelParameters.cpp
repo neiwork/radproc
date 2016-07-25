@@ -46,7 +46,7 @@ double eEmax(double z, double B)
 	//double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
-	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat); //*Gamma
+	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma); //
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 	//double Emax_hillas = electronCharge*B*Reff;
 	double min1 = std::min(Emax_syn, Emax_ad);

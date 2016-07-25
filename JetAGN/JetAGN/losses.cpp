@@ -29,10 +29,10 @@ double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i)
 	double B = st.magf.get(i); // parameters.magneticField;
 	if(p.id == "electron")	{
 		return  lossesSyn(E, B, p)
-			+adiabaticLosses(E, r, cLight); 
-			+lossesIC(E, p, 
+			+ adiabaticLosses(E, r, vel_lat);
+			/*+lossesIC(E, p, 
 			[&E, &r](double E){
-			return starBlackBody(E, r); }, phEmin, phEmax)/P2(Dlorentz);
+			return starBlackBody(E, r); }, phEmin, phEmax)/P2(Dlorentz);*/
 				//lossesAnisotropicIC(E, p, r);
 	}
 

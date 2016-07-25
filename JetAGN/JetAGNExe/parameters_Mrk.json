@@ -3,6 +3,7 @@
    "I":3.8e-28,
    "eph_s":3.2e-17,
 	"starT":3.0e4,
+   "IRstarT":200.0,
    "pseda":1.0,
    
    "subEq":1.0e-3,
@@ -21,6 +22,7 @@
 		"eDist":"eDist",
 		"eDist_ET":"eDist_ET",
 		"eDist_RT":"eDist_RT",
+      "eDist_final":"eDist_final",
 		"E_NT_r":"E_NT_r"
 	},
 
@@ -35,12 +37,12 @@
 					"radius":{
 						"min":1.0,
 						"max":23.0,
-						"samples":10
+						"samples":30
 					},
 					"time":{
 						"min":1.0,
 						"max":23.0,
-						"samples":10
+						"samples":30
 					}
 				}
 			},
@@ -67,7 +69,7 @@
 	"math": {
 		"runge-kutta-1": {
 			"samples": {
-				"x": 50
+				"x": 30
 			}
 		},
 
