@@ -56,52 +56,51 @@ double frad(double E, double z)
 }
 
 
-double dLnt(double z)  //esta es para M87
-{	
-
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
-
-	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
-	static const double vWind = GlobalConfig.get<double>("vWind");
-
-	static const double Lj = GlobalConfig.get<double>("Lj");
-
-	//double Sj = pi*P2(jetRadius(z, openingAngle));
-	//double stagPoint = stagnationPoint(z);
-	//double So = 100.0*pi*P2(stagPoint);
-
-	double ratioS = 100.0*MdotWind*vWind*cLight / (4.0) / Lj;  // == So / Sj si tomo las estrellas iguales
-	double Lnt = accEfficiency*(ratioS)*Lj; //
-	double nstar = starDensity(z);
-	double f = nstar*Lnt; //saque el Sj, el doppler boosting y el frad
-
-	double prueba = ratioS*nstar;
-
-	return f;
-	//return prueba;
-}
-
-
-//double dLnt(double z)  //esta la uso para CygA y Mrk
-//{
+//double dLnt(double z)  //esta es para M87
+//{	
 //
 //	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
-//	
-//	static const double int_m = GlobalConfig.get<double>("I");  //erg cm-3 /cm
 //
-//	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  //pc
-//	static const double Lj = GlobalConfig.get<double>("Lj");  
+//	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
+//	static const double vWind = GlobalConfig.get<double>("vWind");
 //
+//	static const double Lj = GlobalConfig.get<double>("Lj");
 //
-//	double prueba = int_m*100.0*cLight / 4.0/Lj;
+//	//double Sj = pi*P2(jetRadius(z, openingAngle));
+//	//double stagPoint = stagnationPoint(z);
+//	//double So = 100.0*pi*P2(stagPoint);
 //
-//	double f = accEfficiency*int_m*100.0*cLight / 4.0;
+//	double ratioS = 100.0*MdotWind*vWind*cLight / (4.0) / Lj;  // == So / Sj si tomo las estrellas iguales
+//	double Lnt = accEfficiency*(ratioS)*Lj; //
+//	double nstar = starDensity(z);
+//	double f = nstar*Lnt; //saque el Sj, el doppler boosting y el frad
 //
-//	if (z > h_d)
-//	{ return 0.0; }
-//	//else{ return prueba; }
-//	else{ return f; }
+//	double prueba = ratioS*nstar;
+//
+//	return f;
+//	//return prueba;
 //}
+
+
+double dLnt(double z)  //esta la uso para CygA y Mrk
+{
+
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
+	
+	static const double int_m = GlobalConfig.get<double>("I");  //erg cm-3 /cm
+
+	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  //pc
+	static const double Lj = GlobalConfig.get<double>("Lj");  
+
+	//double prueba = int_m*100.0*cLight / 4.0/Lj;
+
+	double f = accEfficiency*int_m*100.0*cLight / 4.0;
+
+	if (z > h_d)
+	{ return 0.0; }
+	//else{ return prueba; }
+	else{ return f; }
+}
 
 
 double nonThermalLuminosity(double intRmin, double intRmax)

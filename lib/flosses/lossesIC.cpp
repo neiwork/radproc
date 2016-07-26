@@ -21,7 +21,7 @@ double dIC(double u, double E, double mass)   //limite superior
 	return s*E/(1+s);
 }
 
-double fIC(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
+double fIC(double u, double t, double E, double mass, const SpaceCoord& distCoord, ParamSpaceValues tpf)   //funcion a integrar
 {
 	//DataLosses* data = (DataLosses*)voiddata;
 	//const double E = data->E;
@@ -30,7 +30,9 @@ double fIC(double u,double t, double E, double mass, fun1 tpf)   //funcion a int
 
 	double Erep = mass*cLight2;
 	double r    = t*P2(Erep)/(4*u*E*(E-t));
-	double Nterm = tpf(u);
+
+	double Nterm = tpf.interpolate({ { 0, u } }, &distCoord);
+	//double Nterm = tpf(u);
 
 	double result = (Nterm/u)*(t-u)*(2*r*log(r)+
        	(1+2*r)*(1-r)+(P2((t/(E-t)))*(1-r))/(2*(1+(t/(E-t)))));
@@ -38,7 +40,8 @@ double fIC(double u,double t, double E, double mass, fun1 tpf)   //funcion a int
 	return  result;
 }
 
-double lossesIC(double E, Particle& particle, fun1 tpf, double phEmin, double phEmax)
+//double lossesIC(double E, Particle& particle, fun1 tpf, double phEmin, double phEmax)
+double lossesIC(double E, Particle& particle, const SpaceCoord& distCoord, ParamSpaceValues tpf, double phEmin, double phEmax)
 {
 	double mass = particle.mass;
 
@@ -49,7 +52,7 @@ double lossesIC(double E, Particle& particle, fun1 tpf, double phEmin, double ph
 
 	double integral = RungeKutta(a,b,&cIC,
 		[mass, E](double u){return dIC(u, E, mass);},
-		[E, mass, tpf](double u, double t){ return fIC(u, t, E, mass, tpf); });    //le asigno a la variable integral el resultado de la integracion   
+		[E, mass, &distCoord, tpf](double u, double t){ return fIC(u, t, E, mass, distCoord, tpf); });    //le asigno a la variable integral el resultado de la integracion   
 
 	double gamma = E/(mass*cLight2);
 

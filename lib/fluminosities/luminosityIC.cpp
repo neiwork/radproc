@@ -1,6 +1,6 @@
 #include "luminosityIC.h"
 
-#include <finjection\dataInjection.h>
+//#include <finjection\dataInjection.h>
 #include <fmath\RungeKutta.h>
 #include <fmath\interpolation.h>
 #include <flosses\crossSectionInel.h>
@@ -29,7 +29,7 @@ double dICemi(double u, double E)         //limite superior
 
 
 
-double fICemi(double u, double t, double E, const Particle& creator, const SpaceCoord& distCoord, fun1 tpf)   //funcion a integrar  u=Ee
+double fICemi(double u, double t, double E, const Particle& creator, const SpaceCoord& distCoord, ParamSpaceValues tpf)   //funcion a integrar  u=Ee
 {    
 	double distCreator;
 	if (u < creator.emin() || u> creator.emax()){
@@ -47,7 +47,8 @@ double fICemi(double u, double t, double E, const Particle& creator, const Space
 
 	double r = E/(s*u*(1-E/u));   //equivalente al q
 
-	double pepe = (tpf(t));  //VER
+	double pepe = tpf.interpolate({ { 0, t } }, &distCoord); 
+	//double pepe = (tpf(t));  //VER
 
 	double function = distCreator*(pepe/t)
             			*(2*r*log(r)+(1+2*r)*(1-r)+(1-r)*P2(r*s)/(2*(1+r*s)))/P2(u);
@@ -57,7 +58,7 @@ double fICemi(double u, double t, double E, const Particle& creator, const Space
 	return function;
 }
 
-double luminosityIC(double E, const Particle& creator, const SpaceCoord& distCoord, fun1 tpf, double phEmin)
+double luminosityIC(double E, const Particle& creator, const SpaceCoord& distCoord, ParamSpaceValues tpf, double phEmin)
 {
 	
 	double mass = creator.mass;

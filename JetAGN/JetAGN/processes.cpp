@@ -75,7 +75,7 @@ void processes(State& st, const std::string& filename)
 {
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double starT = GlobalConfig.get<double>("starT");
-	//static const double IRstarT = GlobalConfig.get<double>("IRstarT");
+	static const double IRstarT = GlobalConfig.get<double>("IRstarT");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	show_message(msgStart, Module_luminosities);
@@ -88,21 +88,32 @@ void processes(State& st, const std::string& filename)
 	file.open(filename.c_str(), std::ios::out);
 
 	double EphminS = boltzmann*starT / 100.0;
-	//double EphminIR = boltzmann*IRstarT / 100.0;
+	double EphminIR = boltzmann*IRstarT / 100.0;
+	
+	ParamSpaceValues starBB(st.photon.ps);
+	tpfPSV(starBB, starBlackBody, st.photon, 1.0);
+
+	ParamSpaceValues starIRpsv(st.photon.ps);
+	tpfPSV(starIRpsv, starIR, st.photon, 1.0);
+
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
 		const double E = i.val(DIM_E);
 		const double r = i.val(DIM_R);
 		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
-		const double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
+
+		const double eICs = luminosityIC(E, st.electron, i.coord, starBB, EphminS);
+		const double eIC_IR = luminosityIC(E, st.electron, i.coord, starIRpsv, EphminIR);
+		
+		/*const double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
 			return starBlackBody(E, r); }, EphminS);
-		//const double eIC_IR = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
-		//		return starIR(E, r); }, EphminIR);
+		const double eIC_IR = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
+				return starIR(E, r); }, EphminIR);*/
 
 		Qsyn.set(i, eSyn);
 		QicS.set(i, eICs);
-		//QicIR.set(i, eIC_IR);
+		QicIR.set(i, eIC_IR);
 
 	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
 
@@ -111,7 +122,7 @@ void processes(State& st, const std::string& filename)
 	file << "log(E/eV)"
 		<< '\t' << "log(Lsyn/erg s-1)"
 		<< '\t' << "log(Lic/erg s-1)"
-		//<< '\t' << "log(LicIR/erg s-1)"
+		<< '\t' << "log(LicIR/erg s-1)"
 		//<< '\t' << "log(LiSSC/erg s-1)"
 		<< std::endl;
 
@@ -132,7 +143,7 @@ void processes(State& st, const std::string& filename)
 
 			double Lsyn   = emiToLumi(pps, Qsyn, E, t_ix);
 			double LicS = emiToLumi(pps, QicS, E, t_ix);
-			//double LicIR = emiToLumi(pps, QicIR, E, t_ix);
+			double LicIR = emiToLumi(pps, QicIR, E, t_ix);
 			//double Lssc = emiToLumi(pps, Qssc, E, t_ix);
 
 			double fmtE = log10(Elab / 1.6e-12);
@@ -140,7 +151,7 @@ void processes(State& st, const std::string& filename)
 			file << fmtE //<< '\t' << log10(t)
 				<< '\t' << safeLog10(Llab(Lsyn))
 				<< '\t' << safeLog10(Llab(LicS))
-				//<< '\t' << safeLog10(Llab(LicIR))
+				<< '\t' << safeLog10(Llab(LicIR))
 				//<< '\t' << safeLog10(Llab(Lssc))
 				<< std::endl;
 

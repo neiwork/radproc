@@ -1,6 +1,7 @@
 #include "SSC.h"
 
 #include "processes.h"
+#include "targetFields.h"
 
 #include <fluminosities\luminositySynchrotron.h>
 #include <fluminosities\luminosityIC.h>
@@ -17,31 +18,35 @@
 
 
 
-double nSSC(double E, ParamSpace pps, ParamSpaceValues Qsyn)
+double nSSC(double E, double r, ParamSpace pps, ParamSpaceValues Qsyn)
 {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	int t_ix = pps[DIM_R].size() - 1;
 
 	double t = pps[2][t_ix];  //t es el ultimo valor
 
 	double Lsyn = emiToLumi(pps, Qsyn, E, t_ix);
-	return Lsyn;
+	return Lsyn/(P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight);
 
 }
 
 void SSC(State st, ParamSpaceValues& Qssc, ParamSpaceValues Qsyn)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-
 	const ParamSpace& pps = st.photon.ps;
+
+	ParamSpaceValues SynL(st.photon.ps);
+	tpfPSV(SynL, 
+		[&pps, &Qsyn](double E, double z){return nSSC(E, z, pps, Qsyn); }
+		, st.photon, 1.0);
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
 		const double E = i.val(DIM_E);
 		const double r = i.val(DIM_R);
 
-		const double eSSC = luminosityIC(E, st.electron, i,
-			[&Qsyn, &pps, &r](double E){return nSSC(E, pps, Qsyn) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
-		, st.photon.emin());
+		const double eSSC = luminosityIC(E, st.electron, i, SynL, st.photon.emin());
+			//[&Qsyn, &pps, &r](double E){return nSSC(E, pps, Qsyn) / ; }
+		
 
 		//const double eSSC = luminosityIC(E, st.electron, i.coord, [&](double E){
 		//	return luminositySynchrotron(E, st.electron, i.coord, st.magf) /

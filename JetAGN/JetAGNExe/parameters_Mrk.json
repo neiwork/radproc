@@ -1,12 +1,14 @@
 {
 	"h_d":23,
+   "R_d":320,
    "I":3.8e-28,
    "eph_s":3.2e-17,
 	"starT":3.0e4,
    "IRstarT":200.0,
+   "LIR":1.0e11,
    "pseda":1.0,
    
-   "subEq":1.0e-3,
+   "subEq":1.0,
 	"targetPhotonEnergies-Tcmb": 2.7,
 
    "injector":"multiple",
@@ -32,16 +34,16 @@
 				"mass":0,
 				"dim": {
 					"energy":{
-						"samples":20
+						"samples":30
 					},
 					"radius":{
 						"min":1.0,
-						"max":23.0,
+						"max":100.0,
 						"samples":30
 					},
 					"time":{
 						"min":1.0,
-						"max":23.0,
+						"max":100.0,
 						"samples":30
 					}
 				}
@@ -50,7 +52,7 @@
 				"dim":{
 					"energy": {
 						"min":-4.0,
-						"max":13.0
+						"max":15.0
 					}
 				}
 			},

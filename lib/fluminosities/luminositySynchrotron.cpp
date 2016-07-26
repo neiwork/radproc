@@ -25,7 +25,7 @@ double fSyn(double x, double E, const Particle& creator, const ParamSpaceValues&
 
 	double cte = pow(3.0, 0.5)*P3(electronCharge)*magneticField / (planck*creator.mass*cLight2);
 
-	double Echar = 3 * electronCharge*planck*magneticField*P2(x) / (4 * pi*P3(creator.mass)*cLight*P2(cLight2));
+	double Echar = 3.0 * electronCharge*planck*magneticField*P2(x) / (4.0 * pi*P3(creator.mass)*cLight*P2(cLight2));
 	
 	double aux = E/Echar;  //aca el aux es el x real
 
