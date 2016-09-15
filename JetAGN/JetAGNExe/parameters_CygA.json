@@ -1,18 +1,20 @@
 {
+	"id":"CygA",
 	"h_d":100,
-   "I":2.8e-29,
-   "eph_s":2.4e-18,
+	"R_d":300,
+	"I":2.8e-29,
+	"eph_s":2.4e-18, 
 	"starT":3.0e4,
-   "IRstarT":200.0,
-   "pseda":1.0,
-   
-   "subEq":1.0,
-	"targetPhotonEnergies-Tcmb": 2.7,
+	"IRstarT":200.0,
+	"IRlum":1.0e12,
+	"pseda":1.0,
 
-   "injector":"multiple",
-   "Lj": 1.0e46,
+	"subEq":1.0,
+
+	"injector":"multiple",
+	"Lj": 1.0e46,
 	"openingAngle": 0.1,
-   "inc": 0,
+	"inc": 0,
 	"Gamma": 10,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
@@ -32,19 +34,19 @@
 				"mass":0,
 				"dim": {
 					"energy":{
-						"samples":30
+						"samples":100
 					},
 					"radius":{
 						"min":1.0,
-						"max":1.0e2,
-						"samples":30
+						"max":300,
+						"samples":100
 					},
 					"time":{
 						"min":1.0,
-						"max":1.0e2,
-						"samples":30
-					}
+						"max":300,
+						"samples":100
 				}
+					}
 			},
 			"photon": {
 				"dim":{
@@ -59,7 +61,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":15
+						"max":16.0
 					}
 				}
 			}
@@ -69,23 +71,23 @@
 	"math": {
 		"runge-kutta-1": {
 			"samples": {
-				"x": 30
+				"x": 50
 			}
 		},
 
 		"runge-kutta-2": {
 			"samples": { 
-				"x": 30,
-				"y": 30
+				"x": 50,
+				"y": 50
 			}
 		}
 	},
 
 	"integrate-losses": {
 		"samples": {
-			"x": 20,
-			"t": 20,
-			"y": 20
+			"x": 30,
+			"t": 30,
+			"y": 30
 		}
 	}
 }

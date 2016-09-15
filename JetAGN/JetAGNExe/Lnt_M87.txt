@@ -1,0 +1,7 @@
+pseda 1
+E	7.58523e+11	Lnt total	1.0846e+42
+Doppler	8.10779
+
+pseda 2
+E	7.58523e+11	Lnt total	8.88342e+41
+Doppler	8.10779

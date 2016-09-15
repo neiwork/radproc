@@ -12,6 +12,8 @@
 #include <iostream>
 #include <algorithm>
 
+const DimensionCoord
+DIM_E = 0;
 
 inline double computeModelB0(double Lj, double openingAngle) {
 	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0

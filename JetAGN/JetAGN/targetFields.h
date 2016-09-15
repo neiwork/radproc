@@ -2,11 +2,11 @@
 
 
 
-double cmbBlackBody(double Ep);
+double cmbBlackBody(double Ep, double z);
 
 double starDensity(double z);
 
-double starBlackBody(double E, double r);
+double starBlackBody(double Ep, double r);
 
 double starIR(double Ep, double z);
 

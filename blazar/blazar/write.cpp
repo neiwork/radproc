@@ -119,5 +119,28 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 	generateViewScript(filename);
 }
 
+void readData(const std::string& archive, Matrix& data)
+{
+	std::ifstream fileReaded;
+	fileReaded.open(archive.c_str(), std::ios::in);
+
+	double logE, loglum, errLum;
+	int j = 0;
+
+	while (!fileReaded.eof())  //esto termina cuando llega al final
+	{
+		fileReaded >> logE;
+		fileReaded >> loglum;
+		fileReaded >> errLum;
+
+		data[j][0] = pow(10.0, logE)*1.6e-12;
+		data[j][1] = pow(10.0, loglum);
+		data[j][2] = errLum;
+
+		j += 1;
+	}
+
+	fileReaded.close();
+}
 
 

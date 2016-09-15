@@ -34,7 +34,7 @@ for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
 
 double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, double E, int t_ix)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	double sum = 0.0;
 
@@ -69,26 +69,39 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, double E, int t_i
 }
 
 
-
-
 void processes(State& st, const std::string& filename)
 {
+	static const std::string id = GlobalConfig.get<std::string>("id");
+
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double starT = GlobalConfig.get<double>("starT");
-	//static const double IRstarT = GlobalConfig.get<double>("IRstarT");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	
 
 	show_message(msgStart, Module_luminosities);
 
 	ParamSpaceValues Qsyn(st.photon.ps);
 	ParamSpaceValues QicS(st.photon.ps);
-	ParamSpaceValues QicIR(st.photon.ps);
+	ParamSpaceValues QicAux(st.photon.ps);
 	
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
 
 	double EphminS = boltzmann*starT / 100.0;
-	//double EphminIR = boltzmann*IRstarT / 100.0;
+	double EphminAux;
+
+	if (id == "M87") {
+		std::cout << "M87" << std::endl;
+		static const double cmbT = GlobalConfig.get<double>("cmbT");
+		EphminAux = boltzmann*cmbT / 100.0;
+	}
+	else {
+		static const double IRstarT = GlobalConfig.get<double>("IRstarT");
+		EphminAux = boltzmann*IRstarT / 100.0;
+	}
+		
+
+	
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
@@ -97,12 +110,24 @@ void processes(State& st, const std::string& filename)
 		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 		const double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
 			return starBlackBody(E, r); }, EphminS);
-		//const double eIC_IR = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
-		//		return starIR(E, r); }, EphminIR);
+
+		double eIC_Aux;
+		
+		//std::cout << id << std::endl;
+
+		if (id == "M87") {
+			std::cout << "M87" << std::endl;
+			eIC_Aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
+				return cmbBlackBody(E, r); }, EphminAux);
+		}
+		else {
+			eIC_Aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
+				return starIR(E, r); }, EphminAux);
+		}
 
 		Qsyn.set(i, eSyn);
 		QicS.set(i, eICs);
-		//QicIR.set(i, eIC_IR);
+		QicAux.set(i, eIC_Aux);
 
 	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
 
@@ -111,7 +136,7 @@ void processes(State& st, const std::string& filename)
 	file << "log(E/eV)"
 		<< '\t' << "log(Lsyn/erg s-1)"
 		<< '\t' << "log(Lic/erg s-1)"
-		//<< '\t' << "log(LicIR/erg s-1)"
+		<< '\t' << "log(LicAux/erg s-1)"
 		//<< '\t' << "log(LiSSC/erg s-1)"
 		<< std::endl;
 
@@ -132,7 +157,7 @@ void processes(State& st, const std::string& filename)
 
 			double Lsyn   = emiToLumi(pps, Qsyn, E, t_ix);
 			double LicS = emiToLumi(pps, QicS, E, t_ix);
-			//double LicIR = emiToLumi(pps, QicIR, E, t_ix);
+			double LicAux = emiToLumi(pps, QicAux, E, t_ix);
 			//double Lssc = emiToLumi(pps, Qssc, E, t_ix);
 
 			double fmtE = log10(Elab / 1.6e-12);
@@ -140,7 +165,7 @@ void processes(State& st, const std::string& filename)
 			file << fmtE //<< '\t' << log10(t)
 				<< '\t' << safeLog10(Llab(Lsyn))
 				<< '\t' << safeLog10(Llab(LicS))
-				//<< '\t' << safeLog10(Llab(LicIR))
+				<< '\t' << safeLog10(Llab(LicAux))
 				//<< '\t' << safeLog10(Llab(Lssc))
 				<< std::endl;
 

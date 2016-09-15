@@ -9,6 +9,7 @@
     <ClCompile Include="distribution.cpp" />
     <ClCompile Include="photonInjection.cpp" />
     <ClCompile Include="write.cpp" />
+    <ClCompile Include="chiSquare.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blazar.h" />
@@ -19,5 +20,6 @@
     <ClInclude Include="distribution.h" />
     <ClInclude Include="photonInjection.h" />
     <ClInclude Include="write.h" />
+    <ClInclude Include="chiSquare.h" />
   </ItemGroup>
 </Project>

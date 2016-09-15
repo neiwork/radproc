@@ -23,14 +23,21 @@ double frad(double E, double z)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double Lj = GlobalConfig.get<double>("Lj");
 
-	static const double eph_s = GlobalConfig.get<double>("eph_s"); 
-	static const double h_d = GlobalConfig.get<double>("h_d") *pc; 
+	static const double eph_s = GlobalConfig.get<double>("eph_s");
+	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
 
-	double tcross = h_d / cLight;
+	static const std::string id = GlobalConfig.get<std::string>("id");
 
+	double wph;
 
-	double wph = (eph_s*solarLuminosity)*starDensity(z)*z/cLight;  //para las gigantes rojas de M87 
-	//double wph = eph_s*tcross; 
+	if (id == "M87") {
+		std::cout << "M87" << std::endl;
+		wph = (eph_s*solarLuminosity)*starDensity(z)*z / cLight;  //para las gigantes rojas de M87 
+	}
+	else {
+		double tcross = h_d / cLight;
+		wph = eph_s*tcross;
+	}
 
 	double Sj = pi*P2(jetRadius(z, openingAngle));
 
@@ -42,7 +49,7 @@ double frad(double E, double z)
 
 	//<<<<<<< HEAD
 
-	double wph2 = Lj / (cLight*4.0*Sj);
+	//double wph2 = Lj / (cLight*4.0*Sj);
 	
 	//double wmag = P2(computeMagField(z)*P2(Gamma)) / (8.0*pi); // [av] ver si se justifica intentar usar el cubo magf, creo que no.
 	//double tsin = 4.0 * thomson*cLight*wmag*(E / P2(electronMass*cLight2)) / 3.0;
@@ -56,8 +63,8 @@ double frad(double E, double z)
 }
 
 
-double dLnt(double z)  //esta es para M87
-{	
+double dLntM87(double z)  
+{	//esta es para M87
 
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
@@ -82,26 +89,37 @@ double dLnt(double z)  //esta es para M87
 }
 
 
-//double dLnt(double z)  //esta la uso para CygA y Mrk
-//{
-//
-//	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
-//	
-//	static const double int_m = GlobalConfig.get<double>("I");  //erg cm-3 /cm
-//
-//	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  //pc
-//	static const double Lj = GlobalConfig.get<double>("Lj");  
-//
-//
-//	double prueba = int_m*100.0*cLight / 4.0/Lj;
-//
-//	double f = accEfficiency*int_m*100.0*cLight / 4.0;
-//
-//	if (z > h_d)
-//	{ return 0.0; }
-//	//else{ return prueba; }
-//	else{ return f; }
-//}
+double dLntStarburst(double z)  
+{//esta la uso para CygA y Mrk
+
+	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
+	
+	static const double int_m = GlobalConfig.get<double>("I");  //erg cm-3 /cm
+	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  //pc
+	static const double Lj = GlobalConfig.get<double>("Lj");  
+	
+	//double prueba = int_m*100.0*cLight / 4.0/Lj;
+
+	double f = accEfficiency*int_m*100.0*cLight / 4.0;
+
+	if (z > h_d)
+	{ return 0.0; }
+	//else{ return prueba; }
+	else{ return f; }
+}
+
+double dLnt(double z)
+{
+	static const std::string id = GlobalConfig.get<std::string>("id");
+
+	if (id == "M87") {
+		std::cout << "M87" << std::endl;
+		return dLntM87(z);
+	}
+	else {
+		return dLntStarburst(z);
+	}
+}
 
 
 double nonThermalLuminosity(double intRmin, double intRmax)

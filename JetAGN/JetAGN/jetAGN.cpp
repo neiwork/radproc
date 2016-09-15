@@ -33,7 +33,7 @@ int jetAGN()
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
 			
-		radiativeLosses(model);
+		//radiativeLosses(model);
 
 		//ParamSpaceValues psv(model.electron.ps);
 

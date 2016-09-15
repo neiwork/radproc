@@ -1,7 +1,7 @@
 #include "blazar.h"
 #include "ioutil.h"
 
-
+#include "chiSquare.h"
 #include "write.h"
 #include "photonInjection.h"
 #include "photonInjection.h"
@@ -23,7 +23,8 @@ void blazar() {
 
 	std::string folder{ prepareOutputfolder() };
 
-	//GlobalConfig = readConfig();
+	Matrix data;
+	readData("BlLac.txt", data);
 
 	GlobalConfig = readConfig();
 	prepareGlobalCfg();
@@ -52,8 +53,10 @@ void blazar() {
 	writeAllSpaceParam(getFileName(folder, "electronDist"), model.electron.distribution);
 	writeAllSpaceParam(getFileName(folder, "SED"), model.photon.distribution);
 
-	
+	Matrix data;
+	readData("PKS0048-097_lum.txt", data);
+	double chi = chiSquare(model.photon.distribution, data, 2);
 
-
+	std::cout << chi;
 
 }

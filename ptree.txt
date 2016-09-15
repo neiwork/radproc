@@ -1,0 +1,9 @@
+external a la misma altura que lib
+
+despues de descomprimir
+la boost corre booststrap.bat desde una consola
+y despues de eso
+.\b2
+luego recien podes hacer build de tu proy
+eso se explica aca, pero no es necesario q lo leas
+http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html#simplified-build-from-source
