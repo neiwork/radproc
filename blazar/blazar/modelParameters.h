@@ -9,7 +9,7 @@
 //class Photon : public ParticleCfg<Photon> {};
 
 const DimensionCoord
-	DIM_E = 0,
+DIM_E = 0,
 	DIM_R = 1,
 	DIM_T = 2;
 

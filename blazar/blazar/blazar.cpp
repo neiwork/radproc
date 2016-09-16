@@ -23,8 +23,6 @@ void blazar() {
 
 	std::string folder{ prepareOutputfolder() };
 
-	Matrix data;
-	readData("BlLac.txt", data);
 
 	GlobalConfig = readConfig();
 	prepareGlobalCfg();
@@ -51,11 +49,17 @@ void blazar() {
 	photonDistribution(model.photon, model);
 
 	writeAllSpaceParam(getFileName(folder, "electronDist"), model.electron.distribution);
-	writeAllSpaceParam(getFileName(folder, "SED"), model.photon.distribution);
+	dopplerBoost(getFileName(folder, "SED"), model.photon.distribution);
+	//writeAllSpaceParam(getFileName(folder, "SED"), model.photon.distribution);
 
-	Matrix data;
-	readData("PKS0048-097_lum.txt", data);
-	double chi = chiSquare(model.photon.distribution, data, 2);
+
+	static const int height = GlobalConfig.get<int>("height");
+	static const int width = GlobalConfig.get<int>("width");
+	
+	Matrix obs;
+	matrixInit(obs, height, width, 0.0);
+	readData("PKS0048-097_lum.txt", obs);
+	double chi = chiSquareFit(model.photon.distribution, obs, 2);
 
 	std::cout << chi;
 

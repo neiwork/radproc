@@ -28,19 +28,17 @@ void photonTarget(Particle& p, State& st)
 	static const double zInt = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });
-	double Emin = p.emin();
-	double Emax = eEmax(zInt, B);
+	//double Emin = p.emin();
+	//double Emax = p.emax();//es la del foton eEmax(zInt, B);
 
-
-	//double vol = pi*P2(jetRadius(zInt, openingAngle))*zInt;
 	double radius = jetRadius(zInt, openingAngle);
-
+	//double vol = pi*P2(radius)*zInt;
 
 	p.injection.fill([&](const SpaceIterator& i){
 
 		double E = i.val(DIM_E);
 
-		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf);
+		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf); //erg/s
 
 		double total = Qsyn/(P2(E) *4.0*pi*P2(radius)*cLight); //lo paso a 1/erg cm^3
 
@@ -56,13 +54,15 @@ void photonDistribution(Particle& p, State& st)
 	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });
-	double Emin = p.emin();
-	double Emax = eEmax(Rdiss, B);
+	//double Emin = p.emin();
+	//double Emax = eEmax(Rdiss, B);
 
 	//volumen 
-	double vol = pi*P2(jetRadius(Rdiss, openingAngle))*Rdiss;
+	//double vol = pi*P2(jetRadius(Rdiss, openingAngle))*Rdiss;
+	//no es necesario el volumen, [Q]= 1/ erg s
 
 	const ParamSpaceValues psv = st.photon.injection;
+
 
 	p.distribution.fill([&](const SpaceIterator& i){
 
@@ -72,9 +72,9 @@ void photonDistribution(Particle& p, State& st)
 
 		double Qic = luminosityIC(E, st.electron, i,
 			[&psv, &i](double E){return tpf(E, psv, i); }
-		, st.photon.emin());
+		, st.photon.emin()/100.0);
 
-		double total = (Qsyn + Qic);// *vol;
+		double total = (Qsyn+Qic);
 
 		return total;
 	});

@@ -12,8 +12,8 @@
 #include <iostream>
 #include <algorithm>
 
-const DimensionCoord
-DIM_E = 0;
+//const DimensionCoord
+//DIM_E = 0;
 
 inline double computeModelB0(double Lj, double openingAngle) {
 	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
@@ -22,8 +22,8 @@ inline double computeModelB0(double Lj, double openingAngle) {
 inline double fmagneticField(double z, double B_o)
 {
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
-	double B = B_o / z / P2(Gamma); //VER
-	return B;// 1.0e-2*
+	double B = B_o / z / P2(Gamma); 
+	return B;
 }
 
 double computeMagField(double z) {
@@ -45,15 +45,14 @@ double eEmax(double z, double B)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-
 	double size = openingAngle*z;
 
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
-	double Emax_hillas = electronCharge*B*size;
-	double min1 = std::min(Emax_syn, Emax_syn);
+//	double Emax_hillas = electronCharge*B*size;
+	double min1 = std::min(Emax_syn, Emax_ad);
 
 	return min1;
 
@@ -61,25 +60,16 @@ double eEmax(double z, double B)
 		
 }
 
-//double stagnationPoint(double z)
-//{
-//	static const double openingAngle = GlobalConfig.get<double>("openingAngle", 0.1);
-//	static const double Lj = GlobalConfig.get<double>("Lj", 1.0e43);
-//
-//	double Mdot_wind = 1.0e-8*solarMass / yr;
-//	double v_wind = 2.0e7;
-//
-//	double stagPoint = sqrt(Mdot_wind*v_wind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
-//
-//	return stagPoint;
-//
-//}
 
 
 double computeDlorentz(double gamma) {
-	double inc = 10.0*pi / 180; //ang obs del jet
+
+	static const double inc = GlobalConfig.get<double>("inc")*pi / 180.0;
+	static const double op = GlobalConfig.get<double>("openingAngle");
+
+	double theta = std::max(inc,op); //ang obs del jet
 	double beta = 1.0 - 1.0 / P2(gamma);
-	double Dlorentz = 1.0 / (gamma*(1.0 - cos(inc)*beta));
+	double Dlorentz = 1.0 / (gamma*(1.0 - cos(theta)*beta));
 	return Dlorentz;
 }
 

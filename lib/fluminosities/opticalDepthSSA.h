@@ -7,4 +7,4 @@
 Factor to account for the effect of synchrotron self absorption (SSA) within the corona */ 
 
 
-//double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Particle& creator);
+double opticalDepthSSA(double E, double mass, double Emin, double Emax, const Particle& creator);

@@ -49,93 +49,57 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	generateViewScript(filename);
 }
 
-
-
-
-void writeEnt(const std::string& filename, const ParamSpaceValues& data)
+double Llab(double Lint)
 {
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	double boost = pow(Dlorentz, 4.0);
+	return Lint*boost;
+}
 
+void dopplerBoost(const std::string& filename, const ParamSpaceValues& data)
+{
 	std::ofstream file;
 	file.open(dataName(filename).c_str(), std::ios::out);
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
-//<<<<<<< HEAD
-	file << "log(z/pc)" << '\t';
-//=======
-//	for (int i = 0; i < particle.eDim()->size(); ++i){
-//>>>>>>> globals
+	data.ps.iterate([&file, &data](const SpaceIterator& i) {
 
-	for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
-		double time = data.ps[2][t_ix];
-		file << "t=" << log10(time) << '\t';
-	}
+		double Elab = i.val(DIM_E)*Dlorentz; //Dlorentz=delta
+		double logE = log10(Elab / 1.6e-12);
+		double lognu = log10(Elab / planck);
 
-	const double Emin = data.ps[DIM_E].first();
+		double logQ = log10(Llab(data.get(i)));
 
-	const double RMIN = data.ps[DIM_R].first();
-	const double RMAX = data.ps[DIM_R].last();
-	const int N_R = data.ps[DIM_R].size() - 1;
 
-	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
+		file << logE << '\t' << lognu << '\t' <<
+			logQ << std::endl;
+		//logQ << std::endl;
+	});
 
-	for (size_t r_ix = 0; r_ix < data.ps[1].size()-1; r_ix++) {
-
-		file << std::endl;
-
-		double z = data.ps[1][r_ix];
-		double logR =  (z / pc);
-
-		double dz = z * (z_int - 1);
-
-		//volumen de la celda i
-		double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;;
-
-		// [av] ver: no se usaba?
-		//double Emax = eEmax(z, magneticField);
-
-		file << logR << '\t';
-
-		for (size_t t_ix = 0; t_ix < data.ps[2].size(); t_ix++) {
-
-			double sum = 0.0;
-
-			for (size_t E_ix = 0; E_ix < data.ps[0].size(); E_ix++) {
-
-				double E = data.ps[0][E_ix];
-				double T = data.ps[2][t_ix];
-
-				double dist = data.interpolate({ { DIM_E, E }, { DIM_R, z }, { DIM_T, T } });
-
-				sum = sum + dist*E*vol_i;
-			}
-
-			file << log10(sum*Gamma) << '\t';
-			       //multiplico nuevamente por Gamma para obtener la Ent en el sist lab
-		}
-
-	}
 	file.close();
 	generateViewScript(filename);
 }
+
 
 void readData(const std::string& archive, Matrix& data)
 {
 	std::ifstream fileReaded;
 	fileReaded.open(archive.c_str(), std::ios::in);
+	
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	double boost = pow(Dlorentz, 4.0);
 
 	double logE, loglum, errLum;
 	int j = 0;
 
+
 	while (!fileReaded.eof())  //esto termina cuando llega al final
 	{
-		fileReaded >> logE;
-		fileReaded >> loglum;
-		fileReaded >> errLum;
+		fileReaded >> logE >> loglum >> errLum;
 
-		data[j][0] = pow(10.0, logE)*1.6e-12;
-		data[j][1] = pow(10.0, loglum);
-		data[j][2] = errLum;
+		data[j][0] = pow(10.0, logE)*1.6e-12/Dlorentz; //paso del lab al ff
+		data[j][1] = pow(10.0, loglum)/boost;
+		data[j][2] = errLum / boost;
 
 		j += 1;
 	}

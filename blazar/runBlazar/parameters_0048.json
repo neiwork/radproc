@@ -1,0 +1,67 @@
+{
+	"height":102,
+	"width":3,
+	
+	"Mbh": 1.0E+8,
+	"Lj": 1.0E+45,
+	"openingAngle": 0.1,
+	"inc":0.0,
+	"Gamma": 10,
+	"Rdiss_rg": 1000.0,
+	"accEfficiency": 0.1,
+	"primaryIndex": 2.3,
+	
+	"file": {
+		"SED": "SED",
+		"electronDist": "electronDist"
+	},
+	"model": {
+		"particle": {
+			"default": {
+				"mass": 0,
+				"dim": {
+					"energy": {
+						"samples": 100
+					}
+				}
+			},
+			"photon": {
+				"dim": {
+					"energy": {
+						"min": -6.0,
+						"max": 16.0
+					}
+				}
+			},
+			"electron": {
+				"mass": 9.1094E-28,
+				"dim": {
+					"energy": {
+						"min": 6.0,
+						"max": 16.0
+					}
+				}
+			}
+		}
+	},
+	"math": {
+		"runge-kutta-1": {
+			"samples": {
+				"x": 50
+			}
+		},
+		"runge-kutta-2": {
+			"samples": {
+				"x": 50,
+				"y": 50
+			}
+		}
+	},
+	"integrate-losses": {
+		"samples": {
+			"x": 50,
+			"t": 50,
+			"y": 50
+		}
+	}
+}

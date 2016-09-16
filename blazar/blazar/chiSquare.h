@@ -1,3 +1,6 @@
 #pragma once
 
-double chiSquare(const ParamSpaceValues psv, Matrix data, int dof);
+#include <fmath\physics.h>
+#include <fparameters\ParamSpaceValues.h>
+
+double chiSquareFit(ParamSpaceValues psv, Matrix data, int dof);

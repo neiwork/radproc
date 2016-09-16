@@ -56,9 +56,7 @@ void readData(const std::string& archive, Matrix& data);
 /*It writes data for all param space*/
 void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data);
 
-
-
-void writeEnt(const std::string& filename, const ParamSpaceValues& data);
+void dopplerBoost(const std::string& filename, const ParamSpaceValues& data);
 
 
 

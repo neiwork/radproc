@@ -58,10 +58,6 @@ void injection(Particle& p, State& st)
 
 	double Q0 = normalization(p, Rdiss, B);
 	
-	//volumen 
-	double vol = pi*P2(jetRadius(Rdiss, openingAngle))*Rdiss;
-
-
 	p.injection.fill([&](const SpaceIterator& i){
 		
 		double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0;// *vol;
