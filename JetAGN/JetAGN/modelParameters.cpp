@@ -13,6 +13,19 @@
 #include <iostream>
 #include <algorithm>
 
+
+double stagnationPoint(double z)
+{
+	static const double Mdot = GlobalConfig.get<double>("Mdot")*solarMass/yr;
+	static const double vWind = GlobalConfig.get<double>("vWind");
+	static const double Lj = GlobalConfig.get<double>("Lj");
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+
+	return jetRadius(z, openingAngle)*sqrt(Mdot*vWind*cLight / (4.0*Lj));
+
+}
+
+
 inline double computeModelB0(double Lj, double openingAngle) {
 	return sqrt(8.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
 }
@@ -20,7 +33,7 @@ inline double computeModelB0(double Lj, double openingAngle) {
 inline double fmagneticField(double z, double B_o)
 {
 	static const double subEq = GlobalConfig.get<double>("subEq");
-	return subEq*B_o / z;
+	return sqrt(subEq)*B_o / z;  //la equiparicion es respecto a Lj ~B^2
 }
 
 double computeMagField(double z) {
@@ -29,8 +42,9 @@ double computeMagField(double z) {
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
-	return Blab / P2(Gamma);  //este es el B en el sistema del jet
-}
+	return Blab / Gamma;  //este es el B en el sistema del jet
+} //la densidad de energia (~B^2) transforma con Gamma^2, 
+  //B transforma como Gamma
 
 double jetRadius(double z, double openingAngle)
 {
@@ -43,38 +57,27 @@ double eEmax(double z, double B)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-	//double Reff = 10.0*stagnationPoint(z);
+	double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma); //
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
-	//double Emax_hillas = electronCharge*B*Reff;
+	
+	double ampl = Gamma; //factor de amplificaci'on de B en la zona del choque
+	double Emax_diff = electronCharge*B*Reff*sqrt(3.0*accEfficiency*ampl/2.0);
 	double min1 = std::min(Emax_syn, Emax_ad);
+	double min2 = std::min(min1, Emax_diff);
 
 	//std::ofstream file;
 	//file.open("Emax.txt", std::ios::out);
 
 	//file << z << '\t' << Emax_ad << '\t' << Emax_syn  << '\t' << std::endl;
 
-	//return Emax_ad;
-	return min1;
+	return min2;
 		
 }
 
-//double stagnationPoint(double z)
-//{
-//	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-//	static const double Lj = GlobalConfig.get<double>("Lj");
-//
-//	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
-//	static const double vWind = GlobalConfig.get<double>("vWind");
-//
-//
-//	double stagPoint = sqrt(MdotWind*vWind*cLight / (4.0*Lj))*jetRadius(z,openingAngle);
-//
-//	return stagPoint;
-//
-//}
+
 
 //void derive_parameters_r(double E, double z, double t)
 //{
@@ -91,10 +94,16 @@ double computeDlorentz(double gamma) {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
 
-	double angle = std::max(openingAngle, inc);
-
+	//double angle = std::max(openingAngle, inc);
+	double Dlorentz;
 	double beta = sqrt(1.0 - 1.0 / P2(gamma));
-	double Dlorentz = 1.0 / (gamma*(1.0 - cos(angle)*beta));
+
+	if (inc < openingAngle) {
+		Dlorentz = pow((14.0*pow(gamma,4) / 3.0) , (1.0 / 4.0));
+	}
+	else {
+		Dlorentz = 1.0 / (gamma*(1.0 - cos(inc)*beta));
+	}
 	return Dlorentz;
 }
 

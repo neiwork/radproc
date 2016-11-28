@@ -39,7 +39,7 @@ double normalization(Particle& p, double z, double magf)
 	});  //integra E*Q(E)  entre Emin y Emax
 	
 	double Q0 = dLnt(z) / (int_E);  //factor de normalizacion de la inyeccion
-	return Q0 / Gamma;
+	return Q0 / P2(Gamma);
 	//N'(E')dE' = N(E)dE  ==> E'_nt = int( E'N(E')dE') = E_nt/Gamma;
 }
 

@@ -1,13 +1,14 @@
 {
 	"id":"CygA",
-	"h_d":100,
+	"Mdot":3.4e-9,
+	"vWind":4.0e8,
+	"h_d":50,
 	"R_d":300,
 	"I":2.8e-29,
 	"eph_s":2.4e-18, 
 	"starT":3.0e4,
 	"IRstarT":200.0,
 	"IRlum":1.0e12,
-	"pseda":1.0,
 
 	"subEq":1.0,
 
@@ -51,7 +52,7 @@
 			"photon": {
 				"dim":{
 					"energy": {
-						"min":-4.0,
+						"min":-6.0,
 						"max":16.0
 					}
 				}

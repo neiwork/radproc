@@ -10,4 +10,4 @@ double starBlackBody(double Ep, double r);
 
 double starIR(double Ep, double z);
 
-//void targetPhotonEnergies(double& EphminS, double& EphminCMB);
+double gxM87(double Ep, double z);

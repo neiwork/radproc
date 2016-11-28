@@ -67,7 +67,7 @@ double timeDistribution(double Ee, double r, double t, Particle& p, State& st, d
 
 		dEp = Ep*(Ep_int-1.0);
 
-		if (Ep > Emax){
+		if (Ep > 10.0*Emax){
 			inj = 0.0;
 		}
 		else{

@@ -33,7 +33,7 @@ int jetAGN()
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
 			
-		//radiativeLosses(model);
+		//radiativeLosses(model,folder+"\\electronLosses.txt");
 
 		//ParamSpaceValues psv(model.electron.ps);
 
@@ -52,7 +52,7 @@ int jetAGN()
 
 		std::cout << "checking injected power:" << '\t' << totalL << std::endl;		
 
-		writeAllSpaceParam(folder+"\\electronInj.txt", model.electron.injection);
+		//writeAllSpaceParam(folder+"\\electronInj.txt", model.electron.injection);
 		writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
 		writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para rmax y t(0)
 	
@@ -74,11 +74,6 @@ int jetAGN()
 		writeEnt(getFileName(folder, "E_NT_r"), model.electron.distribution);
 
 
-		//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades
-		//model.electron.distribution.fill([&model](const SpaceIterator& i){
-		//	return model.electron.injection.get(i);
-		//});
-
 		processes(model, getFileName(folder, "luminosity"));
 
 	}
@@ -91,3 +86,14 @@ int jetAGN()
 	return 0;
 }
 
+
+
+
+
+
+
+
+//lo siguiente es una funcion rapida para llenar N(E) asi pruebo las luminosidades
+//model.electron.distribution.fill([&model](const SpaceIterator& i){
+//	return model.electron.injection.get(i);
+//});

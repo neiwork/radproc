@@ -31,7 +31,7 @@ double frad(double E, double z)
 	double wph;
 
 	if (id == "M87") {
-		std::cout << "M87" << std::endl;
+		//std::cout << "M87" << std::endl;
 		wph = (eph_s*solarLuminosity)*starDensity(z)*z / cLight;  //para las gigantes rojas de M87 
 	}
 	else {
@@ -67,7 +67,7 @@ double dLntM87(double z)
 {	//esta es para M87
 
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
-
+	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  //pc
 	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
 	static const double vWind = GlobalConfig.get<double>("vWind");
 
@@ -80,12 +80,17 @@ double dLntM87(double z)
 	double ratioS = 100.0*MdotWind*vWind*cLight / (4.0) / Lj;  // == So / Sj si tomo las estrellas iguales
 	double Lnt = accEfficiency*(ratioS)*Lj; //
 	double nstar = starDensity(z);
-	double f = nstar*Lnt; //saque el Sj, el doppler boosting y el frad
+	double f = nstar*Lnt; 
 
 	double prueba = ratioS*nstar;
 
-	return f;
-	//return prueba;
+	//return f;
+	if (z > h_d)
+	{
+		return 0.0;
+	}
+	//else{ return MdotWind*nstar; }
+	else { return f; }
 }
 
 
@@ -113,7 +118,7 @@ double dLnt(double z)
 	static const std::string id = GlobalConfig.get<std::string>("id");
 
 	if (id == "M87") {
-		std::cout << "M87" << std::endl;
+		//std::cout << "M87" << std::endl;
 		return dLntM87(z);
 	}
 	else {
@@ -129,10 +134,8 @@ double nonThermalLuminosity(double intRmin, double intRmax)
 
 	static const double starT = GlobalConfig.get<double>("starT");
 
-	double E = P2(electronMass*cLight2) / (boltzmann*starT);
-
-	//double E = 1.0e9*1.6e-12;
-
+	double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gamma;
+	
 	double integral = intCilindric(intRmin, intRmax,
 		//[&E](double z){return dLnt(z)*frad(E, z); });
 		[&E](double z){return dLnt(z); });
@@ -144,7 +147,7 @@ double nonThermalLuminosity(double intRmin, double intRmax)
 	file.open("Lnt.txt", std::ios::out);
 
 	file << "E" << '\t' << E / 1.6e-12 << '\t' << "Lnt total" << '\t' << Lnt_total << std::endl;
-	file << "Doppler" << '\t' << boost << std::endl;
+	file << "boost" << '\t' << boost << '\t' << "Doppler" << '\t' << Dlorentz  << std::endl;
 
 	file.close();
 

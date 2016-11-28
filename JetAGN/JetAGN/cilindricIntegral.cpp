@@ -23,7 +23,7 @@ double intCilindric(double zMin, double zMax, fun1 fun)
 	double z = zMin;
 	
 	//std::ofstream file;
-	//file.open("integral.txt", std::ios::out);
+	//file.open("Mdot_pseda.txt", std::ios::out);
 	
 
 	double L1 = 0.0;
@@ -32,14 +32,14 @@ double intCilindric(double zMin, double zMax, fun1 fun)
 	{
 		double dz = z*(z_int - 1.0);
 
-		L1 = L1 + fun(z)*(pi*P2(jetRadius(z, theta)))*dz;  
+		L1 = L1 + fun(z)*(pi*P2(jetRadius(z, theta)))*dz; 
 
 		//file << z / pc << '\t' << L1 << std::endl;
+		//file << z / pc << '\t' << L1*yr/solarMass << std::endl;
 
 		z = z*z_int;
 
 	}
-
 
 	//file.close();
 

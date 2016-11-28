@@ -10,18 +10,13 @@
 #include <boost/property_tree/ptree.hpp>
 
 
-double starDensity(double z)
+double starDensity(double z) //M87
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double h_d = GlobalConfig.get<double>("h_d")*pc;
 	static const double Nrg = GlobalConfig.get<double>("N_s");
 	static const double pseda = GlobalConfig.get<double>("pseda");
-
-	//double mBH = 1.0e7*solarMass;  //black hole mass
-	//double rg = mBH*gravitationalConstant / cLight2;
-	//double z0 = 50.0*rg;	
-	//double RintMin = z0;// rmin;// z0;
-
+	
 	double RintMax = h_d;
 
 	//double int_z = pow(RintMax, (3.0 - pseda)) - pow(RintMin, (3.0 - pseda)) / (3.0 - pseda);
@@ -43,6 +38,7 @@ double starBBStarburst(double Ep, double z)  //Cyg A y Mrk
 	static const double starT = GlobalConfig.get<double>("starT");
 	static const double eph_s = GlobalConfig.get<double>("eph_s");
 	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
+	static const double R_d = GlobalConfig.get<double>("R_d") *pc;
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 
 	double E = Ep*Dlorentz;  //esta seria E_lab
@@ -64,12 +60,12 @@ double starBBStarburst(double Ep, double z)  //Cyg A y Mrk
 	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 
 
-	if (z > h_d) {
-		return nph*P2(Dlorentz)*P2(h_d / z);
-	}
-	else {
+	//if (z > R_d/2.0) {
+	//	return nph*P2(Dlorentz)*P2(R_d / z/2.0);
+	//}
+	//else {
 		return nph*P2(Dlorentz);
-	}
+	//}
 
 }
 	
@@ -84,8 +80,7 @@ double sBBM87(double Ep, double z)  //M87
 	
 	double E = Ep*Dlorentz;  //esta seria E_lab
 
-	double wph = (eph_s*solarLuminosity)*starDensity(z)*z / cLight;  //para las gigantes rojas de M87 
-
+	
 	double Epeak = boltzmann*starT;
 	double Ephmin = Epeak / 100.0;
 	double Ephmax = Epeak*100.0;
@@ -93,12 +88,23 @@ double sBBM87(double Ep, double z)  //M87
 	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&](double E){
 		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 	});
-
-	double normalizacion = wph / int_E;
-
-	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+	
+	double nph = (P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 		
-	return nph*P2(Dlorentz);
+	double normalization;
+	//para M87 tmb extiendo el jet mas alla del radio del bulge
+	if (z > h_d) {
+		double wph = (eph_s*solarLuminosity)*starDensity(h_d)*h_d / cLight;  //para las gigantes rojas de M87 
+		double norm = wph / int_E;
+		normalization = norm;// *P2(h_d / z / 2.0);
+	}
+	else {
+		double wph = (eph_s*solarLuminosity)*starDensity(z)*z / cLight;  //para las gigantes rojas de M87 
+		double norm = wph / int_E;
+		normalization = norm;
+	}
+
+	return normalization*nph*P2(Dlorentz);
 }
 
 double starBlackBody(double Ep, double z)
@@ -106,7 +112,7 @@ double starBlackBody(double Ep, double z)
 	static const std::string id = GlobalConfig.get<std::string>("id");
 
 	if (id == "M87") {
-		std::cout << "M87" << std::endl;
+		//std::cout << "M87" << std::endl;
 		return sBBM87(Ep, z);
 	}
 	else {
@@ -115,7 +121,7 @@ double starBlackBody(double Ep, double z)
 }
 
 
-double starIR(double Ep, double z)  
+double starIR(double Ep, double z)
 {   //Cyg A y Mrk
 	static const double starT = GlobalConfig.get<double>("IRstarT");
 	static const double IRlum = GlobalConfig.get<double>("IRlum");
@@ -126,7 +132,7 @@ double starIR(double Ep, double z)
 	double E = Ep*Dlorentz;  //esta seria E_lab
 
 	double tcross = h_d / cLight;
-	
+
 	//IR field
 	double wph = IRlum*solarLuminosity / (cLight*pi*P2(R_d));
 
@@ -134,7 +140,7 @@ double starIR(double Ep, double z)
 	double Ephmin = Epeak / 100.0;
 	double Ephmax = Epeak*100.0;
 
-	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&Ephmin, &Epeak](double E){
+	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&Ephmin, &Epeak](double E) {
 		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 	});
 
@@ -143,14 +149,51 @@ double starIR(double Ep, double z)
 	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 
 
-	if (z > h_d) {
-		return nph*P2(Dlorentz)*P2(h_d / z);
-	}
-	else {
+	//if (z > R_d / 2.0) {
+	//	return nph*P2(Dlorentz)*P2(R_d / z / 2.0);
+	//}
+	//else {
 		return nph*P2(Dlorentz);
-	}
+	//}
 
 }
+
+double gxM87(double Ep, double z)
+{   //M87
+	static const double starT = GlobalConfig.get<double>("starT");
+	static const double lum = GlobalConfig.get<double>("eph_s");
+	static const double h_d = GlobalConfig.get<double>("h_d") *pc; //radio bulge
+	static const double R_d = GlobalConfig.get<double>("R_d") *pc; //zmax
+	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+
+	double E = Ep*Dlorentz;  //esta seria E_lab
+
+	double tcross = h_d / cLight;
+
+	//star field
+	double wph = 3.0*lum*solarLuminosity / (cLight*pi*P2(R_d));
+
+	double Epeak = boltzmann*starT;
+	double Ephmin = Epeak / 100.0;
+	double Ephmax = Epeak*100.0;
+
+	static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&Ephmin, &Epeak](double E) {
+		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+	});
+
+	double normalizacion = wph / int_E;
+
+	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
+
+	//if (z > R_d / 2.0) {
+	//	return nph*P2(Dlorentz)*P2(R_d / z / 2.0);
+	//}
+	//else {
+		return nph*P2(Dlorentz);
+	//}
+
+}
+
 double cmbBlackBody(double Ep, double z)
 {
 	//nph'(E') = nph(E) Potter, W 2012
@@ -170,6 +213,14 @@ double cmbBlackBody(double Ep, double z)
 
 	return nph*P2(Dlorentz);
 }
+
+
+
+
+
+
+
+
 
 
 

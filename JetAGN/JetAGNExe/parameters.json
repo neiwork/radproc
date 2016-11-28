@@ -1,20 +1,22 @@
 {
-	"id":"mrk",
-	"h_d":23,
-	"R_d":300,
-	"I":3.8e-28,
-	"eph_s":2.7e-17,
-	"starT":3.0e4,
-	"IRstarT":200.0,
-	"IRlum":1.0e12,
+	"id":"M87",
+	"Mdot":5.7e-10,
+	"vWind":2.0e7,
+	"starT":4.0e3,
+	"h_d":3.1e3,
+	"R_d":1.0e4,
+	"N_s":1.3e9,
+	"eph_s":37.0,
+	"pseda":2,
 
-	"subEq":1.0,
+	"subEq":1.0e-4,
+	"cmbT": 2.7,
 
 	"injector":"multiple",
-	"Lj": 1.0e43,
+	"Lj": 1.0e44,
 	"openingAngle": 0.1,
-	"inc": 0,
-	"Gamma": 10,
+	"inc": 20,
+	"Gamma": 3.0,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
 
@@ -36,13 +38,13 @@
 						"samples":100
 					},
 					"radius":{
-						"min":1.0,
-						"max":300.0,
+						"min":10.0,
+						"max":5.0e3,
 						"samples":100
 					},
 					"time":{
-						"min":1.0,
-						"max":300.0,
+						"min":10.0,
+						"max":5.0e3,
 						"samples":100
 					}
 				}
@@ -50,8 +52,8 @@
 			"photon": {
 				"dim":{
 					"energy": {
-						"min":-4.0,
-						"max":16.0
+						"min":-6.0,
+						"max":15.0
 					}
 				}
 			},
@@ -60,7 +62,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":16.0
+						"max":13.0
 					}
 				}
 			}
@@ -84,9 +86,9 @@
 
 	"integrate-losses": {
 		"samples": {
-			"x": 30,
-			"t": 30,
-			"y": 30
+			"x": 50,
+			"t": 50,
+			"y": 50
 		}
 	}
 }

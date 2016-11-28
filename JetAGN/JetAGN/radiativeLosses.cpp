@@ -14,26 +14,41 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-void radiativeLosses(State& st)
+void radiativeLosses(State& st, const std::string& filename)
 {
+	static const std::string id = GlobalConfig.get<std::string>("id");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double starT = GlobalConfig.get<double>("starT");
 	
-	std::vector<File*> files;
-	OFM out;
+	//std::vector<File*> files;
+	//OFM out;
 
-	File electronLosses(files, out, std::string("electronLosses"));	
+	//File electronLosses(files, out, std::string("electronLosses"));	
 
-	out["electronLosses"]->file << "Log(E/eV)" << "\t" << "Log(R/pc)"
-		<< "\t" << "Syn"
-	//	<< "\t" << "IC"
+	std::ofstream file;
+	file.open(filename.c_str(), std::ios::out);
+
+	file << "Log(E/eV)" << "\t" << "Log(R/pc)"
+		<< "\t" << "Synchr"
 		<< "\t" << "IC"
-		<< "\t" << "Dif"
+		<< "\t" << "ICAux"
+		<< "\t" << "Diff"
 		<< "\t" << "Acc"
-		<< "\t" << "Adia" << std::endl;
+		<< "\t" << "Ad" << std::endl;
 	
 	double Emin = boltzmann*starT / 100.0;
+	double EphminAux;
+
+	if (id == "M87") {
+		//std::cout << "M87" << std::endl;
+		static const double cmbT = GlobalConfig.get<double>("cmbT");
+		EphminAux = boltzmann*cmbT / 100.0;
+	}
+	else {
+		static const double IRstarT = GlobalConfig.get<double>("IRstarT");
+		EphminAux = boltzmann*IRstarT / 100.0;
+	}
 
 	st.electron.ps.iterate([&](const SpaceIterator& i){
 
@@ -60,28 +75,43 @@ void radiativeLosses(State& st)
 			[&E,&r](double E){
 			return starBlackBody(E,r);},   
 				Emin, 1.0e4*Emin ) / i.val(DIM_E);
-		
-		   
-		double eDif  = diffusionRate(i.val(DIM_E), i.val(DIM_R), B);
+			
+		double eIC_Aux;
+
+		if (id == "M87") {
+			//	std::cout << "M87" << std::endl;
+			eIC_Aux = lossesIC(i.val(DIM_E), st.electron,
+				[&E, &r](double E) {
+				return cmbBlackBody(E, r); },
+				EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);
+		}
+		else {
+			eIC_Aux = lossesIC(i.val(DIM_E), st.electron,
+				[&E, &r](double E) {
+				return starIR(E, r); },
+				EphminAux, 1.0e4*EphminAux) / i.val(DIM_E); 
+		}
+				
+		double Reff = 10.0*stagnationPoint(i.val(DIM_R));
+		double eDif  = diffusionRate(i.val(DIM_E), Reff, B);
 		double eAcc = accelerationRate(i.val(DIM_E), B, accEfficiency);
 		double eAdia = adiabaticLosses(i.val(DIM_E), i.val(DIM_R), vel_lat) / i.val(DIM_E);
 		
-	out["electronLosses"]->file << fmtE << "\t" << logR 
-											<< "\t" << safeLog10(eSyn) 
-						//					<< "\t" << safeLog10(eIC)
-											<< "\t" << safeLog10(eIC2)
-											<< "\t" << safeLog10(eDif)
-											<< "\t" << safeLog10(eAcc)
-											<< "\t" << safeLog10(eAdia) 
-											<< std::endl;
+		file << fmtE << "\t" << logR 
+							<< "\t" << safeLog10(eSyn) 
+							<< "\t" << safeLog10(eIC2)
+							<< "\t" << safeLog10(eIC_Aux)
+							<< "\t" << safeLog10(eDif)
+							<< "\t" << safeLog10(eAcc)
+							<< "\t" << safeLog10(eAdia) 
+							<< std::endl;
 	
 
 	}, { -1, -1, 0 }); //fijo t
 
 
-	for (auto f : files) {
-		f->file.close();
-	}
+	file.close();
+	
 
 
 

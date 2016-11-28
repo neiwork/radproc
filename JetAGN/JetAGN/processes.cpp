@@ -83,6 +83,7 @@ void processes(State& st, const std::string& filename)
 	ParamSpaceValues Qsyn(st.photon.ps);
 	ParamSpaceValues QicS(st.photon.ps);
 	ParamSpaceValues QicAux(st.photon.ps);
+	//ParamSpaceValues QicAux2(st.photon.ps);
 	
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
@@ -91,7 +92,7 @@ void processes(State& st, const std::string& filename)
 	double EphminAux;
 
 	if (id == "M87") {
-		std::cout << "M87" << std::endl;
+		//std::cout << "M87" << std::endl;
 		static const double cmbT = GlobalConfig.get<double>("cmbT");
 		EphminAux = boltzmann*cmbT / 100.0;
 	}
@@ -111,14 +112,18 @@ void processes(State& st, const std::string& filename)
 		const double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
 			return starBlackBody(E, r); }, EphminS);
 
-		double eIC_Aux;
+		double eIC_Aux; 
+		double eIC_Aux2;
 		
 		//std::cout << id << std::endl;
 
 		if (id == "M87") {
-			std::cout << "M87" << std::endl;
+		//	std::cout << "M87" << std::endl;
 			eIC_Aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
 				return cmbBlackBody(E, r); }, EphminAux);
+			//eIC_Aux2 = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
+			//	return gxM87(E, r); }, EphminS);
+			//QicAux2.set(i, eIC_Aux2);
 		}
 		else {
 			eIC_Aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
@@ -134,11 +139,14 @@ void processes(State& st, const std::string& filename)
 	const ParamSpace& pps = st.photon.ps;
 
 	file << "log(E/eV)"
-		<< '\t' << "log(Lsyn/erg s-1)"
-		<< '\t' << "log(Lic/erg s-1)"
-		<< '\t' << "log(LicAux/erg s-1)"
-		//<< '\t' << "log(LiSSC/erg s-1)"
-		<< std::endl;
+		<< '\t' << "Synchr"
+		<< '\t' << "IC"
+		<< '\t' << "IC-Aux";
+
+	//if (id == "M87") {
+	//	file << '\t' << "IC-gx";
+	//}
+	file<< std::endl;
 
 	//ParamSpaceValues Qssc(st.photon.ps);
 	//SSC(st, Qssc, Qsyn);
@@ -158,16 +166,22 @@ void processes(State& st, const std::string& filename)
 			double Lsyn   = emiToLumi(pps, Qsyn, E, t_ix);
 			double LicS = emiToLumi(pps, QicS, E, t_ix);
 			double LicAux = emiToLumi(pps, QicAux, E, t_ix);
-			//double Lssc = emiToLumi(pps, Qssc, E, t_ix);
 
 			double fmtE = log10(Elab / 1.6e-12);
 
 			file << fmtE //<< '\t' << log10(t)
 				<< '\t' << safeLog10(Llab(Lsyn))
-				<< '\t' << safeLog10(Llab(LicS))
-				<< '\t' << safeLog10(Llab(LicAux))
-				//<< '\t' << safeLog10(Llab(Lssc))
-				<< std::endl;
+				<< '\t' << safeLog10(2.0*Llab(LicS))
+				<< '\t' << safeLog10(2.0*Llab(LicAux));
+			//el 2.0 en IC es para tener en cuenta la 
+			//secci'on eficaz anisotropica en el regimen de thomson
+			
+			//if (id == "M87") {
+			//	double LicAux2 = emiToLumi(pps, QicAux2, E, t_ix);
+			//	file << '\t' << safeLog10(Llab(LicAux2));
+			//	}
+
+			file << std::endl;
 
 		}
 

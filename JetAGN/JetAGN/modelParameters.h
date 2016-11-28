@@ -33,6 +33,8 @@ double jetRadius(double z, double openingAngle);
 
 double eEmax(double z, double B);
 
+double stagnationPoint(double z);
+
 
 //double vWind(double r, double starR);
 
