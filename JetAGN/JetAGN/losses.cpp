@@ -15,27 +15,32 @@
 #include <map>
 
 double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i)
-{	
-	static const double starT = GlobalConfig.get<double>("starT");
+{
+	static const std::string id = GlobalConfig.get<std::string>("id");
+	
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-
-	double phEmin = boltzmann*starT*1.0e-2; 
-	double phEmax = boltzmann*starT*1.0e2;
+	
 
 	double vel_lat = cLight*openingAngle;
 
 	//double r = i->par.R;
 	double B = st.magf.get(i); // parameters.magneticField;
-	if(p.id == "electron")	{
-		return  lossesSyn(E, B, p)
-			+ adiabaticLosses(E, r, vel_lat);
-			/*+lossesIC(E, p, 
-			[&E, &r](double E){
-			return starBlackBody(E, r); }, phEmin, phEmax)/P2(Dlorentz);*/
-				//lossesAnisotropicIC(E, p, r);
-	}
+	
+	double loss = lossesSyn(E, B, p)
+		+ adiabaticLosses(E, r, vel_lat);
 
-	throw 0;
+	/*if (E > 9.0e10*1.6e-12 && id != "M87") {
+		static const double starT = GlobalConfig.get<double>("IRstarT");
+		double phEmin = boltzmann*starT*1.0e-2;
+		double phEmax = boltzmann*starT*1.0e2;
+
+		loss = loss + lossesIC(E, p,
+			[&E, &r](double E) {
+			return starIR(E, r); }, phEmin, phEmax);
+	}*/ 
+	
+	return loss;
+
 }
 

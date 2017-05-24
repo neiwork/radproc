@@ -1,0 +1,94 @@
+{
+	"id":"mrk",
+	"Mdot":3.4e-9,
+	"vWind":4.0e8,
+	"h_d":12,
+	"R_d":300,
+	"I":3.8e-28,
+	"eph_s":2.7e-17,
+	"starT":3.0e4,
+	"IRstarT":200.0,
+	"IRlum":3.0e12,
+
+	"subEq":1.0e-4,
+
+	"injector":"multiple",
+	"Lj": 1.0e43,
+	"openingAngle": 0.1,
+	"inc": 10,
+	"Gamma": 6,
+	"accEfficiency": 0.1,
+	"primaryIndex": 2.0,
+
+	"file": {
+		"luminosity":"ntLuminosity.txt",
+		"eDist":"eDist",
+		"eDist_ET":"eDist_ET",
+		"eDist_RT":"eDist_RT",
+      "eDist_final":"eDist_final",
+		"E_NT_r":"E_NT_r"
+	},
+
+	"model": {
+		"particle": {
+			"default": {
+				"mass":0,
+				"dim": {
+					"energy":{
+						"samples":50
+					},
+					"radius":{
+						"min":1.0,
+						"max":15.0,
+						"samples":50
+					},
+					"time":{
+						"min":1.0,
+						"max":15.0,
+						"samples":50
+					}
+				}
+			},
+			"photon": {
+				"dim":{
+					"energy": {
+						"min":-6.0,
+						"max":16.0
+					}
+				}
+			},
+			"electron": {
+				"mass":9.1094e-28,
+				"dim":{
+					"energy": {
+						"min":6.0,
+						"max":14.0
+					}
+				}
+			}
+		}
+	},
+   
+	"math": {
+		"runge-kutta-1": {
+			"samples": {
+				"x": 50
+			}
+		},
+
+		"runge-kutta-2": {
+			"samples": { 
+				"x": 50,
+				"y": 50
+			}
+		}
+	},
+
+	"integrate-losses": {
+		"samples": {
+			"x": 30,
+			"t": 30,
+			"y": 30
+		}
+	}
+}

@@ -1,13 +1,10 @@
 #pragma once
 
+#include "targetFieldM87.h"
 
-
-double cmbBlackBody(double Ep, double z);
-
-double starDensity(double z);
+double wph(double z);
 
 double starBlackBody(double Ep, double r);
 
 double starIR(double Ep, double z);
 
-double gxM87(double Ep, double z);

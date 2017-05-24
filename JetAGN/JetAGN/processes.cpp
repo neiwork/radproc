@@ -48,10 +48,6 @@ double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, double E, int t_i
 
 	for (size_t i = 0; i < z.size(); ++i) { 
 
-		//double dz = z[i]*(z_int - 1);
-		//volumen de la celda i
-		//double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
-		//double E = pps[0][E_ix];
 		
 		double T = pps[2][t_ix];
 
@@ -101,31 +97,35 @@ void processes(State& st, const std::string& filename)
 		EphminAux = boltzmann*IRstarT / 100.0;
 	}
 		
-
 	
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
+		if (i.coord[0] == 0 && i.coord[1] % 5 == 0){
+			std::cout << "height: " << i.coord[1] << std::endl; }
+		
 		const double E = i.val(DIM_E);
 		const double r = i.val(DIM_R);
-		const double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
-		const double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E){
-			return starBlackBody(E, r); }, EphminS);
-
-		double eIC_Aux; 
-		double eIC_Aux2;
+		double eSyn   = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 		
-		//std::cout << id << std::endl;
 
-		if (id == "M87") {
-		//	std::cout << "M87" << std::endl;
+		//double eIC_Aux2 = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
+		//	return gxM87(E, r); }, EphminS);
+
+		double eICs, eIC_Aux;
+
+		if (id == "M87") {					
+			
+			eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
+				return starBlackBody(E, r); }, EphminS);
+
 			eIC_Aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
 				return cmbBlackBody(E, r); }, EphminAux);
-			//eIC_Aux2 = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
-			//	return gxM87(E, r); }, EphminS);
-			//QicAux2.set(i, eIC_Aux2);
 		}
 		else {
+			eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
+				return starBlackBody(E, r); }, EphminS);
+
 			eIC_Aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
 				return starIR(E, r); }, EphminAux);
 		}
@@ -133,8 +133,9 @@ void processes(State& st, const std::string& filename)
 		Qsyn.set(i, eSyn);
 		QicS.set(i, eICs);
 		QicAux.set(i, eIC_Aux);
+		//QicAux2.set(i, eIC_Aux2);
 
-	}, { -1, -1, (int)st.photon.ps[DIM_R].size()-1 });
+	}, { -1, -1,  (int)st.photon.ps[DIM_R].size() - 1}); //0 });//
 
 	const ParamSpace& pps = st.photon.ps;
 
@@ -142,10 +143,8 @@ void processes(State& st, const std::string& filename)
 		<< '\t' << "Synchr"
 		<< '\t' << "IC"
 		<< '\t' << "IC-Aux";
-
-	//if (id == "M87") {
-	//	file << '\t' << "IC-gx";
-	//}
+		//<< '\t' << "IC-gx";
+	
 	file<< std::endl;
 
 	//ParamSpaceValues Qssc(st.photon.ps);
@@ -157,7 +156,8 @@ void processes(State& st, const std::string& filename)
 			//variables primadas ->FF
 			//variables sin primar-> lab frame
 
-			int t_ix = pps[DIM_R].size()-1;
+		//int t_ix = 0;// pps[DIM_R].size() - 1;
+		int t_ix = pps[DIM_R].size() - 1;
 			double E = pps[0][E_ix]; 
 			double t = pps[2][t_ix];  //t es el ultimo valor
 
@@ -178,7 +178,7 @@ void processes(State& st, const std::string& filename)
 			
 			//if (id == "M87") {
 			//	double LicAux2 = emiToLumi(pps, QicAux2, E, t_ix);
-			//	file << '\t' << safeLog10(Llab(LicAux2));
+			//	file << '\t' << safeLog10(2.0*Llab(LicAux2));
 			//	}
 
 			file << std::endl;
@@ -222,3 +222,10 @@ void processes(State& st, const std::string& filename)
 //		});
 //	}
 //}
+
+
+
+//double dz = z[i]*(z_int - 1);
+//volumen de la celda i
+//double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
+//double E = pps[0][E_ix];

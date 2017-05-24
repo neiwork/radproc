@@ -25,7 +25,11 @@ void photonTarget(Particle& p, State& st)
 {
 //	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double zInt = GlobalConfig.get<double>("Rdiss");
+	static const double Mbh = GlobalConfig.get<double>("Mbh")*solarMass;
+
+	double rg = gravitationalConstant*Mbh / cLight2;
+	static const double zInt = GlobalConfig.get<double>("Rdiss")*rg;
+	
 
 	double B = st.magf.get({ 0 });
 	//double Emin = p.emin();

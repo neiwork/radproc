@@ -59,6 +59,8 @@
       <Filter>distribution</Filter>
     </ClCompile>
     <ClCompile Include="SSC.cpp" />
+    <ClCompile Include="oneZone.cpp" />
+    <ClCompile Include="targetFieldM87.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -113,6 +115,8 @@
       <Filter>injection</Filter>
     </ClInclude>
     <ClInclude Include="SSC.h" />
+    <ClInclude Include="oneZone.h" />
+    <ClInclude Include="targetFieldM87.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

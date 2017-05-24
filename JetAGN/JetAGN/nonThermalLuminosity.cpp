@@ -21,24 +21,14 @@ double frad(double E, double z)
 	//static const double starT = GlobalConfig.get<double>("starT");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
-	static const double Lj = GlobalConfig.get<double>("Lj");
+	//static const double Lj = GlobalConfig.get<double>("Lj");
 
-	static const double eph_s = GlobalConfig.get<double>("eph_s");
-	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
+	//static const double eph_s = GlobalConfig.get<double>("eph_s");
+	//static const double h_d = GlobalConfig.get<double>("h_d") *pc;
 
 	static const std::string id = GlobalConfig.get<std::string>("id");
 
-	double wph;
-
-	if (id == "M87") {
-		//std::cout << "M87" << std::endl;
-		wph = (eph_s*solarLuminosity)*starDensity(z)*z / cLight;  //para las gigantes rojas de M87 
-	}
-	else {
-		double tcross = h_d / cLight;
-		wph = eph_s*tcross;
-	}
-
+	
 	double Sj = pi*P2(jetRadius(z, openingAngle));
 
 	double vel_lat = cLight*openingAngle;
@@ -50,11 +40,9 @@ double frad(double E, double z)
 	//<<<<<<< HEAD
 
 	//double wph2 = Lj / (cLight*4.0*Sj);
+		
+	double tic = 4.0*cLight*thomson* wph(z)*(E / P2(electronMass*cLight2)) / 3.0;
 	
-	//double wmag = P2(computeMagField(z)*P2(Gamma)) / (8.0*pi); // [av] ver si se justifica intentar usar el cubo magf, creo que no.
-	//double tsin = 4.0 * thomson*cLight*wmag*(E / P2(electronMass*cLight2)) / 3.0;
-	double tic = 4.0*cLight*thomson*wph*(E / P2(electronMass*cLight2)) / 3.0;
-	//double trad = tsin + tic;
 	double trad = tic;
 
 	double frad = 1.0 / (1.0 + tad / trad);
@@ -80,7 +68,7 @@ double dLntM87(double z)
 	double ratioS = 100.0*MdotWind*vWind*cLight / (4.0) / Lj;  // == So / Sj si tomo las estrellas iguales
 	double Lnt = accEfficiency*(ratioS)*Lj; //
 	double nstar = starDensity(z);
-	double f = nstar*Lnt; 
+	double f = nstar*Lnt;
 
 	double prueba = ratioS*nstar;
 
@@ -137,8 +125,8 @@ double nonThermalLuminosity(double intRmin, double intRmax)
 	double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gamma;
 	
 	double integral = intCilindric(intRmin, intRmax,
-		//[&E](double z){return dLnt(z)*frad(E, z); });
-		[&E](double z){return dLnt(z); });
+		[&E](double z){return dLnt(z)*frad(E, z); });
+		//[&E](double z){return dLnt(z); });
 	
 	double boost = pow(Dlorentz, 4) / P2(Gamma);
 	double Lnt_total = integral*boost;

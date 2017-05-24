@@ -8,6 +8,7 @@
 #include "nonThermalLuminosity.h"
 #include "distribution.h"
 #include "injection.h"
+#include "oneZone.h"
 #include "state.h"
 #include "modelParameters.h"
 
@@ -56,10 +57,12 @@ int jetAGN()
 		writeEnergyFunction(folder+"\\electronInj_E_r0", model.electron.injection, 0, 0); //escribe Q(E), para r(0) y t(0)
 		writeEnergyFunction(folder+"\\electronInj_E_rmax", model.electron.injection, model.electron.ps[1].size()-1, 0); //escribe Q(E), para rmax y t(0)
 	
-		
+		//oneZoneDistribution(model.electron, model);
+		//processesOneZone(model, folder + "\\oneZoneLum.txt");
+
 		distribution(model.electron, model);
 		//distWOLosses(model.electron, model);
-		
+
 
 		static const double Gamma = GlobalConfig.get<double>("Gamma");
 		double totalE = computeInjectedEnergy(model.electron.distribution); 
@@ -67,10 +70,10 @@ int jetAGN()
 		std::cout << "checking total energy:" << '\t' << totalE << '\t' << totalE2 << std::endl;
 
 	
-		writeAllSpaceParam(getFileName(folder, "eDist"), model.electron.distribution);
-		writeEandTParamSpace(getFileName(folder, "eDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
-		writeRandTParamSpace(getFileName(folder, "eDist_RT"), model.electron.distribution, model.electron.ps[0].size() / 2);
-		writeEandRParamSpace(getFileName(folder, "eDist_final"), model.electron.distribution, model.electron.ps[2].size()-1);
+		//writeAllSpaceParam(getFileName(folder, "eDist"), model.electron.distribution);
+		//writeEandTParamSpace(getFileName(folder, "eDist_ET"), model.electron.distribution, model.electron.ps[1].size() / 2);
+		//writeRandTParamSpace(getFileName(folder, "eDist_RT"), model.electron.distribution, model.electron.ps[0].size() / 2);
+		writeEandRParamSpace(getFileName(folder, "eDist_final"), model.electron.distribution, model.electron.ps[2].size() - 1);
 		writeEnt(getFileName(folder, "E_NT_r"), model.electron.distribution);
 
 

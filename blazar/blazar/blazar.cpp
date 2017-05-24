@@ -59,7 +59,8 @@ void blazar() {
 	Matrix obs;
 	matrixInit(obs, height, width, 0.0);
 	readData("PKS0048-097_lum.txt", obs);
-	double chi = chiSquareFit(model.photon.distribution, obs, 2);
+	double dof = height;
+	double chi = chiSquareFit(model.photon.distribution, obs, dof);
 
 	std::cout << chi;
 

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="distribution.cpp" />
+    <ClCompile Include="injection.cpp" />
+    <ClCompile Include="losses.cpp" />
+    <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="nonThermalLuminosity.cpp" />
+    <ClCompile Include="oneZone.cpp" />
+    <ClCompile Include="processes.cpp" />
+    <ClCompile Include="radiativeLosses.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="targetFields.cpp" />
+    <ClCompile Include="timeDistribution.cpp" />
+    <ClCompile Include="jetSN.cpp" />
+    <ClCompile Include="checkPower.cpp" />
+    <ClCompile Include="ioutil.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="messages.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="read.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="write.cpp">
+      <Filter>extras</Filter>
+    </ClCompile>
+    <ClCompile Include="SSC.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="distribution.h" />
+    <ClInclude Include="injection.h" />
+    <ClInclude Include="losses.h" />
+    <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="nonThermalLuminosity.h" />
+    <ClInclude Include="oneZone.h" />
+    <ClInclude Include="processes.h" />
+    <ClInclude Include="radiativeLosses.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="timeDistribution.h" />
+    <ClInclude Include="jetSN.h" />
+    <ClInclude Include="checkPower.h" />
+    <ClInclude Include="ioutil.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="messages.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="read.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="write.h">
+      <Filter>extras</Filter>
+    </ClInclude>
+    <ClInclude Include="targetFields.h" />
+    <ClInclude Include="SSC.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="extras">
+      <UniqueIdentifier>{85fe8eed-3c9f-4e01-a504-2e9d368bb6ad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -21,9 +21,11 @@ inline double computeModelB0(double Lj, double openingAngle) {
 
 inline double fmagneticField(double z, double B_o)
 {
+	static const double subEq = GlobalConfig.get<double>("subEq");
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
-	double B = B_o / z / P2(Gamma); 
-	return B;
+	double B = B_o / z / (Gamma); 
+
+	return B*sqrt(subEq);
 }
 
 double computeMagField(double z) {
@@ -54,22 +56,30 @@ double eEmax(double z, double B)
 //	double Emax_hillas = electronCharge*B*size;
 	double min1 = std::min(Emax_syn, Emax_ad);
 
-	return min1;
-
-	//return std::min(min1, Emax_hillas); VER
-		
+	double Emax_diff = electronCharge*B*size*sqrt(3.0*accEfficiency / 2.0);
+	double min2 = std::min(min1, Emax_diff);
+	
+	return min2;
+			
 }
 
 
 
 double computeDlorentz(double gamma) {
 
-	static const double inc = GlobalConfig.get<double>("inc")*pi / 180.0;
-	static const double op = GlobalConfig.get<double>("openingAngle");
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
 
-	double theta = std::max(inc,op); //ang obs del jet
-	double beta = 1.0 - 1.0 / P2(gamma);
-	double Dlorentz = 1.0 / (gamma*(1.0 - cos(theta)*beta));
+																		 //double angle = std::max(openingAngle, inc);
+	double Dlorentz;
+	double beta = sqrt(1.0 - 1.0 / P2(gamma));
+
+	if (inc < openingAngle) {
+		Dlorentz = pow((14.0*pow(gamma, 4) / 3.0), (1.0 / 4.0));
+	}
+	else {
+		Dlorentz = 1.0 / (gamma*(1.0 - cos(inc)*beta));
+	}
 	return Dlorentz;
 }
 

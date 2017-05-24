@@ -35,7 +35,7 @@ void distribution(Particle& p, State& st)
 			double tad = E / adiabaticLosses(E, zInt, v_lat); //en [seg]
 			double tsyn = E / lossesSyn(E, B, p);
 
-			double tcool = std::min(tad, tsyn);
+			double tcool = (tad + tsyn);
 			p.distribution.set(i,inj*tcool); 
 				
 		} );

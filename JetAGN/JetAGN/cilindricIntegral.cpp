@@ -23,7 +23,7 @@ double intCilindric(double zMin, double zMax, fun1 fun)
 	double z = zMin;
 	
 	//std::ofstream file;
-	//file.open("Mdot_pseda.txt", std::ios::out);
+	//file.open("sigma_pseda.txt", std::ios::out);
 	
 
 	double L1 = 0.0;

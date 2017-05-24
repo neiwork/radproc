@@ -95,6 +95,7 @@
     <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="nonThermalLuminosity.cpp" />
+    <ClCompile Include="oneZone.cpp" />
     <ClCompile Include="processes.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="read.cpp">
@@ -103,6 +104,7 @@
     </ClCompile>
     <ClCompile Include="SSC.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="targetFieldM87.cpp" />
     <ClCompile Include="targetFields.cpp" />
     <ClCompile Include="timeDistribution.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -132,6 +134,7 @@
     <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="nonThermalLuminosity.h" />
+    <ClInclude Include="oneZone.h" />
     <ClInclude Include="processes.h" />
     <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="read.h">
@@ -140,6 +143,7 @@
     </ClInclude>
     <ClInclude Include="SSC.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="targetFieldM87.h" />
     <ClInclude Include="targetFields.h" />
     <ClInclude Include="timeDistribution.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

@@ -1,15 +1,14 @@
 {
 	"id":"M87",
 	"Mdot":5.7e-10,
-	"vWind":2.0e7,
+	"vWind":1.0e7,
 	"starT":4.0e3,
 	"h_d":3.1e3,
-	"R_d":1.0e4,
 	"N_s":1.3e9,
 	"eph_s":37.0,
-	"pseda":2,
+	"pseda":1,
 
-	"subEq":1.0e-4,
+	"subEq":1.0,
 	"cmbT": 2.7,
 
 	"injector":"multiple",
@@ -35,17 +34,17 @@
 				"mass":0,
 				"dim": {
 					"energy":{
-						"samples":100
+						"samples":4
 					},
 					"radius":{
-						"min":10.0,
+						"min":1.0,
 						"max":5.0e3,
-						"samples":100
+						"samples":4
 					},
 					"time":{
-						"min":10.0,
+						"min":1.0,
 						"max":5.0e3,
-						"samples":100
+						"samples":4
 					}
 				}
 			},
@@ -53,7 +52,7 @@
 				"dim":{
 					"energy": {
 						"min":-6.0,
-						"max":15.0
+						"max":16.0
 					}
 				}
 			},
@@ -62,7 +61,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":13.0
+						"max":16.0
 					}
 				}
 			}

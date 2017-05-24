@@ -10,7 +10,7 @@
 	"IRstarT":200.0,
 	"IRlum":1.0e12,
 
-	"subEq":1.0,
+	"subEq":1.0e-4,
 
 	"injector":"multiple",
 	"Lj": 1.0e46,
@@ -62,7 +62,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":16.0
+						"max":14.0
 					}
 				}
 			}
