@@ -26,13 +26,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -88,11 +88,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\external\boost_1_61_0;..\..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\boost_1_61_0;..\..\..\lib;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\..\external\boost_1_61_0;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,13 +118,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\external\boost_1_61_0;..\..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\boost_1_61_0;..\..\..\lib;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\..\external\boost_1_61_0;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,41 +149,83 @@
     <ClCompile Include="checkPower.cpp" />
     <ClCompile Include="distribution.cpp" />
     <ClCompile Include="injection.cpp" />
-    <ClCompile Include="ioutil.cpp" />
     <ClCompile Include="jetSN.cpp" />
     <ClCompile Include="losses.cpp" />
     <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="nonThermalLuminosity.cpp" />
-    <ClCompile Include="oneZone.cpp" />
+    <ClCompile Include="oneZone.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="processes.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
-    <ClCompile Include="read.cpp" />
-    <ClCompile Include="SSC.cpp" />
+    <ClCompile Include="read.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="SSC.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="State.cpp" />
     <ClCompile Include="targetFields.cpp" />
-    <ClCompile Include="timeDistribution.cpp" />
+    <ClCompile Include="timeDistribution.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="checkPower.h" />
     <ClInclude Include="distribution.h" />
     <ClInclude Include="injection.h" />
-    <ClInclude Include="ioutil.h" />
     <ClInclude Include="jetSN.h" />
     <ClInclude Include="losses.h" />
     <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="nonThermalLuminosity.h" />
-    <ClInclude Include="oneZone.h" />
+    <ClInclude Include="oneZone.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="processes.h" />
     <ClInclude Include="radiativeLosses.h" />
-    <ClInclude Include="read.h" />
-    <ClInclude Include="SSC.h" />
+    <ClInclude Include="read.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="SSC.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="State.h" />
     <ClInclude Include="targetFields.h" />
-    <ClInclude Include="timeDistribution.h" />
+    <ClInclude Include="timeDistribution.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="write.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\flosses\flosses.vcxproj">
+      <Project>{c85692b2-ca76-4fa7-ae5a-4bfb381513af}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\fluminosities\fluminosities.vcxproj">
+      <Project>{f3d01362-4e4b-4f3f-9f1b-a5ba28df9db7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\fmath\fmath.vcxproj">
+      <Project>{6d9ae1eb-3467-4970-a4ef-4b19236fbd4b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\fparameters\fparameters.vcxproj">
+      <Project>{d40df49f-3c0d-401c-9f40-10170c1307aa}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\fparticle\fparticle.vcxproj">
+      <Project>{634888ae-9178-404d-8e22-8e1d5d6b4f3c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\inout\inout.vcxproj">
+      <Project>{f260a381-e325-493c-a89c-107eaa6cebb3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

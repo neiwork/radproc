@@ -9,27 +9,6 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-double f(double h,double z)
-{
-	static const double R_d = GlobalConfig.get<double>("R_d") *pc;
-	double res = 0.5*(h - z)*log(P2(R_d / (z - h)) + 1.0) + R_d*atan((h - z) / R_d);
-	return res;
-}
-double wph(double z)
-{
-	static const double eph_s = GlobalConfig.get<double>("eph_s");
-	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
-	//static const double R_d = GlobalConfig.get<double>("R_d") *pc;
-
-	//double tcross = h_d / cLight;
-
-	double cte = eph_s/ (2.0*cLight);
-
-	double wph = cte*(f(h_d, z) - f(-h_d, z));
-
-	return wph;
-}
-
 
 
 double starBlackBody(double Ep, double z)
@@ -37,6 +16,7 @@ double starBlackBody(double Ep, double z)
 
 	static const double starT = GlobalConfig.get<double>("starT");
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	static const double E_0 = GlobalConfig.get<double>("E_0");
 
 	double E = Ep*Dlorentz;  //esta seria E_lab
 
@@ -48,7 +28,10 @@ double starBlackBody(double Ep, double z)
 		return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 	});
 
-	double normalizacion = wph(z) / int_E;
+	double Rs = stagnationPoint(z);
+	double wph = 3.0*E_0 / (4.0*P3(Rs));
+
+	double normalizacion = wph / int_E;
 
 	double nph = normalizacion*(P2(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 
@@ -56,6 +39,11 @@ double starBlackBody(double Ep, double z)
 	
 }
 
+double f(double h, double z, double R)
+{
+	double res = 0.5*(h - z)*log(P2(R / (z - h)) + 1.0) + R*atan((h - z) / R);
+	return res;
+}
 
 double wphIR(double z)
 {
@@ -70,7 +58,7 @@ double wphIR(double z)
 
 	double cte = eph_s / (2.0*cLight);
 
-	double wph = cte*(f(h_d, z) - f(-h_d, z));
+	double wph = cte*(f(h_d, z, R_d) - f(-h_d, z, R_d));
 
 	return wph;
 }

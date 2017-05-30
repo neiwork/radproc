@@ -16,12 +16,13 @@
 
 double stagnationPoint(double z)
 {
-	static const double Mdot = GlobalConfig.get<double>("Mdot")*solarMass/yr;
-	static const double vWind = GlobalConfig.get<double>("vWind");
+	static const double E_0 = GlobalConfig.get<double>("E_0");
 	static const double Lj = GlobalConfig.get<double>("Lj");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
-	return jetRadius(z, openingAngle)*sqrt(Mdot*vWind*cLight / (4.0*Lj));
+	double Rs = pow((E_0*cLight*pi*P2(openingAngle*z) / (4.0*Lj)), 1.0 / 3.0);
+
+	return Rs;
 
 }
 
@@ -59,7 +60,7 @@ double eEmax(double z, double B)
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-	double Reff = 10.0*stagnationPoint(z);
+	double Reff = stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma); //
@@ -96,7 +97,6 @@ double computeDlorentz(double gamma) {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
 
-	//double angle = std::max(openingAngle, inc);
 	double Dlorentz;
 	double beta = sqrt(1.0 - 1.0 / P2(gamma));
 
@@ -112,9 +112,11 @@ double computeDlorentz(double gamma) {
 
 void prepareGlobalCfg()
 {
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
+	GlobalConfig.put("Bfield", GlobalConfig.get<double>("Bfield", computeMagField(z_int)));
 
 //	DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);
 	//DefOpt_IntLosses.samples_t = GlobalConfig.get<int>("integrate-losses.samples.t", DefOpt_IntLosses.samples_t);

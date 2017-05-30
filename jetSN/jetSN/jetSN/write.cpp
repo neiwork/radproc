@@ -38,13 +38,13 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	
 	data.ps.iterate([&file, &data](const SpaceIterator& i){
 		double logE = log10(i.val(DIM_E) / 1.6e-12);
-		double logR = log10(i.val(DIM_R));
-		double logT = log10(i.val(DIM_T));
+		//double logR = log10(i.val(DIM_R));
+		//double logT = log10(i.val(DIM_T));
 		double logQ = log10(data.get(i)); //log10(salida.values(i));  // values(i));
 //		salida.values(i);
 
 
-		file << logE << '\t' << logR << '\t' << logT << '\t' << 
+		file << logE << '\t' <<// logR << '\t' << logT << '\t' << 
 			logQ << std::endl;
 			//logQ << std::endl;
 	});
@@ -53,6 +53,7 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	generateViewScript(filename);
 }
 
+/*
 void writeEandRParamSpace(const std::string& filename, const ParamSpaceValues& data, int t)
 {
 
@@ -254,6 +255,6 @@ void writeEnt(const std::string& filename, const ParamSpaceValues& data)
 	file.close();
 	generateViewScript(filename);
 }
-
+*/
 
 

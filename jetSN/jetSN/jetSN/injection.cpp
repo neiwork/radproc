@@ -17,14 +17,14 @@
 
 double powerLaw(double E, double Emin, double Emax)
 {
-	static const double primaryIndex = GlobalConfig.get<double>("primaryIndex", 2.0);
+	static const double primaryIndex = GlobalConfig.get<double>("primaryIndex");
 	
 	double result = pow(E, (-primaryIndex))*exp(-E / Emax)*exp(-5 * Emin / E);
 	return result;
 }
 
 
-double normalization(Particle& p, double z, double magf)
+double normalization(Particle& p, double z, double B)
 {
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
@@ -32,7 +32,7 @@ double normalization(Particle& p, double z, double magf)
 	//double z = p.ps[1][i_z];
 
 	double Emin = p.emin();
-	double Emax = eEmax(z, magf);
+	double Emax = eEmax(z, B);
 
 	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
@@ -47,35 +47,40 @@ double normalization(Particle& p, double z, double magf)
 
 void injection(Particle& p, State& st)
 {
+	//static const double magf = GlobalConfig.get<double>("magf");
+
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
 
 	show_message(msgStart, Module_electronInjection);
 
-	const double RMIN = p.ps[DIM_R].first();
-	const double RMAX = p.ps[DIM_R].last();
-	const int N_R = p.ps[DIM_R].size()-1;
+	//const double RMIN = p.ps[DIM_R].first();
+	//const double RMAX = p.ps[DIM_R].last();
+	//const int N_R = p.ps[DIM_R].size()-1;
 
-	double Lnt_total = nonThermalLuminosity(RMIN, RMAX);
+	double Lnt_total = nonThermalLuminosity();
 
 	//volumen total del jet
 	//double vol = (pi / 3.0)*(P2(jetRadius(RMAX, openingAngle))*RMAX
 	//	- P2(jetRadius(RMIN, openingAngle))*RMIN);
 
-	double z_int = pow((RMAX / RMIN), (1.0 / N_R));
+	//double z_int = pow((RMAX / RMIN), (1.0 / N_R));
 
-	int z_ix = 0;
-	int t_ix = 0;
+	//int z_ix = 0;
+	//int t_ix = 0;
 
-	static const std::string injector = GlobalConfig.get<std::string>("injector");
+	//static const std::string injector = GlobalConfig.get<std::string>("injector");
 
 	//bool multiple = (injector == "multiple");
 	//bool single = (injector == "single");
 	//bool condicion;
 
+	
+
 	p.injection.fill([&](const SpaceIterator& i){
 		const double magf{ st.magf.get(i) };
-		const double r{ i.val(DIM_R) };
+		//const double r{ i.val(DIM_R) };
 		
 		//if (single)
 		//{
@@ -95,22 +100,22 @@ void injection(Particle& p, State& st)
 		//else //if (t_position = 0) solo inyecto particulas a tiempo 0
 		//{
 		
-			if (i.its[1].dim == 0 && i.its[2].dim){
+			//if (i.its[1].dim == 0 && i.its[2].dim){
 			double Emin = p.emin();
-			double Emax = eEmax(r,magf);
-			double Q0 = normalization(p,r,magf);
+			double Emax = eEmax(z_int,magf);
+			double Q0 = normalization(p,z_int,magf);
 		
-			double z = i.val(DIM_R);			
-			double dz = z*(z_int - 1);
+			//double z = i.val(DIM_R);			
+			//double dz = z*(z_int - 1);
 			//volumen de la celda i
-			double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
+			//double vol_i = pi*P2(jetRadius(z, openingAngle))*dz;
 
-			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0*vol_i;// / vol;
+			double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0; // *vol_i;// / vol;
 
 			return total;
-		}
+		//}
 
-	}, { -1, z_ix, t_ix });
+	});
 
 	show_message(msgEnd, Module_electronInjection);
 }

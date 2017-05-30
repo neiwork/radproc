@@ -14,18 +14,20 @@
 #include <iostream>
 #include <map>
 
+
+
 double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i)
 {
-	static const std::string id = GlobalConfig.get<std::string>("id");
 	
-	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	//static const double magf = GlobalConfig.get<double>("magf");
+	//static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	
 
 	double vel_lat = cLight*openingAngle;
 
 	//double r = i->par.R;
-	double B = st.magf.get(i); // parameters.magneticField;
+	static const double B{ st.magf.get(i) };
 	
 	double loss = lossesSyn(E, B, p)
 		+ adiabaticLosses(E, r, vel_lat);

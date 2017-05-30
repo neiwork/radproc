@@ -4,20 +4,63 @@
 
 #include "injection.h"
 #include "losses.h"
-#include "timeDistribution.h"
+//#include "timeDistribution.h"
 
 #include <iostream>
-#include <fmath\physics.h>
+#include <flosses\nonThermalLosses.h>
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 #include <fparameters\parameters.h>
+#include <fmath\RungeKutta.h>
+#include <fmath\interpolation.h>
+#include <fmath\physics.h>
+
 #include <boost/property_tree/ptree.hpp>
 
 void distribution(Particle& p, State& st)
 {
+
+	//static const double Bfield = GlobalConfig.get<double>("Bfield");
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
 
 	show_message(msgStart, Module_electronDistribution);
+
+	//double magf = computeMagField(z_int);
+	//
+	double Rs = stagnationPoint(z_int);
+
+	p.ps.iterate([&](const SpaceIterator& i) {
+		const double E = i.val(DIM_E);
+		const double magf{ st.magf.get(i) };
+
+		double Emax = (z_int, magf);
+
+		double bE = losses(E, z_int, p, st, i);
+
+		double tloss = bE / E; //en [s]^-1
+		double tesc = diffusionRate(E, Rs, magf);  //en [s]^-1
+
+		double dist;
+
+		if (tesc > tloss) {
+			dist = p.injection.get(i)*tesc;
+		}
+		else {
+			double integral = RungeKuttaSimple(E, Emax, [&Emax, &p](double Ep) {
+				return p.injection.interpolate({ { DIM_E, Ep } }); });
+
+			//inj = p.injection.interpolate({ { DIM_E, Ep },{ DIM_R, r },{ DIM_T, tmin } })
+			dist = p.injection.get(i) / bE;
+		}
+
+		p.distribution.set(i, dist);
+
+	});
+
+}
+
+		/*
 
 	const ParamSpace& ps{ p.ps };
 	
@@ -155,3 +198,4 @@ void distribution(Particle& p, State& st)
 
 
 
+*/

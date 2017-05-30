@@ -2,63 +2,94 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="distribution.cpp" />
-    <ClCompile Include="injection.cpp" />
-    <ClCompile Include="losses.cpp" />
     <ClCompile Include="modelParameters.cpp" />
-    <ClCompile Include="nonThermalLuminosity.cpp" />
-    <ClCompile Include="oneZone.cpp" />
     <ClCompile Include="processes.cpp" />
-    <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="targetFields.cpp" />
-    <ClCompile Include="timeDistribution.cpp" />
     <ClCompile Include="jetSN.cpp" />
     <ClCompile Include="checkPower.cpp" />
-    <ClCompile Include="ioutil.cpp">
-      <Filter>extras</Filter>
-    </ClCompile>
     <ClCompile Include="messages.cpp">
-      <Filter>extras</Filter>
-    </ClCompile>
-    <ClCompile Include="read.cpp">
       <Filter>extras</Filter>
     </ClCompile>
     <ClCompile Include="write.cpp">
       <Filter>extras</Filter>
     </ClCompile>
-    <ClCompile Include="SSC.cpp" />
+    <ClCompile Include="losses.cpp">
+      <Filter>losses</Filter>
+    </ClCompile>
+    <ClCompile Include="radiativeLosses.cpp">
+      <Filter>losses</Filter>
+    </ClCompile>
+    <ClCompile Include="read.cpp">
+      <Filter>excluded</Filter>
+    </ClCompile>
+    <ClCompile Include="oneZone.cpp">
+      <Filter>excluded</Filter>
+    </ClCompile>
+    <ClCompile Include="SSC.cpp">
+      <Filter>excluded</Filter>
+    </ClCompile>
+    <ClCompile Include="timeDistribution.cpp">
+      <Filter>excluded</Filter>
+    </ClCompile>
+    <ClCompile Include="injection.cpp">
+      <Filter>injection</Filter>
+    </ClCompile>
+    <ClCompile Include="nonThermalLuminosity.cpp">
+      <Filter>injection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="distribution.h" />
-    <ClInclude Include="injection.h" />
-    <ClInclude Include="losses.h" />
     <ClInclude Include="modelParameters.h" />
-    <ClInclude Include="nonThermalLuminosity.h" />
-    <ClInclude Include="oneZone.h" />
     <ClInclude Include="processes.h" />
-    <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="State.h" />
-    <ClInclude Include="timeDistribution.h" />
-    <ClInclude Include="jetSN.h" />
     <ClInclude Include="checkPower.h" />
-    <ClInclude Include="ioutil.h">
-      <Filter>extras</Filter>
-    </ClInclude>
     <ClInclude Include="messages.h">
-      <Filter>extras</Filter>
-    </ClInclude>
-    <ClInclude Include="read.h">
       <Filter>extras</Filter>
     </ClInclude>
     <ClInclude Include="write.h">
       <Filter>extras</Filter>
     </ClInclude>
     <ClInclude Include="targetFields.h" />
-    <ClInclude Include="SSC.h" />
+    <ClInclude Include="losses.h">
+      <Filter>losses</Filter>
+    </ClInclude>
+    <ClInclude Include="radiativeLosses.h">
+      <Filter>losses</Filter>
+    </ClInclude>
+    <ClInclude Include="read.h">
+      <Filter>excluded</Filter>
+    </ClInclude>
+    <ClInclude Include="oneZone.h">
+      <Filter>excluded</Filter>
+    </ClInclude>
+    <ClInclude Include="SSC.h">
+      <Filter>excluded</Filter>
+    </ClInclude>
+    <ClInclude Include="timeDistribution.h">
+      <Filter>excluded</Filter>
+    </ClInclude>
+    <ClInclude Include="jetSN.h" />
+    <ClInclude Include="injection.h">
+      <Filter>injection</Filter>
+    </ClInclude>
+    <ClInclude Include="nonThermalLuminosity.h">
+      <Filter>injection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">
       <UniqueIdentifier>{85fe8eed-3c9f-4e01-a504-2e9d368bb6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="losses">
+      <UniqueIdentifier>{01aa7b44-c2f2-44ea-9d8e-a80ae658deed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="excluded">
+      <UniqueIdentifier>{af18a33c-04e7-4232-859a-fded3d8b1e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="injection">
+      <UniqueIdentifier>{f2f817fe-79b9-4b65-96df-3422bc42676d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

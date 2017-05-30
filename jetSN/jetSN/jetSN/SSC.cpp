@@ -28,16 +28,17 @@ double nSSC(double E, ParamSpace pps, ParamSpaceValues Qsyn)
 
 }
 
+
 void SSC(State st, ParamSpaceValues& Qssc, ParamSpaceValues Qsyn)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	const double r = GlobalConfig.get<double>("z_int")*pc;
 
 	const ParamSpace& pps = st.photon.ps;
 
 	st.photon.ps.iterate([&](const SpaceIterator &i){
 
-		const double E = i.val(DIM_E);
-		const double r = i.val(DIM_R);
+		const double E = i.val(DIM_E);		
 
 		const double eSSC = luminosityIC(E, st.electron, i,
 			[&Qsyn, &pps, &r](double E){return nSSC(E, pps, Qsyn) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
