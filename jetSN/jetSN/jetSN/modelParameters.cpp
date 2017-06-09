@@ -20,29 +20,36 @@ double stagnationPoint(double z)
 	static const double Lj = GlobalConfig.get<double>("Lj");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
-	double Rs = pow((E_0*cLight*pi*P2(openingAngle*z) / (4.0*Lj)), 1.0 / 3.0);
+	double Rs = pow((E_0*cLight*P2(openingAngle*z) / (4.0*Lj)), 1.0 / 3.0);
+
+	//double Rs = sqrt( E_0*P2(openingAngle*z) / (4.0*Lj) );
 
 	return Rs;
 
 }
 
-
-inline double computeModelB0(double Lj, double openingAngle) {
-	return sqrt(4.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
-}
-
-inline double fmagneticField(double z, double B_o)
+double jetRamPress(double z)
 {
-	static const double subEq = GlobalConfig.get<double>("subEq");
-	return sqrt(subEq)*B_o / z;  //la equiparicion es respecto a Lj ~B^2
-}
+	static const double Lj = GlobalConfig.get<double>("Lj");
+	static const double theta = GlobalConfig.get<double>("openingAngle");
 
+	double ramP = Lj / (cLight*pi*P2(jetRadius(z, theta)));
+
+	return ramP;
+
+
+}
 double computeMagField(double z) {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double Lj = GlobalConfig.get<double>("Lj");
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double subEq = GlobalConfig.get<double>("subEq");
 
-	double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
+	double B0 = sqrt(4.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
+
+	//double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
+	double Blab = sqrt(subEq)*B0 / z;  //la equiparicion es respecto a Lj ~B^2
+
 	return Blab/ Gamma;  //este es el B en el sistema del jet
 	//return Blab * (5.0e16/z);  //este es el B para m=2
 
@@ -82,16 +89,6 @@ double eEmax(double z, double B)
 
 
 
-//void derive_parameters_r(double E, double z, double t)
-//{
-//	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
-//	//parameters.radius = jetRadius(z, parameters.openingAngle);
-//	parameters.magneticField = fmagneticField(z, B0);
-//	//electronLogEmax = log10(eEmax(z, magneticField));
-//
-//	//Rsp = stagnationPoint(z);
-//}
-
 double computeDlorentz(double gamma) {
 
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
@@ -112,11 +109,10 @@ double computeDlorentz(double gamma) {
 
 void prepareGlobalCfg()
 {
-	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	//static const double Gamma = GlobalConfig.get<double>("Gamma");
 
-	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
-	GlobalConfig.put("Bfield", GlobalConfig.get<double>("Bfield", computeMagField(z_int)));
+	//GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
+	
 
 //	DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);
 	//DefOpt_IntLosses.samples_t = GlobalConfig.get<int>("integrate-losses.samples.t", DefOpt_IntLosses.samples_t);
@@ -126,7 +122,9 @@ void prepareGlobalCfg()
 }
 
 
-//
+
+
+///inicializadores de coord
 
 
 void initializeEnergyPoints(Vector& v, double logEmin, double logEmax)
@@ -177,6 +175,17 @@ void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 
 
 /*
+inline double computeModelB0(double Lj, double openingAngle) {
+return sqrt(4.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
+}
+
+inline double fmagneticField(double z, double B_o)
+{
+static const double subEq = GlobalConfig.get<double>("subEq");
+return sqrt(subEq)*B_o / z;  //la equiparicion es respecto a Lj ~B^2
+}*/
+
+/*
 
 double vWind(double r, double starR) //x es la energia
 {
@@ -189,3 +198,15 @@ double nWindDensity(double r, double starR)
 	double Mdot = 3.0e-6*solarMass;
 	return Mdot / (4.0*pi*P2(r)*vWind(r, starR)*protonMass);
 }*/
+
+
+
+//void derive_parameters_r(double E, double z, double t)
+//{
+//	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
+//	//parameters.radius = jetRadius(z, parameters.openingAngle);
+//	parameters.magneticField = fmagneticField(z, B0);
+//	//electronLogEmax = log10(eEmax(z, magneticField));
+//
+//	//Rsp = stagnationPoint(z);
+//}

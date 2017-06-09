@@ -20,8 +20,14 @@
 #define true 1
 #define false 0
 
-double absval(double);
-void INPUT(int *, double [][13], int *);
+/* Absolute Value Function */
+double absval(double val)
+{
+	if (val >= 0) return val;
+	else return -val;
+}
+
+//void INPUT(int *, double [][13], int *);
 
 void elimiGaussiana( int N, Matrix& A, Vector& X )
 {	
@@ -88,12 +94,7 @@ void elimiGaussiana( int N, Matrix& A, Vector& X )
 }
 
 
-/* Absolute Value Function */
-double absval(double val)
-{
-   if (val >= 0) return val;
-   else return -val;
-}
+
 
 
 /*

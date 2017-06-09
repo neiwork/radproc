@@ -4,8 +4,8 @@
 
 #include "State.h"
 
-double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, double E, int t_ix);
+//double emiToLumi(const ParamSpace& pps, ParamSpaceValues& psv, double E, int t_ix);
 
-void processes(State& st, const std::string& filename);
+void processes(State& st, const std::string& filename, Vector& Gc);
 
 double Llab(double Lint);

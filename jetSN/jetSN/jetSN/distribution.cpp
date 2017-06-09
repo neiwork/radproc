@@ -2,6 +2,8 @@
 
 #include "messages.h"
 
+#include "oneZoneDistribution.h"
+
 #include "injection.h"
 #include "losses.h"
 //#include "timeDistribution.h"
@@ -17,47 +19,62 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-void distribution(Particle& p, State& st)
+void distribution(Particle& p, State& st, Vector& Gc)
 {
 
-	//static const double Bfield = GlobalConfig.get<double>("Bfield");
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
-	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
+	static const double Gj = GlobalConfig.get<double>("Gamma");
 
 	show_message(msgStart, Module_electronDistribution);
+	double z_0 = p.ps[DIM_R].first();
 
-	//double magf = computeMagField(z_int);
-	//
-	double Rs = stagnationPoint(z_int);
+	double Rs = stagnationPoint(z_0);
 
-	p.ps.iterate([&](const SpaceIterator& i) {
+	/*p.ps.iterate([&](const SpaceIterator& i) {
 		const double E = i.val(DIM_E);
-		const double magf{ st.magf.get(i) };
+		const double z = i.val(DIM_R);
+		const double magf = st.magf.get(i);
 
-		double Emax = (z_int, magf);
+		double Emax = (z, magf);
+		
+		double bE = losses(E, z, p, st, i, Gc[i.coord[DIM_R]]);
 
-		double bE = losses(E, z_int, p, st, i);
+		double vc = sqrt(1.0-1.0/P2(Gc[i.coord[DIM_R]]));
 
-		double tloss = bE / E; //en [s]^-1
-		double tesc = diffusionRate(E, Rs, magf);  //en [s]^-1
+		double vjet = sqrt(1.0 - 1.0 / P2(Gj));
+		double v_rel = cLight*(vjet - vc);
+
+		double tloss = E / bE; //en [s]
+		double tesc = 1.0/escapeRate(Rs, v_rel);  //en [s]
 
 		double dist;
 
-		if (tesc > tloss) {
+		if (tesc < tloss) {
 			dist = p.injection.get(i)*tesc;
 		}
 		else {
-			double integral = RungeKuttaSimple(E, Emax, [&Emax, &p](double Ep) {
-				return p.injection.interpolate({ { DIM_E, Ep } }); });
-
-			//inj = p.injection.interpolate({ { DIM_E, Ep },{ DIM_R, r },{ DIM_T, tmin } })
+			double integral = RungeKuttaSimple(E, Emax, [&Emax, &p, &z](double Ep) {
+				return p.injection.interpolate({ { DIM_E, Ep },{ DIM_R, z } }); });
+				//inj = p.injection.interpolate({ { DIM_E, Ep },{ DIM_R, r },{ DIM_T, tmin } })
 			dist = p.injection.get(i) / bE;
 		}
 
 		p.distribution.set(i, dist);
 
-	});
+	});*/
 
+	p.ps.iterate([&](const SpaceIterator& i) {
+		const double E = i.val(DIM_E);
+		const double z = i.val(DIM_R);
+		const double magf = st.magf.get(i);
+
+		double Emax = (z, magf);
+
+		oneZoneDistribution(p, st, i, Gc);
+	
+
+	}, { 0,-1 });
+
+	
 }
 
 		/*

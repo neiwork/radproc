@@ -1,10 +1,10 @@
 #pragma once
 
 
-double wph(double z);
+//double wph(double z);
 
 
-double starBlackBody(double Ep, double r);
+double starBlackBody(double Ep, double r, double gamma);
 
-double starIR(double Ep, double z);
+double starIR(double Ep, double z, double gamma);
 

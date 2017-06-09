@@ -21,9 +21,9 @@
 
 
 
-double Llab(double Lint)
+double Llab(double Lint, double gamma)
 {
-	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	double Dlorentz = computeDlorentz(gamma);
 	double boost = pow(Dlorentz, 4.0);
 	return Lint*boost;
 }
@@ -32,13 +32,8 @@ double Llab(double Lint)
 for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
 
 
-
-
-
-
 void synL(State& st, ParamSpaceValues& Qsyn)
 {
-	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
 
 
 	st.photon.ps.iterate([&](const SpaceIterator &i) {
@@ -50,14 +45,12 @@ void synL(State& st, ParamSpaceValues& Qsyn)
 	});
 }
 
-void processes(State& st, const std::string& filename)
+void processes(State& st, const std::string& filename, Vector& Gc)
 {
 	
-	//static const double Bfield = GlobalConfig.get<double>("Bfield");
-	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
+	//static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double starT = GlobalConfig.get<double>("starT");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
 
 
 	ParamSpaceValues Qsyn(st.photon.ps);
@@ -75,43 +68,51 @@ void processes(State& st, const std::string& filename)
 
 
 	file << "log(E/eV)"
+		<< '\t' << "z/pc"
+		<< '\t' << "t/yr"
 		<< '\t' << "Synchr"
 		<< '\t' << "IC"
-		<< '\t' << "IC-Aux"
+		<< '\t' << "IC - IR"
 	    << '\t' << "SSC";
 
 	file << std::endl;
 
 	st.photon.ps.iterate([&](const SpaceIterator &i) {
 
-		if (i.coord[0] % 5 == 0){
-			std::cout << "energy: " << i.coord[0] << std::endl; }
+		if (i.coord[0] == 0 && i.coord[1] % 5 == 0){
+			std::cout << "z: " << i.coord[1] << std::endl; }
 
 		const double E = i.val(DIM_E);
+		const double r = i.val(DIM_R);
+
+		double gamma = Gc[i.coord[DIM_R]];
+		double Dlorentz = computeDlorentz(gamma);
 		double Elab = E*Dlorentz; //Dlorentz=delta
 
-		const double r = z_int;
 		double eSyn = Qsyn.get(i);// luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 
-		double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
-			return starBlackBody(E, r); }, EphminS);
+		double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
+			return starBlackBody(E, r, gamma); }, EphminS);
 
-		double eIC_aux = luminosityIC(E, st.electron, i.coord, [&E, &r](double E) {
-			return starIR(E, r); }, EphminAux);
+		double eIC_aux = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
+			return starIR(E, r, gamma); }, EphminAux);
 
 		double eSSC = luminosityIC(E, st.electron, i, 
-		[&Qsyn, &i, &r](double E) {return Qsyn.interpolate({ {DIM_E, E } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
+		[&Qsyn, &i, &r](double E) {return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 		, st.photon.emin());
 
 
-		double Lsyn = Llab(eSyn);
-		double LicS = Llab(eICs);
-		double Lic_aux = Llab(eIC_aux);
-		double Lssc = Llab(eSSC);
+		double Lsyn = Llab(eSyn,gamma);
+		double LicS = Llab(eICs, gamma);
+		double Lic_aux = Llab(eIC_aux, gamma);
+		double Lssc = Llab(eSSC, gamma);
 
 		double fmtE = log10(Elab / 1.6e-12);
+		double t = r / cLight / yr;
 
-		file << fmtE //<< '\t' << log10(t)
+		file << fmtE 
+			<< '\t' << r/pc
+			<< '\t' << t
 			<< '\t' << safeLog10((Lsyn))
 			<< '\t' << safeLog10((LicS))
 			<< '\t' << safeLog10((Lic_aux))

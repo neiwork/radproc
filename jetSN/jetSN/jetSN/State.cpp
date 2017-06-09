@@ -21,17 +21,17 @@ State::State(boost::property_tree::ptree& cfg) :
 
 	magf.initialize();
 
-	//magf.fill([&](const SpaceIterator& i) {
-	//	return computeMagField(i.val(DIM_R));  // 
-	//});
+	magf.fill([&](const SpaceIterator& i) {
+		return computeMagField(i.val(DIM_R));  // 
+	});
 
 	//inicializo el magf de distinta forma porque ahora notengo dimension r
-	static const double z_int = GlobalConfig.get<double>("z_int")*pc;
+	//static const double z_int = GlobalConfig.get<double>("z_int")*pc;
 	//static const double z_int = cfg.get<double>("z_int")*pc;
-	magf.ps.iterate([&](const SpaceIterator &i) {
-		double field = computeMagField(z_int);
-		magf.set(i, field); 
-	});	
+	//magf.ps.iterate([&](const SpaceIterator &i) {
+	//	double field = computeMagField(z_int);
+	//	magf.set(i, field); 
+	//});	
 
 }
 
@@ -53,10 +53,10 @@ void State::initializeParticle(Particle& p, boost::property_tree::ptree& cfg)
 
 	// we can't use createDimension because we're multiplying by pc before creating them
 	// add dimension for R
-	//double rmin = p.getpar(cfg,"dim.radius.min", 1.0)*pc;
-	//double rmax = p.getpar(cfg,"dim.radius.max", 1.0e3)*pc;
-	//int nR = p.getpar(cfg,"dim.radius.samples", 5); // solo por ahora; y no deberia ser usado directamente desde otro lado
-	//p.ps.add(new Dimension(nR, bind(initializeRPoints, std::placeholders::_1, rmin, rmax)));
+	double rmin = p.getpar(cfg,"dim.radius.min", 1.0)*pc;
+	double rmax = p.getpar(cfg,"dim.radius.max", 1.0)*pc;
+	int nR = p.getpar(cfg,"dim.radius.samples", 1); // solo por ahora; y no deberia ser usado directamente desde otro lado
+	p.ps.add(new Dimension(nR, bind(initializeRPoints, std::placeholders::_1, rmin, rmax)));
 
 	// add dimension for T
 	//double tmin = p.getpar(cfg, "dim.time.min", 1.0)*pc;

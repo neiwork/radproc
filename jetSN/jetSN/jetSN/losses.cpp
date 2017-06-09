@@ -16,11 +16,9 @@
 
 
 
-double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i)
+double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i, double gamma)
 {
 	
-	//static const double magf = GlobalConfig.get<double>("magf");
-	//static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	
 
@@ -30,7 +28,7 @@ double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i)
 	static const double B{ st.magf.get(i) };
 	
 	double loss = lossesSyn(E, B, p)
-		+ adiabaticLosses(E, r, vel_lat);
+		+ adiabaticLosses(E, r, vel_lat, gamma);
 
 	/*if (E > 9.0e10*1.6e-12 && id != "M87") {
 		static const double starT = GlobalConfig.get<double>("IRstarT");

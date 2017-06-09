@@ -51,6 +51,8 @@ public:
 	}
 };
 
+void writeEvol(const std::string& filename, const ParamSpaceValues& data, const Vector& Gc);
+
 //void writeFlux(const std::string& archive, Vector salida, Particle particle);
 
 //void write(const std::string& archive, Vector salida, Particle particle);

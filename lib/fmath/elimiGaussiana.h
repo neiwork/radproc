@@ -9,4 +9,3 @@
 	 @returns result in Ne*/ 
 void elimiGaussiana (int N2, Matrix& a, Vector& Ne);
 
-double absval(double val);

@@ -32,7 +32,8 @@ double nSSC(double E, ParamSpace pps, ParamSpaceValues Qsyn)
 void SSC(State st, ParamSpaceValues& Qssc, ParamSpaceValues Qsyn)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	const double r = GlobalConfig.get<double>("z_int")*pc;
+
+	double r = st.electron.ps[DIM_R].first();
 
 	const ParamSpace& pps = st.photon.ps;
 

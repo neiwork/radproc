@@ -38,6 +38,8 @@
     <ClCompile Include="nonThermalLuminosity.cpp">
       <Filter>injection</Filter>
     </ClCompile>
+    <ClCompile Include="dynamics.cpp" />
+    <ClCompile Include="oneZoneDistribution.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="distribution.h" />
@@ -77,6 +79,8 @@
     <ClInclude Include="nonThermalLuminosity.h">
       <Filter>injection</Filter>
     </ClInclude>
+    <ClInclude Include="dynamics.h" />
+    <ClInclude Include="oneZoneDistribution.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">

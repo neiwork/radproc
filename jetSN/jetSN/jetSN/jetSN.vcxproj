@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="checkPower.cpp" />
     <ClCompile Include="distribution.cpp" />
+    <ClCompile Include="dynamics.cpp" />
     <ClCompile Include="injection.cpp" />
     <ClCompile Include="jetSN.cpp" />
     <ClCompile Include="losses.cpp" />
@@ -158,6 +159,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="oneZoneDistribution.cpp" />
     <ClCompile Include="processes.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="read.cpp">
@@ -179,6 +181,7 @@
   <ItemGroup>
     <ClInclude Include="checkPower.h" />
     <ClInclude Include="distribution.h" />
+    <ClInclude Include="dynamics.h" />
     <ClInclude Include="injection.h" />
     <ClInclude Include="jetSN.h" />
     <ClInclude Include="losses.h" />
@@ -189,6 +192,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="oneZoneDistribution.h" />
     <ClInclude Include="processes.h" />
     <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="read.h">

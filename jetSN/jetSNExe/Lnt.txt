@@ -1,2 +1,0 @@
-E	1.01136e+08	Lnt total	1.11914e+43
-boost	8.10779	Doppler	2.92271

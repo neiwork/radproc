@@ -5,7 +5,7 @@
 
 
 
+//void distribution(Particle& particle, State& state);
+void distribution(Particle& p, State& st, Vector& Gc);
 
-void distribution(Particle& particle, State& state);
-
-void distWOLosses(Particle& p, State& st);
+//void distWOLosses(Particle& p, State& st);
