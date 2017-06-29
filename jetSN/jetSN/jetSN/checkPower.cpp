@@ -16,60 +16,62 @@
 
 
 
-double computeInjectedPower(const ParamSpaceValues& dist, int t_ix)
+double computeInjectedPower(const ParamSpaceValues& dist, int z_ix)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	
+	
 
-	double sum = 0.0;
-
-	//double T = dist.ps[2][t_ix];
-
-	///Vector& z = dist.ps.dimensions[1]->values;
-	Vector& E = dist.ps.dimensions[0]->values;
-
+	
+	const double EMIN = dist.ps[DIM_E].first();
+	const double EMAX = dist.ps[DIM_E].last();
+	const int N_E = dist.ps[DIM_E].size() - 1;
+	double E_int = pow((EMAX / EMIN), (1.0 / N_E));
 
 	//const double RMIN = dist.ps[DIM_R].first();
 	//const double RMAX = dist.ps[DIM_R].last();
 	//const int N_R = dist.ps[DIM_R].size() - 1;
-
-	//double z_int = pow((RMAX / RMIN), (1.0 / N_R));
+	//double sumT = 0.0;
 	
-	//for (size_t i = 0; i < N_R + 1 ; ++i) { 
-	
-		//double z = z[i]; // i.val(DIM_R);
-		//double dz = z[i]*(z_int - 1);
-		//volumen de la celda i
-		//double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;
+	//for (int z_ix = 0; z_ix < N_R; z_ix++) {
+		
+		double sum = 0.0;
 
-		//double jetR = jetRadius(z[i], openingAngle);
+		double E = EMIN;
 
-		for (size_t j = 0; j < E.size() - 1; ++j) {
+		double z = dist.ps[DIM_R][z_ix];
 
-			double dE = E[j + 1] - E[j];
+		dist.ps.iterate([&](const SpaceIterator& i) {
+			
+			double dE = E*(E_int - 1);
 
-			double emissivity = dist.interpolate({ { DIM_E, E[j] } });
+			double emissivity = dist.interpolate({ { DIM_E, E },{ DIM_R, z } });
 
-			//double L1 = 2.0*pi*P2(jetR)*emissivity*E[j] * dE*dz;
-			double L1 = emissivity*E[j] * dE;
+			double L1 = emissivity* E * dE;
 
 			sum = sum + L1;
-		}
+
+			E = E*E_int;
+
+		}, { -1, z_ix });
+
+		return sum;
+		//std::cout << "injected power at :" << '\t' << z/pc << '\t' << sum << std::endl;
+
+		//sumT = sumT + sum;
 
 	//}
 
-	return sum;
+	//std::cout << "checking injected power:" << '\t' << sumT << std::endl;
 }
 
+/*
 
 double computeInjectedEnergy(const ParamSpaceValues& dist)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
-	double sum = 0.0;
-
-	//double T = dist.ps[2].last();
-
-	//Vector& z = dist.ps.dimensions[1]->values;
+	
 	Vector& E = dist.ps.dimensions[0]->values;
 
 	//for (size_t i = 0; i < z.size() - 1; ++i) { //no llego al ultimo
@@ -80,6 +82,7 @@ double computeInjectedEnergy(const ParamSpaceValues& dist)
 
 		for (size_t j = 0; j < E.size() - 1; ++j) {
 
+
 			double dE = E[j + 1] - E[j];
 
 			double emissivity = dist.interpolate({ { DIM_E, E[j] } });
@@ -87,11 +90,16 @@ double computeInjectedEnergy(const ParamSpaceValues& dist)
 			//double L1 = 2.0*pi*P2(jetR)*emissivity*E[j] * dE*dz;
 			double L1 = emissivity*E[j] * dE;
 
-			sum = sum + L1;
+			//sum = sum + L1;
 		}
 
+		
 	//}
 
 	return sum;
-}
+}*/ 
 
+//Vector& z = dist.ps.dimensions[1]->values;
+//Vector& E = dist.ps.dimensions[0]->values;
+
+//	double Emin = p.emin();

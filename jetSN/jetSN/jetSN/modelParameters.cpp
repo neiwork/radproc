@@ -4,6 +4,7 @@
 
 //#include "lossesAnisotropicIC.h"
 
+
 #include <fmath\interpolation.h>
 #include <fmath\RungeKutta.h>
 
@@ -21,9 +22,7 @@ double stagnationPoint(double z)
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	double Rs = pow((E_0*cLight*P2(openingAngle*z) / (4.0*Lj)), 1.0 / 3.0);
-
-	//double Rs = sqrt( E_0*P2(openingAngle*z) / (4.0*Lj) );
-
+		
 	return Rs;
 
 }
@@ -61,31 +60,7 @@ double jetRadius(double z, double openingAngle)
 	return z*openingAngle;
 }
 
-double eEmax(double z, double B)
-{
-	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-	double Reff = stagnationPoint(z);
-	double vel_lat = cLight*openingAngle;
-
-	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma); //
-	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
-	
-	double ampl = Gamma; //factor de amplificaci'on de B en la zona del choque
-	double Emax_diff = electronCharge*B*Reff*sqrt(3.0*accEfficiency*ampl/2.0);
-	double min1 = std::min(Emax_syn, Emax_ad);
-	double min2 = std::min(min1, Emax_diff);
-
-	//std::ofstream file;
-	//file.open("Emax.txt", std::ios::out);
-
-	//file << z << '\t' << Emax_ad << '\t' << Emax_syn  << '\t' << std::endl;
-
-	return min2;
-		
-}
 
 
 
@@ -97,7 +72,10 @@ double computeDlorentz(double gamma) {
 	double Dlorentz;
 	double beta = sqrt(1.0 - 1.0 / P2(gamma));
 
-	if (inc < openingAngle) {
+	if (gamma == 1.0) {
+		Dlorentz = 1.0;
+	}
+	else if(inc < openingAngle) {
 		Dlorentz = pow((14.0*pow(gamma,4) / 3.0) , (1.0 / 4.0));
 	}
 	else {

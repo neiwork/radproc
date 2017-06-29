@@ -1,5 +1,6 @@
 #include "oneZoneDistribution.h"
 
+#include "dynamics.h"
 #include "losses.h"
 
 #include <flosses\nonThermalLosses.h>
@@ -11,7 +12,8 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, Vector& Gc)
+void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, 
+	Vector& Gc, Vector& Rc)
 {
 	static const double Gj = GlobalConfig.get<double>("Gamma");
 
@@ -49,8 +51,9 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, Vector
 	double v_rel = cLight*(vjet - vc);
 
 	double z_int = p.ps[DIM_R].first();
-	double Rs = stagnationPoint(z_int);
-
+	double Rs = z / Gc[z_ix]; // Rc[z_ix];
+	//double Rs = Rc[z_ix] / Gc[z_ix]; 
+	
 	nE = nE - 1;
 
 	for (int i = 0; i <= nE; ++i) {     //ver como acomodo los limites
@@ -63,15 +66,16 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, Vector
 			double h = Ee[i + 1] - Ee[i];
 
 			for (int j = 0; j <= nE + 1; ++j) {
-				if (j == i) {                               //escapeTime esta en [s]
+				double tesc = 1.0e30; // 1.0 / escapeRate(Rs, v_rel);  //en [s]  
+				double frac = 0.5*h / 1.0e20;
+				if (j == i) {                               
 					double bE = losses(Ee[i], z, p, st, si, Gc[z_ix]);
-					double tesc = 1.0 / escapeRate(Rs, v_rel);  //en [s]
+					
 					//a[i][j] = losses(Ee[i], particle, state) + 0.5*h / escapeTime(Ee[i], particle);
 					a[i][j] = bE + 0.5*h / tesc;
 				}
 				else if (j == i + 1) {
 					double bE = losses(Ee[i + 1], z, p, st, si, Gc[z_ix]);
-					double tesc = 1.0 / escapeRate(Rs, v_rel);  //en [s]
 					//a[i][j] = -losses(Ee[i + 1], particle, state) + 0.5*h / escapeTime(Ee[i], particle);
 					a[i][j] = -bE + 0.5*h / tesc;
 				}
@@ -87,7 +91,7 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, Vector
 	}
 
 
-	elimiGaussiana(nE + 1, a, Ne);
+	elimiGaussiana(nE+1, a, Ne); //ne+1
 
 	p.ps.iterate([&](const SpaceIterator& i) {
 

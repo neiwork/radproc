@@ -95,6 +95,10 @@ void show_module(ProgramModule module)
             printf("main ");
             break;
 	
+		case Module_radLosses:
+			printf("Non-thermal losses");
+			break;
+
         case Module_electronInjection:
             printf("Injection of electrons");
             break;

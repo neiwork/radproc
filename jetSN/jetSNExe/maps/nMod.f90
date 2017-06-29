@@ -7,8 +7,8 @@
 	open(unit=10,file='eDist.txt')
 	open(unit=20,file='eDist_mod.txt')
 	
-	iE = 30
-	iR = 30
+	iE = 100
+	iR = 50
 	read(10,*)
 	
 	do i=1,iE*iR

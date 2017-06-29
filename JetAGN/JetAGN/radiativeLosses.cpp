@@ -20,6 +20,7 @@ void radiativeLosses(State& st, const std::string& filename)
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double starT = GlobalConfig.get<double>("starT");
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	
 	//std::vector<File*> files;
 	//OFM out;
@@ -95,7 +96,7 @@ void radiativeLosses(State& st, const std::string& filename)
 		double Reff = 10.0*stagnationPoint(i.val(DIM_R));
 		double eDif  = diffusionRate(i.val(DIM_E), Reff, B);
 		double eAcc = accelerationRate(i.val(DIM_E), B, accEfficiency);
-		double eAdia = adiabaticLosses(i.val(DIM_E), i.val(DIM_R), vel_lat) / i.val(DIM_E);
+		double eAdia = adiabaticLosses(i.val(DIM_E), i.val(DIM_R), vel_lat, Gamma) / i.val(DIM_E);
 		
 		file << fmtE << "\t" << logR 
 							<< "\t" << safeLog10(eSyn) 

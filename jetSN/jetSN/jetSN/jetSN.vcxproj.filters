@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="distribution.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="processes.cpp" />
     <ClCompile Include="State.cpp" />
@@ -39,10 +38,14 @@
       <Filter>injection</Filter>
     </ClCompile>
     <ClCompile Include="dynamics.cpp" />
-    <ClCompile Include="oneZoneDistribution.cpp" />
+    <ClCompile Include="distribution.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
+    <ClCompile Include="oneZoneDistribution.cpp">
+      <Filter>distribution</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="distribution.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="processes.h" />
     <ClInclude Include="State.h" />
@@ -80,7 +83,12 @@
       <Filter>injection</Filter>
     </ClInclude>
     <ClInclude Include="dynamics.h" />
-    <ClInclude Include="oneZoneDistribution.h" />
+    <ClInclude Include="distribution.h">
+      <Filter>distribution</Filter>
+    </ClInclude>
+    <ClInclude Include="oneZoneDistribution.h">
+      <Filter>distribution</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">
@@ -94,6 +102,9 @@
     </Filter>
     <Filter Include="injection">
       <UniqueIdentifier>{f2f817fe-79b9-4b65-96df-3422bc42676d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="distribution">
+      <UniqueIdentifier>{a933a361-1c22-4c96-9c1c-5759fc528c99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

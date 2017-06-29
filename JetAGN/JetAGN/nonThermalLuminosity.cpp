@@ -33,7 +33,7 @@ double frad(double E, double z)
 
 	double vel_lat = cLight*openingAngle;
 
-	double tad_flow = adiabaticLosses(E, z, vel_lat) / E; //ad esta en erg/s
+	double tad_flow = adiabaticLosses(E, z, vel_lat, Gamma) / E; //ad esta en erg/s
 
 	double tad = tad_flow/Gamma; //en el lab
 

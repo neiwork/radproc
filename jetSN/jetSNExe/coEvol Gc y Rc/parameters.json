@@ -11,7 +11,7 @@
 
 	"subEq":1.0,
 	
-	"Lj": 1.0e44,
+	"Lj": 1.0e45,
 	"openingAngle": 0.1,
 	"inc": 5,
 	"Gamma": 10.0,
@@ -34,7 +34,7 @@
 					"radius":{
 						"min":10.0,
 						"max":100,
-						"samples":30
+						"samples":100
 					}
 				}
 			},

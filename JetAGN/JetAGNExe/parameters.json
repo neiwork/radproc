@@ -34,17 +34,17 @@
 				"mass":0,
 				"dim": {
 					"energy":{
-						"samples":4
+						"samples":10
 					},
 					"radius":{
 						"min":1.0,
 						"max":5.0e3,
-						"samples":4
+						"samples":100
 					},
 					"time":{
 						"min":1.0,
 						"max":5.0e3,
-						"samples":4
+						"samples":100
 					}
 				}
 			},

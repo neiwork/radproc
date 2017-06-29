@@ -1,8 +1,9 @@
 #include "injection.h"
 
 #include "messages.h"
-#include "modelParameters.h"
 #include "nonThermalLuminosity.h"
+#include "dynamics.h"
+#include "modelParameters.h"
 
 #include <fparameters\parameters.h>
 #include <fparameters\SpaceIterator.h>
@@ -25,7 +26,7 @@ double powerLaw(double E, double Emin, double Emax)
 
 
 
-void injection(Particle& p, State& st, Vector& Gc)
+void injection(Particle& p, State& st, Vector& Gc, Vector& Rc)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
@@ -55,19 +56,21 @@ void injection(Particle& p, State& st, Vector& Gc)
 
 		//normalizacion afuera del iterate sobre E
 		double B = computeMagField(z);
-		double Emax = eEmax(z, B);
+		double Rs = Rc[z_ix];
+
+		double Emax = eEmax(z_0, z, Gc[z_ix], B, Rs);
 
 		double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E) {
 			return E*powerLaw(E, Emin, Emax);
 		});  //integra E*Q(E)  entre Emin y Emax
 
-		double Q0 = dLnt(z, Gc[z_ix], z_0) / (int_E);  //factor de normalizacion de la inyeccion
-		double Q0p = Q0 / P2(Gc[z_ix]); 
-		//////
 
 		p.injection.fill([&](const SpaceIterator& i) {
 			const double E = i.val(DIM_E);
 			const double z = i.val(DIM_R);
+			
+			double Q0 = dLnt(z, Gc[z_ix], z, Rs) / (int_E);  //factor de normalizacion de la inyeccion
+			double Q0p = Q0 / P2(Gc[z_ix]);
 
 			//double z = i.val(DIM_R);			
 			//double dz = z*(z_int - 1);

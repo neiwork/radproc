@@ -43,8 +43,10 @@ void elimiGaussiana( int N, Matrix& A, Vector& X )
          /* STEP 2 */
          /* use IP instead of p */
          IP = I;
-         while ((absval(A[IP-1][I-1]) <= ZERO) && (IP <= N))
-            IP++;
+         
+		 while ((absval(A[IP-1][I-1]) <= ZERO) && (IP <= N)) 
+            IP++;		 
+
          if (IP == M) OK = false;
          else {
             /* STEP 3 */

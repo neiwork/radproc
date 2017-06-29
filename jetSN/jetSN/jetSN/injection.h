@@ -11,7 +11,7 @@
 
 /* Returns Q(E,z) in units of 1/erg/s  (it is multiplied by the volume of each celd)*/
 
-void injection(Particle& p, State& st, Vector& Gc);
+void injection(Particle& p, State& st, Vector& Gc, Vector& Rc);
 
 
 

@@ -35,6 +35,21 @@ int jetAGN()
 		State model(GlobalConfig.get_child("model"));
 			
 		//radiativeLosses(model,folder+"\\electronLosses.txt");
+		
+		//frad(z)
+		static const double Gamma = GlobalConfig.get<double>("Gamma");
+		static const double starT = GlobalConfig.get<double>("starT");
+
+		double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gamma;
+		std::ofstream file;
+		
+		file.open("frad.txt", std::ios::out);
+
+		model.electron.ps.iterate([&](const SpaceIterator& i) {
+			double z = i.val(DIM_R);
+			double f = frad(E, z);
+			file << z/pc << '\t' << f << std::endl;
+		}, { 0, -1, 0 });
 
 		//ParamSpaceValues psv(model.electron.ps);
 
@@ -64,7 +79,7 @@ int jetAGN()
 		//distWOLosses(model.electron, model);
 
 
-		static const double Gamma = GlobalConfig.get<double>("Gamma");
+		//static const double Gamma = GlobalConfig.get<double>("Gamma");
 		double totalE = computeInjectedEnergy(model.electron.distribution); 
 		double totalE2 = totalL*(model.electron.ps[1].last() - model.electron.ps[1].first()) / (cLight*Gamma);
 		std::cout << "checking total energy:" << '\t' << totalE << '\t' << totalE2 << std::endl;

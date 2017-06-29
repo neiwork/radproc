@@ -7,6 +7,7 @@
 enum MessageType {msgStart, msgEnd, msgError};
 
 enum ProgramModule {Module_Main,
+					Module_radLosses,
 					Module_electronInjection,
 					Module_electronDistribution, 
 					Module_photonInjection,

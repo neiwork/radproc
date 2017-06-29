@@ -1,0 +1,32 @@
+data = 'luminosity.txt'  
+
+
+set xlabel 'Log(E / eV)'
+set ylabel 'Log(E L / erg s^{-1})'
+
+#set ylabel 'Log (E_{/Symbol g})'
+
+set terminal gif animate delay 20
+set output 'lum.gif' 
+
+PE = 100
+PZ = 50
+
+set xrange [-6.0:16.0];
+set yrange [30:46]
+#set logscale y
+
+do for [p=0:49] {
+	start = (p*PE)+ 0
+	end   = (p*PE)+ 99
+	plot data every ::start::end using 1:4 with line, data every ::start::end using 1:5 with line, data every ::start::end using 1:6 with line, data every ::start::end using 1:7 with line
+}
+
+#plot data every ::start::end using 1:8 with line
+#lw 2 
+#set key autotitle columnhead # si no stats falla
+#stats data nooutput
+#COLUMNS = int(STATS_columns)
+
+
+

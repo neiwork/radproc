@@ -33,7 +33,7 @@ double jetRamPress(double z);
 
 double computeMagField(double z);
 
-double eEmax(double z, double B);
+//double eEmax(double z0, double z, double Gc, double B);
 
 double computeDlorentz(double gamma);
 

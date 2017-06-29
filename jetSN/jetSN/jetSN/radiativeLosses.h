@@ -4,7 +4,8 @@
 //#include <fparticle\Particle.h>
 
 
-void radiativeLosses(State& st, const std::string& filename, Vector& Gc);
+void radiativeLosses(State& st, const std::string& filename, 
+				Vector& Gc, Vector& Rc);
 
 
 

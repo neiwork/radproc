@@ -1,15 +1,16 @@
 #include "nonThermalLuminosity.h"
 
 #include "dynamics.h"
-#include "targetFields.h"
-#include "modelParameters.h"
+//#include "modelParameters.h"
+
+//#include "targetFields.h"
 //#include "cilindricIntegral.h"
 
-#include "write.h"
+//#include "write.h"
 
-#include <flosses\nonThermalLosses.h>
-#include <fparameters\SpaceIterator.h>
-#include <fparameters\Dimension.h>
+//#include <flosses\nonThermalLosses.h>
+//#include <fparameters\SpaceIterator.h>
+//#include <fparameters\Dimension.h>
 #include <fparameters\parameters.h>
 
 
@@ -19,7 +20,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 
-
+/*
 double frad(double E, double z) //VER
 {
 	
@@ -33,7 +34,7 @@ double frad(double E, double z) //VER
 	double tad = tad_flow/Gamma; //en el lab
 
 	//<<<<<<< HEAD
-	double Rs = stagnationPoint(z);
+	double Rs = blobRadius(z);
 	double wph2 = 3.0*E_0 / (4.0*P3(Rs));
 		
 	double tic = 4.0*cLight*thomson* wph2*(E / P2(electronMass*cLight2)) / 3.0;
@@ -43,17 +44,17 @@ double frad(double E, double z) //VER
 	double frad = 1.0 / (1.0 + tad / trad);
 	return frad;
 
-}
+}*/
 
 
-double dLnt(double z, double Gc, double z_int)
+double dLnt(double z, double Gc, double z_int, double Rs)
 {
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double Gj = GlobalConfig.get<double>("Gamma");
-	//static const double Lj = GlobalConfig.get<double>("Lj");
+	static const double theta = GlobalConfig.get<double>("openingAngle");
 
 
-	double Rs = stagnationPoint(z_int); 
+	//double Rs = blobRadius(z_int,z,Gc); 
 
 	double y = z / z_int;
 
@@ -61,76 +62,24 @@ double dLnt(double z, double Gc, double z_int)
 
 	//double Lsc = 4.0*accEfficiency*cLight*P2(Gj)*jetRamPress(z)*Fe(g,y)*pi*P2(Rs);
 	
-	double cte = jetRamPress(z_int)*pi*cLight*P2(Rs); // = So/Sj
-	double F_e = Fe(g, y);
-	double Lsc = accEfficiency*F_e*cte*P2(Gj / P2(Gc))/4.0;
+	//double cte1 = jetRamPress(z_int)*pi*cLight*P2(Rs); // = So/Sj
+	//double F_e = Fe(g, y);
+	//double Lsc1 = accEfficiency*F_e*cte1*P2(Gj / P2(Gc))/4.0;
+		
+
+	double frac = (Rs/jetRadius(z, theta));
+
+	if (frac > 1.0) {
+		Rs = jetRadius(z, theta); 
+		std::cout << "SN radius larger than jet radius" << '\t' << 	frac << std::endl;
+	}
+
+
+	double cte = jetRamPress(z)*pi*cLight*P2(Rs); // = So/Sj
+
+	double Lsc = accEfficiency*(1.0/P2(g)-P2(g))*cte/(4.0*P2(Gj));
 
 	return Lsc;
 }
 
 
-
-/*
-double nonThermalLuminosity(Particle& p, Vector& Gc)
-{
-	//static const double Gamma = GlobalConfig.get<double>("Gamma");
-	static const double theta = GlobalConfig.get<double>("openingAngle");
-	
-	//static const double starT = GlobalConfig.get<double>("starT");
-
-	//double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gamma; //ver si no a Gc
-
-	const double RMIN = p.ps[DIM_R].first();
-	const double RMAX = p.ps[DIM_R].last();
-	const int N_R = p.ps[DIM_R].size() - 1;
-
-	double R_int = pow((RMAX / RMIN), (1.0 / N_R));
-
-	double L1 = 0.0;
-
-	double z_int = RMIN;
-
-	std::ofstream file;
-	file.open("Lnt.txt", std::ios::out);
-
-	double z = RMIN;
-
-	for (int z_ix = 0; z_ix < N_R; z_ix++) {
-
-		double dz = z*(R_int - 1);
-
-		double beta = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
-
-		double Dlorentz = computeDlorentz(Gc[z_ix]); // 1.0 / (Gc[z_ix] * (1.0 - cos(inc)*beta));
-		double boost = pow(Dlorentz, 4) / P2(Gc[z_ix]);
-
-		//L1 = L1 + dLnt(z,Gc[z_ix],z_int)*frad(E, z)*(pi*P2(jetRadius(z, theta)))*dz;
-		double Q = dLnt(z, Gc[z_ix], z_int)*boost;
-
-		L1 = L1 + Q;
-
-		file << z/cLight/yr << '\t' << Q << std::endl;
-
-		z = z*R_int;
-
-	}
-
-	file << "Lnt total" << '\t' << L1 << std::endl;
-
-	std::cout << "Lnt total" << '\t' << L1 << std::endl;
-
-	//double Lnt_total = L1;
-
-	//double integral = dLnt(z_int,Gc)*frad(E, z_int); 
-//	double boost = pow(Dlorentz, 4) / P2(Gamma);
-//	double Lnt_total = integral*boost;
-
-
-	//file << "E" << '\t' << E / 1.6e-12 << '\t' << "Lnt total" << '\t' << Lnt_total << std::endl;
-	
-	file.close();
-	
-	return L1;
-			
-
-}*/

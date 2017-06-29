@@ -51,24 +51,10 @@ public:
 	}
 };
 
-void writeEvol(const std::string& filename, const ParamSpaceValues& data, const Vector& Gc);
+void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
+	const Vector& Gc, const Vector& Rc);
 
-//void writeFlux(const std::string& archive, Vector salida, Particle particle);
-
-//void write(const std::string& archive, Vector salida, Particle particle);
+double tobs(double t, double gamma, double inc);
 
 /*It writes data for all param space*/
-void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data);
-
-/*It writes data for all param space, but fixin r*/
-//void writeEandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int r); 
-
-//void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& data, int E);
-
-//void writeEandRParamSpace(const std::string& filename, const ParamSpaceValues& data, int t);
-
-//void writeEnt(const std::string& filename, const ParamSpaceValues& data);
-
-/*It writes data as a function of energy for a given r and t*/
-//void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r, int t);
-
+void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data, const Vector& Gc);

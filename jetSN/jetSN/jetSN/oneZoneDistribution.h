@@ -2,4 +2,5 @@
 
 #include "State.h"
 
-void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, Vector& Gc);
+void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si
+	, Vector& Gc, Vector& Rc);
