@@ -5,7 +5,7 @@
 
 
 void radiativeLosses(State& st, const std::string& filename, 
-				Vector& Gc, Vector& Rc);
+				Vector& Gc, Vector& Rc, Vector& tobs);
 
 
 

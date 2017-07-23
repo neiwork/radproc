@@ -30,19 +30,10 @@ void generateViewScript(std::string path) {
 	file.close();
 }
 
-double tobs(double t, double gamma, double inc)
-{
-	double beta = sqrt(1.0 - 1.0 / P2(gamma));
-	double mu = cos(inc);
-
-	return (1.0 - beta*mu)*t;
-}
 
 void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data, 
-	const Vector& Gc)
+	const Vector& Gc, const Vector& tobs)
 {
-	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
-
 	std::ofstream file;
 	file.open(dataName(filename).c_str(), std::ios::out);
 	
@@ -53,8 +44,8 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 		" logQ"  << std::endl;
 	//logQ << std::endl;
 	
-	const double z_int = data.ps[DIM_R].first();
-	double t0 = z_int / cLight;
+	const double z_0 = data.ps[DIM_R].first();
+	double t0 = z_0 / cLight;
 
 	data.ps.iterate([&](const SpaceIterator& i){
 		double logE = log10(i.val(DIM_E) / 1.6e-12);
@@ -65,7 +56,7 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 		double gamma = Gc[i.coord[DIM_R]];
 		
 		double tlab = z / cLight - t0;
-		double T = tobs(tlab, gamma, inc);
+		double T = tobs[i.coord[DIM_R]];
 
 		file << logE << '\t' << 
 			logR << '\t' <<
@@ -80,19 +71,26 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 
 
 void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
-	const Vector& Gc, const Vector& Rc)
+	const Vector& Gc, const Vector& Rc, const Vector& tobs)
 {
 	static const double Gj = GlobalConfig.get<double>("Gamma");
-	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;
+	static const double starT = GlobalConfig.get<double>("IRstarT");
+
+	
 
 	std::ofstream file;
 	file.open(dataName(filename).c_str(), std::ios::out);
 
-	const double z_int = data.ps[DIM_R].first();
+	const double z_0 = data.ps[DIM_R].first();
 
-	file << "z [pc] " << '\t' << "t_lab [yr]" << '\t' << "t_obs [yr]" 
-		<< '\t' << "Rc"
-		<< '\t' << "g=Gc/Gj" << '\t' << "Fe" << '\t' << "Lnt" << std::endl;
+	file << "t_obs [yr]" 
+		<< '\t' << "z [pc] " 
+		//<< '\t' << "t_lab [yr]"
+		<< '\t' << "Rc/Rj"		
+		<< '\t' << "g=Gc/Gj" 
+		<< '\t' << "Lnt"
+		//<< '\t' << "Fe" 
+		<< '\t' << "Lnt_obs" << std::endl;
 
 	double L1 = 0.0;
 
@@ -102,7 +100,7 @@ void writeEvol(const std::string& filename, const ParamSpaceValues& data,
 
 		int z_ix = i.coord[DIM_R];
 		double g = Gc[z_ix] / Gj;
-		double y = z / z_int;
+		double y = z / z_0;
 			
 
 		double beta = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
@@ -110,21 +108,28 @@ void writeEvol(const std::string& filename, const ParamSpaceValues& data,
 		double Dlorentz = computeDlorentz(Gc[z_ix]); // 1.0 / (Gc[z_ix] * (1.0 - cos(inc)*beta));
 		double boost = pow(Dlorentz, 4) / P2(Gc[z_ix]);
 
+		double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gc[z_ix];
 
 		double Reff = Rc[z_ix];
 
-		double Q = dLnt(z, Gc[z_ix], z_int, Reff)*boost;
+		double Lnt = dLnt(z, Gc[z_ix], z_0, Reff);
+		double Q = Lnt*boost*frad(E, z, Gc[z_ix]);
+
 		L1 = L1 + Q;
 		
 		double z_0 = data.ps[DIM_R].first();
 		
-		double t0 = z_int / cLight;
+		double t0 = z_0 / cLight;
 		double t = z / cLight - t0;
-		double t_obs = tobs(t, Gc[z_ix], inc);
+		double t_obs = tobs[z_ix];
 
-		file << z/pc << '\t' << t/yr << '\t' << t_obs/yr << '\t' 
-			<< Reff << '\t' 
-			<< g << '\t' << Fe(g, y) << '\t' << Q << std::endl;
+		file << t_obs / yr
+			<< '\t' << z / pc  //<< t / yr << '\t'
+			<< '\t' << Reff / jetRadius(z,0.1)
+			<< '\t' << g
+			//<< Fe(g, y) 
+			<< '\t' << Lnt*boost
+			<< '\t' << safeLog10(Q) << std::endl;
 
 	}, { 0, -1 }); //fijo cualquier energia
 

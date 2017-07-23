@@ -45,10 +45,12 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si,
 
 	matrixInit(a, Ee.size(), Ee.size() + 1, 0);
 
-	double vc = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
+	double beta_c = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
+	double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
-	double vjet = sqrt(1.0 - 1.0 / P2(Gj));
-	double v_rel = cLight*(vjet - vc);
+	double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+
+	double v_rel = cLight*beta_rel;
 
 	double z_int = p.ps[DIM_R].first();
 	double Rs = z / Gc[z_ix]; // Rc[z_ix];
@@ -66,7 +68,7 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si,
 			double h = Ee[i + 1] - Ee[i];
 
 			for (int j = 0; j <= nE + 1; ++j) {
-				double tesc = 1.0e30; // 1.0 / escapeRate(Rs, v_rel);  //en [s]  
+				double tesc = 1.0 / escapeRate(Rs, v_rel);  //en [s]  
 				double frac = 0.5*h / 1.0e20;
 				if (j == i) {                               
 					double bE = losses(Ee[i], z, p, st, si, Gc[z_ix]);

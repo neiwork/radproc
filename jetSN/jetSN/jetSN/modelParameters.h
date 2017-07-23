@@ -31,7 +31,7 @@ double jetRadius(double z, double openingAngle);
 
 double jetRamPress(double z);
 
-double computeMagField(double z);
+double computeMagField(double z, double gamma);
 
 //double eEmax(double z0, double z, double Gc, double B);
 

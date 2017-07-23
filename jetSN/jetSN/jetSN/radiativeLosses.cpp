@@ -14,7 +14,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc)
+void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc, Vector& tobs)
 {
 	show_message(msgStart, Module_radLosses);
 
@@ -23,11 +23,10 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double starT = GlobalConfig.get<double>("starT");
 	static const double starTIR = GlobalConfig.get<double>("IRstarT");
-	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;
 
 	double z_0 = st.electron.ps[DIM_R].first();
 	double t0 = z_0 / cLight;
-	double vjet = sqrt(1.0 - 1.0 / P2(Gj));
+	double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
@@ -48,7 +47,7 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 
 
 	st.electron.ps.iterate([&](const SpaceIterator& i) {
-		const double B = st.magf.get(i);
+		//const double B = st.magf.get(i);
 		double vel_lat = cLight*openingAngle;
 
 		double E = i.val(DIM_E);
@@ -59,33 +58,39 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 		double Reff = z / gamma; // Rc[i.coord[DIM_R]];
 
 		double fmtE = log10(E / 1.6e-12);
-
-		double eSyn = lossesSyn(i.val(DIM_E), B, st.electron) / i.val(DIM_E);
-
+		
 		//VER como le paso el vector Gc a las perdidas
 		double eIC = lossesIC(i.val(DIM_E), st.electron,
 			[&E, &z, &gamma](double E) {
 			return starBlackBody(E, z, gamma); },
 			Emin, 1.0e4*Emin) / i.val(DIM_E);
 
-			double eIC_Aux = lossesIC(i.val(DIM_E), st.electron,
-				[&E, &z, &gamma](double E) {
-				return starIR(E, z, gamma); },
-				EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);
+		double eIC_Aux = lossesIC(i.val(DIM_E), st.electron,
+			[&E, &z, &gamma](double E) {
+			return starIR(E, z, gamma); },
+			EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);
 
+		double beta_c = sqrt(1.0 - 1.0 / P2(gamma));
+		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
-				double vc = sqrt(1.0 - 1.0 / P2(gamma));
-				double v_rel = cLight*(vjet - vc);
-				double eEsc = escapeRate(Reff, v_rel);
+		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
 
-				double eAcc = accelerationRate(E, B, accEfficiency);
-				//double eAdia = adiabaticLosses(E, z, vel_lat, gamma) / E;
+		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
-				double tlab = (z / cLight - t0) / yr;
-				double t = tobs(tlab, gamma, inc);
+		double v_rel = cLight*beta_rel;
+		double eEsc = escapeRate(Reff, v_rel);
+
+		double B = computeMagField(z, G_rel);
+		double eSyn = lossesSyn(i.val(DIM_E), B, st.electron) / i.val(DIM_E);
+
+		double eAcc = accelerationRate(E, B, accEfficiency);
+		//double eAdia = adiabaticLosses(E, z, vel_lat, gamma) / E;
+
+		double tlab = (z / cLight - t0) / yr;
+		double t = tobs[i.coord[DIM_R]];
 
 				file << fmtE << '\t' << z / pc
-					<< '\t' << t
+					<< '\t' << t/yr
 					<< "\t" << safeLog10(eSyn)
 					<< "\t" << safeLog10(eIC)
 					<< "\t" << safeLog10(eIC_Aux)

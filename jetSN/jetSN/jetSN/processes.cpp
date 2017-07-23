@@ -47,7 +47,7 @@ void synL(State& st, ParamSpaceValues& Qsyn)
 	});
 }
 
-void processes(State& st, const std::string& filename, Vector& Gc)
+void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 {
 	
 	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
@@ -62,6 +62,9 @@ void processes(State& st, const std::string& filename, Vector& Gc)
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
+
+	std::ofstream file2;
+	file2.open(filename + "_peak_evol.txt", std::ios::out);
 
 	double EphminS = boltzmann*starT / 100.0;
 
@@ -86,19 +89,35 @@ void processes(State& st, const std::string& filename, Vector& Gc)
 	
 	for (int z_ix = 0; z_ix < N_R; z_ix++) {
 
+		double t = tobs[z_ix];
+
 		double Ltot = 0.0;
+
+		double gamma = Gc[z_ix];
+		double Dlorentz = computeDlorentz(gamma);
+		double r = st.photon.distribution.ps[DIM_R][z_ix];
+
+		double E_kn = P2(electronMass*cLight2) / (boltzmann*IRstarT) / gamma;
+
+		SpaceCoord j(st.photon.ps);
+		j[DIM_R] = z_ix;
+
+		double L_kn = luminositySynchrotron(E_kn, st.electron, j, st.magf)
+			 + luminosityIC(E_kn, st.electron, j, [&E_kn, &r, &gamma](double E_kn) {
+			return starIR(E_kn, r, gamma); }, EphminAux);
+
+		file2 << t / yr << '\t' << safeLog10(Llab(L_kn, gamma)) << std::endl;
 
 		st.photon.ps.iterate([&](const SpaceIterator &i) {
 
 		//	if (i.coord[DIM_E] == 0 && i.coord[DIM_R] % 5 == 0) {
 		//		std::cout << "z: " << i.coord[DIM_R] << std::endl;
 		//	}
+			
 
 			const double E = i.val(DIM_E);
-			const double r = i.val(DIM_R);
+			//const double r = i.val(DIM_R);
 
-			double gamma = Gc[i.coord[DIM_R]];
-			double Dlorentz = computeDlorentz(gamma);
 			double Elab = E*Dlorentz; 
 
 			double eSyn = Qsyn.get(i);// luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
@@ -113,7 +132,8 @@ void processes(State& st, const std::string& filename, Vector& Gc)
 				[&Qsyn, &i, &r](double E) {return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 			, st.photon.emin());
 
-			Ltot = Ltot + eSyn + eICs + eIC_aux + eSSC;
+			double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
+			Ltot = Ltot + Ltot1;
 
 			double Lsyn = Llab(eSyn, gamma);
 			double LicS = Llab(eICs, gamma);
@@ -121,19 +141,18 @@ void processes(State& st, const std::string& filename, Vector& Gc)
 			double Lssc = Llab(eSSC, gamma);
 
 			double fmtE = log10(Elab / 1.6e-12);
-
-
-			double tlab = (r / cLight - t0) / yr;
-			double t = tobs(tlab, gamma, inc);
+			
+			//double tlab = (r / cLight - t0) / yr;
+			
 			
 			file << fmtE
 				<< '\t' << r / pc
-				<< '\t' << t
+				<< '\t' << t/yr
 				<< '\t' << safeLog10((Lsyn))
 				<< '\t' << safeLog10((LicS))
 				<< '\t' << safeLog10((Lic_aux))
 				<< '\t' << safeLog10((Lssc))
-				<< '\t' << safeLog10(Llab(Ltot, gamma))
+				<< '\t' << safeLog10(Llab(Ltot1, gamma))
 				;
 
 			file << std::endl;

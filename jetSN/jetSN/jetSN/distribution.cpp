@@ -25,18 +25,18 @@ void distribution(Particle& p, State& st, Vector& Gc, Vector& Rc)
 	show_message(msgStart, Module_electronDistribution);
 	double z_0 = p.ps[DIM_R].first();
 
-	/*p.ps.iterate([&](const SpaceIterator& i) {
+	p.ps.iterate([&](const SpaceIterator& i) {
 		const double E = i.val(DIM_E);
 		const double z = i.val(DIM_R);
-		const double magf = st.magf.get(i);
+		//const double magf = st.magf.get(i);
 
 		oneZoneDistribution(p, st, i, Gc, Rc);
 	
 		
 	}, { 0,-1 });
-	*/ 
+	
 
-	static const double Gj = GlobalConfig.get<double>("Gamma");
+	/*static const double Gj = GlobalConfig.get<double>("Gamma");
 	p.ps.iterate([&](const SpaceIterator& i) {
 		const double E = i.val(DIM_E);
 		const double z = i.val(DIM_R);
@@ -47,10 +47,12 @@ void distribution(Particle& p, State& st, Vector& Gc, Vector& Rc)
 		int z_ix = i.coord[DIM_R];
 		double bE = losses(E, z, p, st, i, Gc[z_ix]);
 
-		double vc = sqrt(1.0-1.0/P2(Gc[i.coord[DIM_R]]));
+		double beta_c = sqrt(1.0-1.0/P2(Gc[i.coord[DIM_R]]));
+		double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
-		double vjet = sqrt(1.0 - 1.0 / P2(Gj));
-		double v_rel = cLight*(vjet - vc);
+		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+
+		double v_rel = cLight*beta_rel;
 
 		double Rs = z / Gc[z_ix]; // Rc[z_ix];
 
@@ -70,7 +72,7 @@ void distribution(Particle& p, State& st, Vector& Gc, Vector& Rc)
 
 		p.distribution.set(i, dist);
 
-	});
+	});*/
 
 
 }

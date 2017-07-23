@@ -38,22 +38,24 @@ double jetRamPress(double z)
 
 
 }
-double computeMagField(double z) {
+double computeMagField(double z, double gamma) {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double Lj = GlobalConfig.get<double>("Lj");
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double subEq = GlobalConfig.get<double>("subEq");
+
+	//static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	double B0 = sqrt(4.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
 
 	//double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
 	double Blab = sqrt(subEq)*B0 / z;  //la equiparicion es respecto a Lj ~B^2
 
-	return Blab/ Gamma;  //este es el B en el sistema del jet
+	return Blab/ gamma;  //este es el B en el sistema del jet
 	//return Blab * (5.0e16/z);  //este es el B para m=2
 
 } //la densidad de energia (~B^2) transforma con Gamma^2, 
   //B transforma como Gamma
+
 
 double jetRadius(double z, double openingAngle)
 {

@@ -1,1 +1,0 @@
-@../../plot-svg-and-view.bat Gc

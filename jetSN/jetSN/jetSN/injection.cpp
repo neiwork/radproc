@@ -29,6 +29,7 @@ double powerLaw(double E, double Emin, double Emax)
 void injection(Particle& p, State& st, Vector& Gc, Vector& Rc)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Gj = GlobalConfig.get<double>("Gamma");
 
 	double z_0 = p.ps[DIM_R].first();
 
@@ -55,7 +56,12 @@ void injection(Particle& p, State& st, Vector& Gc, Vector& Rc)
 		double dz = z*(R_int - 1);
 
 		//normalizacion afuera del iterate sobre E
-		double B = computeMagField(z);
+		double beta_c = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
+		double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+
+		double B = computeMagField(z, G_rel);
 		double Rs = Rc[z_ix];
 
 		double Emax = eEmax(z_0, z, Gc[z_ix], B, Rs);

@@ -9,7 +9,7 @@
 
 State::State(boost::property_tree::ptree& cfg) :
  electron{ "electron" },
- photon{ "photon" },
+ photon{ "photon" } ,
  magf(photon.ps, false)
  {
 	particles.push_back(&electron);
@@ -21,9 +21,9 @@ State::State(boost::property_tree::ptree& cfg) :
 
 	magf.initialize();
 
-	magf.fill([&](const SpaceIterator& i) {
-		return computeMagField(i.val(DIM_R));  // 
-	});
+	//magf.fill([&](const SpaceIterator& i) {
+	//	return computeMagField(i.val(DIM_R));  // 
+	//});
 
 	//inicializo el magf de distinta forma porque ahora notengo dimension r
 	//static const double z_int = GlobalConfig.get<double>("z_int")*pc;

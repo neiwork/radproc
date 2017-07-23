@@ -42,23 +42,26 @@ int jetSN()
 
 		Vector Gc(nR, 0.0); 
 		Vector Rc(nR, 0.0);
+		Vector tobs(nR, 0.0);
 
-		gammaC(model, Gc, Rc);
+		gammaC(model, Gc, Rc, tobs);
 		//blobRadius(model, Gc, Rc);
 
-		writeEvol(folder + "\\evol", model.electron.ps, Gc, Rc);
+		writeEvol(folder + "\\evol_frad", model.electron.ps, Gc, Rc, tobs);
+		
+		fillMagnetic(model, Gc);
 
 		//radiativeLosses(model, folder + "\\electronLosses.txt", Gc, Rc);
 
 		injection(model.electron, model, Gc, Rc);
-		writeAllSpaceParam(folder + "\\eInj", model.electron.injection, Gc);
+		writeAllSpaceParam(folder + "\\eInj", model.electron.injection, Gc, tobs);
 		
 		double totalL = computeInjectedPower(model.electron.injection, 0);
 
 		//std::cout << "checking injected power:" << '\t' << totalL << std::endl;		
 
 		distribution(model.electron, model, Gc, Rc);
-		writeAllSpaceParam(folder + "\\eDist", model.electron.distribution, Gc);
+		writeAllSpaceParam(folder + "\\eDist", model.electron.distribution, Gc, tobs);
 		
 		//static const double Gamma = GlobalConfig.get<double>("Gamma");
 		//double totalE = computeInjectedEnergy(model.electron.distribution); 
@@ -67,7 +70,7 @@ int jetSN()
 
 		//writeAllSpaceParam(getFileName(folder, "eDist"), model.electron.distribution);
 
-		processes(model, folder + "\\luminosity", Gc);
+		processes(model, folder + "\\luminosity", Gc, tobs);
 
 	}
 	catch (std::runtime_error& e)

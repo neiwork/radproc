@@ -52,9 +52,9 @@ public:
 };
 
 void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
-	const Vector& Gc, const Vector& Rc);
+	const Vector& Gc, const Vector& Rc, const Vector& tobs);
 
-double tobs(double t, double gamma, double inc);
 
 /*It writes data for all param space*/
-void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data, const Vector& Gc);
+void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& data
+	, const Vector& Gc, const Vector& tobs);

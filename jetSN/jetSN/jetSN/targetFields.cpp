@@ -13,6 +13,7 @@
 double f(double h, double z, double R)
 {
 	double res = 0.5*(h - z)*log(P2(R / (z - h)) + 1.0) + R*atan((h - z) / R);
+	if (h == z) { res = 0.0; }
 	return res;
 }
 
