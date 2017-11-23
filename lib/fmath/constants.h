@@ -58,6 +58,7 @@ const double protonMass				= 1.6726e-24;   //(938.3e6);
 const double chargedPionMass		= 2.4852e-25;   //(139.6e6);
 const double neutralPionMass		= 2.4034e-25;   //(135.0e6);
 const double neutronMass	     	= 1.6749e-24;   //(939.6e6);
+const double atomicMassUnit			= 1.6605e-24;
 
 //Particle mean life  (s)
                 

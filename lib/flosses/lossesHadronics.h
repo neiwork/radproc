@@ -3,4 +3,4 @@
 #include <fparticle\particle.h>
 
 
-double lossesHadronics(double E, Particle& particle);
+double lossesHadronics(double E, double density, Particle& particle);

@@ -1,0 +1,86 @@
+{
+	"id":"Sgr A*",
+	"massBH":"1.0",
+	"spinBH":"0.0",
+	"n":"3.0",
+	"temp_ec":"1.0e11",
+	"xi":"1.0e-2",
+	"lambda":"0.8",
+	"mu_i":"1.23",
+	"mu_e":"1.14",
+
+	"energyC":"1.e-10",
+	"beta":"0.5",
+
+	"file": {
+		"luminosity":"ntLuminosity.txt",
+		"eDist":"eDist",
+		"eDist_ET":"eDist_ET",
+		"eDist_RT":"eDist_RT",
+      "eDist_final":"eDist_final",
+		"E_NT_r":"E_NT_r"
+	},
+
+	"model": {
+		"particle": {
+			"default": {
+				"mass":0,
+				"dim": {
+					"energy":{
+						"samples":10
+					},
+					"radius":{
+						"min":1.0,
+						"max":1.0,
+						"samples":10
+					},
+					"theta":{
+						"min":0.0,
+						"max":1.0,
+						"samples":10
+					}
+				}
+			},
+			"photon": {
+				"dim":{
+					"energy": {
+						"min":-6.0,
+						"max":16.0
+					}
+				}
+			},
+			"electron": {
+				"mass":9.1094e-28,
+				"dim":{
+					"energy": {
+						"min":6.0,
+						"max":16.0
+					}
+				}
+			}
+		}
+	},
+   
+	"math": {
+		"runge-kutta-1": {
+			"samples": {
+				"x": 50
+			}
+		},
+
+		"runge-kutta-2": {
+			"samples": { 
+				"x": 50,
+				"y": 50
+			}
+		}
+	},
+
+	"integrate-losses": {
+		"samples": {
+			"x": 50,
+			"t": 50,
+			"y": 50
+		}
+	}
+}

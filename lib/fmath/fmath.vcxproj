@@ -74,6 +74,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="bisection.h" />
     <ClInclude Include="configure.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="elimiGaussiana.h" />
@@ -84,11 +85,13 @@
     <ClInclude Include="interpolation.h" />
     <ClInclude Include="mathematics.h" />
     <ClInclude Include="matrixInit.h" />
+    <ClInclude Include="operations.h" />
     <ClInclude Include="physics.h" />
     <ClInclude Include="RungeKutta.h" />
     <ClInclude Include="vectorOperations.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bisection.cpp" />
     <ClCompile Include="elimiGaussiana.cpp" />
     <ClCompile Include="gaussianScaledPivoting.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -96,6 +99,7 @@
     </ClCompile>
     <ClCompile Include="interpolation.cpp" />
     <ClCompile Include="matrixInit.cpp" />
+    <ClCompile Include="operations.cpp" />
     <ClCompile Include="RungeKutta.cpp" />
     <ClCompile Include="vectorOperations.cpp" />
   </ItemGroup>

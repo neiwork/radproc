@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="processes.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="targetFields.cpp" />
@@ -44,6 +43,13 @@
     <ClCompile Include="oneZoneDistribution.cpp">
       <Filter>distribution</Filter>
     </ClCompile>
+    <ClCompile Include="lossesAnisotropicIC.cpp">
+      <Filter>aniIC</Filter>
+    </ClCompile>
+    <ClCompile Include="luminosityAnisotropicIC.cpp">
+      <Filter>aniIC</Filter>
+    </ClCompile>
+    <ClCompile Include="modelParameters.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -89,6 +95,12 @@
     <ClInclude Include="oneZoneDistribution.h">
       <Filter>distribution</Filter>
     </ClInclude>
+    <ClInclude Include="lossesAnisotropicIC.h">
+      <Filter>aniIC</Filter>
+    </ClInclude>
+    <ClInclude Include="luminosityAnisotropicIC.h">
+      <Filter>aniIC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extras">
@@ -105,6 +117,9 @@
     </Filter>
     <Filter Include="distribution">
       <UniqueIdentifier>{a933a361-1c22-4c96-9c1c-5759fc528c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="aniIC">
+      <UniqueIdentifier>{9aadb830-21df-4fe9-b9c1-ddff57a057e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

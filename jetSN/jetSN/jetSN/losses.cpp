@@ -33,7 +33,7 @@ double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i, d
 
 	double B = computeMagField(r, G_rel);
 
-	double loss = lossesSyn(E, B, p);
+	double loss = lossesSyn(E, B, p)
 		+ adiabaticLosses(E, r, vel_lat, gamma);
 	 //las perdidas adiabaticas o de escape las considero en escapeRate
 

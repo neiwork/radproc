@@ -6,6 +6,20 @@
 #include <fmath\physics.h>
 
 
+
+double lossesHadronics(double E, double density, Particle& particle)
+{
+	double inelasticity = 0.5;
+
+	if (particle.id == "pion") {
+		return (2.0 / 3.0)*cLight*density*inelasticity*crossSectionHadronic(E)*E;  //mb
+	}
+	else { //particle == proton or neutron
+		return cLight*density*inelasticity*crossSectionHadronic(E)*E;  //mb
+	}
+}
+	
+/*
 double lossesHadronics(double E, Particle& particle)
 {
 	double inelasticity = 0.5; 
@@ -23,3 +37,5 @@ double lossesHadronics(double E, Particle& particle)
 }
 
 //el E multiplicando es porque son perdidas y no cooling time
+
+*/

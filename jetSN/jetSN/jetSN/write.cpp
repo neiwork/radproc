@@ -11,11 +11,6 @@
 #include <fparameters\parameters.h>
 #include <boost/property_tree/ptree.hpp>
 
-//namespace {
-	double safeLog10( double x ) {
-		return x>0.0 ? log10(x) : 0.0;
-	}
-//}
 
 std::string dataName(std::string id) {
 	return id + ".txt";
@@ -69,10 +64,34 @@ void writeAllSpaceParam(const std::string& filename, const ParamSpaceValues& dat
 	generateViewScript(filename);
 }
 
+void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r)
+{
+
+	std::ofstream file;
+	file.open(dataName(filename).c_str(), std::ios::out);
+
+	// version acotada
+	//double logR = log10(data.ps[1][r]);
+
+	data.ps.iterate([&file, &data](const SpaceIterator& i) {
+
+		double logE = log10(i.val(DIM_E) / 1.6e-12);
+		double logQ = safeLog10(data.get(i));
+
+		file << logE << '\t' << logQ << std::endl;
+		;
+	}, { -1, r});  
+					  
+
+	file.close();
+	generateViewScript(filename);
+}
 
 void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
 	const Vector& Gc, const Vector& Rc, const Vector& tobs)
 {
+
+	static const double Mc = GlobalConfig.get<double>("Mc")*solarMass;
 	static const double Gj = GlobalConfig.get<double>("Gamma");
 	static const double starT = GlobalConfig.get<double>("IRstarT");
 
@@ -85,19 +104,30 @@ void writeEvol(const std::string& filename, const ParamSpaceValues& data,
 
 	file << "t_obs [yr]" 
 		<< '\t' << "z [pc] " 
-		//<< '\t' << "t_lab [yr]"
+		<< '\t' << "t_lab [yr]"
 		<< '\t' << "Rc/Rj"		
 		<< '\t' << "g=Gc/Gj" 
+		<< '\t' << "rho_c"
+		<< '\t' << "rho_j"
 		<< '\t' << "Lnt"
 		//<< '\t' << "Fe" 
 		<< '\t' << "Lnt_obs" << std::endl;
+
+	//file << "t_obs [yr]"
+	//	<< '\t' << "z [pc] "
+	//	<< '\t' << "Rc"
+	//	<< '\t' << "Rj"
+	//	<< '\t' << "Gc"
+	//	<< '\t' << "rho_c"
+	//	//<< '\t' << "Fe" 
+	//	<< '\t' << "rho_j" << std::endl;
 
 	double L1 = 0.0;
 
 	data.ps.iterate([&](const SpaceIterator& i) {
 
 		const double z = i.val(DIM_R);
-
+	
 		int z_ix = i.coord[DIM_R];
 		double g = Gc[z_ix] / Gj;
 		double y = z / z_0;
@@ -108,12 +138,22 @@ void writeEvol(const std::string& filename, const ParamSpaceValues& data,
 		double Dlorentz = computeDlorentz(Gc[z_ix]); // 1.0 / (Gc[z_ix] * (1.0 - cos(inc)*beta));
 		double boost = pow(Dlorentz, 4) / P2(Gc[z_ix]);
 
-		double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gc[z_ix];
+		double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+		double beta_rel = (beta_j - beta) / (1.0 - beta_j*beta);
+		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+		
 
+		double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gc[z_ix]; //IC
 		double Reff = Rc[z_ix];
 
+		double B = computeMagField(z, G_rel);
+		//double Emax = eEmax(z, Gc[z_ix], B, Reff);
+		//double Ega = 100.0e6*1.6e-12;
+		//double E = electronMass*cLight2*sqrt(Ega*4.0*pi*electronMass*cLight /
+			//(0.29*Dlorentz*3.0*electronCharge*planck*B)); //Esyn
+		
 		double Lnt = dLnt(z, Gc[z_ix], z_0, Reff);
-		double Q = Lnt*boost*frad(E, z, Gc[z_ix]);
+		double Q = Lnt*boost*frad(E, z, Gc[z_ix], G_rel);
 
 		L1 = L1 + Q;
 		
@@ -123,13 +163,35 @@ void writeEvol(const std::string& filename, const ParamSpaceValues& data,
 		double t = z / cLight - t0;
 		double t_obs = tobs[z_ix];
 
+		double rho_c = Gc[z_ix] * 3.0*Mc / (4.0*pi*P3(Reff));
+		double rho_j = jetRamPress(z) / (Gj*P2(cLight));
+
+
 		file << t_obs / yr
-			<< '\t' << z / pc  //<< t / yr << '\t'
-			<< '\t' << Reff / jetRadius(z,0.1)
-			<< '\t' << g
+				<< '\t' << z / pc  
+				<< '\t' << t / yr
+				<< '\t' << P2(Reff / jetRadius(z,0.1))
+				<< '\t' << g
+				//<< Fe(g, y) 
+				<< '\t' << rho_c
+				<< '\t' << rho_j
+				<< '\t' << Lnt*boost
+				<< '\t' << (Q) << std::endl;
+
+		
+		/*file << t_obs / yr
+			<< '\t' << z/pc
+			<< '\t' << Reff  //<< t / yr << '\t'
+			<< '\t' << jetRadius(z, 0.1)
+			<< '\t' << Gc[z_ix]
 			//<< Fe(g, y) 
-			<< '\t' << Lnt*boost
-			<< '\t' << safeLog10(Q) << std::endl;
+			<< '\t' << rho_c
+			<< '\t' << rho_j 
+			<< '\t' << P2(Reff /jetRadius(z, 0.1))
+			<< std::endl;*/
+
+
+
 
 	}, { 0, -1 }); //fijo cualquier energia
 
@@ -251,31 +313,7 @@ void writeRandTParamSpace(const std::string& filename, const ParamSpaceValues& d
 	generateViewScript(filename);
 }
 
-void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r, int t)
-{
 
-	std::ofstream file;
-	file.open(dataName(filename).c_str(), std::ios::out);
-
-	// version acotada
-	double logR = log10(data.ps[1][r]);
-	// version larga
-	double logT = log10(data.ps.dimensions[2]->values[t]);
-
-	file << "log(r)=" << logR << '\t' << "log(t)=" << logT << std::endl;
-	data.ps.iterate([&file, &data](const SpaceIterator& i){
-
-		double logE = log10(i.val(DIM_E) / 1.6e-12);
-		double logQ = safeLog10(data.get(i));
-
-		file << logE << '\t' << logQ << std::endl;
-		;
-	}, { -1, r, t });  //el -1 indica que las E se recorren, no quedan fijas
-	//las otras dos dimensiones quedan fijas en las posiciones r y t (recordar que la primera es 0 )
-
-	file.close();
-	generateViewScript(filename);
-}
 
 
 void writeEnt(const std::string& filename, const ParamSpaceValues& data)

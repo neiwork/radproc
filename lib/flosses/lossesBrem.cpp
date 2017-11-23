@@ -3,7 +3,7 @@
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
 
-double lossesBremss(double E, Particle& particle)
+double lossesBremss(double E, double density, Particle& particle)
 {
 	double mass = particle.mass;
 	

@@ -24,9 +24,11 @@
 #include <fparameters\parameters.h>
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
+#include <fmath\bisection.h>
 #include <fmath\physics.h>
 
 #include <boost/property_tree/ptree.hpp>
+
 
 int jetSN()
 {
@@ -36,42 +38,39 @@ int jetSN()
 		GlobalConfig = readConfig();
 		prepareGlobalCfg();
 		State model(GlobalConfig.get_child("model"));
-			
-				
+		
 		int nR = model.electron.ps[DIM_R].size();// -1;
-
+		//int nR = model.particles.electron.ps[DIM_R].size();// -1;
+		
 		Vector Gc(nR, 0.0); 
 		Vector Rc(nR, 0.0);
 		Vector tobs(nR, 0.0);
 
 		gammaC(model, Gc, Rc, tobs);
-		//blobRadius(model, Gc, Rc);
 
-		writeEvol(folder + "\\evol_frad", model.electron.ps, Gc, Rc, tobs);
+		//writeEvol(folder + "\\evol_frad", model.electron.ps, Gc, Rc, tobs);
 		
 		fillMagnetic(model, Gc);
 
-		//radiativeLosses(model, folder + "\\electronLosses.txt", Gc, Rc);
+		radiativeLosses(model, folder + "\\electronLosses.txt", Gc, Rc, tobs);
+		//protonLosses(model, folder + "\\protonLosses.txt", Gc, Rc, tobs);
 
 		injection(model.electron, model, Gc, Rc);
 		writeAllSpaceParam(folder + "\\eInj", model.electron.injection, Gc, tobs);
 		
-		double totalL = computeInjectedPower(model.electron.injection, 0);
+		//double totalL = computeInjectedPower(model.electron.injection, 0);
+
+		injection(model.proton, model, Gc, Rc);
+		//double totalL = computeInjectedPower(model.proton.injection, 0);
 
 		//std::cout << "checking injected power:" << '\t' << totalL << std::endl;		
 
 		distribution(model.electron, model, Gc, Rc);
-		writeAllSpaceParam(folder + "\\eDist", model.electron.distribution, Gc, tobs);
+		writeEnergyFunction(folder + "\\eDist", model.electron.distribution, 0);
+		//writeAllSpaceParam(folder + "\\eDist", model.electron.distribution, Gc, tobs);
 		
-		//static const double Gamma = GlobalConfig.get<double>("Gamma");
-		//double totalE = computeInjectedEnergy(model.electron.distribution); 
+		processes(model, folder + "\\luminosity.txt", Gc, tobs);
 		
-		//std::cout << "checking total energy:" << '\t' << totalE << std::endl;
-
-		//writeAllSpaceParam(getFileName(folder, "eDist"), model.electron.distribution);
-
-		processes(model, folder + "\\luminosity", Gc, tobs);
-
 	}
 	catch (std::runtime_error& e)
 	{

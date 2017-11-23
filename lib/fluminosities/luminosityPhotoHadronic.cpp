@@ -8,12 +8,13 @@
 #include <fmath\physics.h>
 
 
-double luminosityPhotoHadronic(double E, Particle& creator, fun1 tpf)
+double luminosityPhotoHadronic(double E, const Particle& creator, fun1 tpf, const SpaceCoord& psc)
 {
 
 	double diezE = 10.0*E;
-	double distCreator = creator.dist(diezE);// interpol(diezE, creator.energyPoints, Ncreator, Ncreator.size() - 1);
-
+	
+	double distCreator = creator.distribution.interpolate({ { 0, diezE } }, &psc);
+	
 	double t_1   = t_pion_PH(diezE, creator, tpf);     //esto no es lossesPH porque son perdidas solo del canal de produccion de piones
 	double omega = omegaPH(diezE, creator, tpf);
 
@@ -30,7 +31,7 @@ double luminosityPhotoHadronic(double E, Particle& creator, fun1 tpf)
 
 		double luminosity = 20.0*nNeutralPion*omega*distCreator;
 
-		return luminosity*volume*P2(E);
+		return luminosity*P2(E);  // [erg s^-1 cm^-3 ]
 	}
 	else	{return 0.0;}
 

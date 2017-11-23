@@ -152,6 +152,11 @@
     <ClCompile Include="injection.cpp" />
     <ClCompile Include="jetSN.cpp" />
     <ClCompile Include="losses.cpp" />
+    <ClCompile Include="lossesAnisotropicIC.cpp" />
+    <ClCompile Include="luminosityAnisotropicIC.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="nonThermalLuminosity.cpp" />
@@ -185,6 +190,11 @@
     <ClInclude Include="injection.h" />
     <ClInclude Include="jetSN.h" />
     <ClInclude Include="losses.h" />
+    <ClInclude Include="lossesAnisotropicIC.h" />
+    <ClInclude Include="luminosityAnisotropicIC.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="nonThermalLuminosity.h" />

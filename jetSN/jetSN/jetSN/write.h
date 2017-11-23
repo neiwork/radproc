@@ -12,7 +12,6 @@ class File;
 
 typedef std::map<std::string, File*> OFM;
 
-double safeLog10(double x);
 
 class File {
 public:
@@ -50,6 +49,8 @@ public:
 		std::cout << name << +" matches reference (" << c << "b)." << std::endl;
 	}
 };
+
+void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r);
 
 void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
 	const Vector& Gc, const Vector& Rc, const Vector& tobs);

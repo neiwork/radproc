@@ -7,7 +7,8 @@
 #include "targetFields.h"
 #include "write.h"
 #include "messages.h"
-//#include "luminosityAnisotropicIC.h"
+
+#include "luminosityAnisotropicIC.h"
 #include <fluminosities\luminositySynchrotron.h>
 #include <fluminosities\luminosityIC.h>
 
@@ -36,8 +37,6 @@ for [N(E)] = 1/erg, then it just sums over all z and returns erg/s  */
 
 void synL(State& st, ParamSpaceValues& Qsyn)
 {
-
-
 	st.photon.ps.iterate([&](const SpaceIterator &i) {
 
 		const double E = i.val(DIM_E);
@@ -53,7 +52,7 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
 	static const double starT = GlobalConfig.get<double>("starT");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-
+	static const double z_peak = GlobalConfig.get<double>("z_peak")*pc;
 	
 	ParamSpaceValues Qsyn(st.photon.ps);
 	synL(st, Qsyn);
@@ -63,21 +62,21 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
 
-	std::ofstream file2;
-	file2.open(filename + "_peak_evol.txt", std::ios::out);
+	//std::ofstream file2;
+	//file2.open(filename + "_peak_evol.txt", std::ios::out);
 
 	double EphminS = boltzmann*starT / 100.0;
 
 	static const double IRstarT = GlobalConfig.get<double>("IRstarT");
 	double EphminAux = boltzmann*IRstarT / 100.0;
 
-	const double z0 = st.electron.ps[DIM_R].first();
-	double t0 = z0 / cLight;
+	//const double z0 = st.electron.ps[DIM_R].first();
+	//double t0 = z0 / cLight;
 	
 
 	file << "log(E/eV)"
-		<< '\t' << "z/pc"
-		<< '\t' << "tobs/yr"
+	//	<< '\t' << "z/pc"
+	//	<< '\t' << "tobs/yr"
 		<< '\t' << "Synchr"
 		<< '\t' << "IC"
 		<< '\t' << "IC - IR"
@@ -95,9 +94,9 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 
 		double gamma = Gc[z_ix];
 		double Dlorentz = computeDlorentz(gamma);
-		double r = st.photon.distribution.ps[DIM_R][z_ix];
+		double r = z_peak; // st.photon.distribution.ps[DIM_R][z_ix];
 
-		double E_kn = P2(electronMass*cLight2) / (boltzmann*IRstarT) / gamma;
+		/*double E_kn = P2(electronMass*cLight2) / (boltzmann*IRstarT) / gamma;
 
 		SpaceCoord j(st.photon.ps);
 		j[DIM_R] = z_ix;
@@ -107,6 +106,7 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 			return starIR(E_kn, r, gamma); }, EphminAux);
 
 		file2 << t / yr << '\t' << safeLog10(Llab(L_kn, gamma)) << std::endl;
+		*/
 
 		st.photon.ps.iterate([&](const SpaceIterator &i) {
 
@@ -122,11 +122,19 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 
 			double eSyn = Qsyn.get(i);// luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 
-			double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
-				return starBlackBody(E, r, gamma); }, EphminS);
+			//double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
+			//	return starBlackBody(E, r, gamma); }, EphminS);
 
-			double eIC_aux = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
-				return starIR(E, r, gamma); }, EphminAux);
+			//double eIC_aux = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
+			//	return starIR(E, r, gamma); }, EphminAux);
+
+			double eICs = luminosityAnisotropicIC( E, st.electron,  r,
+				gamma, [&](double eval, double g, double eta) {
+				return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
+
+			double eIC_aux = luminosityAnisotropicIC(E, st.electron, r,
+				gamma, [&](double eval, double g, double eta) {
+				return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, i.coord);
 
 			double eSSC = luminosityIC(E, st.electron, i,
 				[&Qsyn, &i, &r](double E) {return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
@@ -146,8 +154,8 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 			
 			
 			file << fmtE
-				<< '\t' << r / pc
-				<< '\t' << t/yr
+			//	<< '\t' << r / pc
+			//	<< '\t' << t/yr
 				<< '\t' << safeLog10((Lsyn))
 				<< '\t' << safeLog10((LicS))
 				<< '\t' << safeLog10((Lic_aux))

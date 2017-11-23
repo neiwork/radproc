@@ -37,6 +37,6 @@ double computeMagField(double z, double gamma);
 
 double computeDlorentz(double gamma);
 
-
+double beta(double gamma);
 //double vWind(double r, double starR);
 

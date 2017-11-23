@@ -6,7 +6,7 @@
 
 #include "injection.h"
 #include "losses.h"
-//#include "timeDistribution.h"
+
 
 #include <iostream>
 #include <flosses\nonThermalLosses.h>
@@ -23,11 +23,11 @@ void distribution(Particle& p, State& st, Vector& Gc, Vector& Rc)
 {
 
 	show_message(msgStart, Module_electronDistribution);
-	double z_0 = p.ps[DIM_R].first();
+	//double z_0 = p.ps[DIM_R].first();
 
 	p.ps.iterate([&](const SpaceIterator& i) {
-		const double E = i.val(DIM_E);
-		const double z = i.val(DIM_R);
+		//const double E = i.val(DIM_E);
+		//const double z = i.val(DIM_R);
 		//const double magf = st.magf.get(i);
 
 		oneZoneDistribution(p, st, i, Gc, Rc);

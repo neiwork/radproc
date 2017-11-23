@@ -3,4 +3,4 @@
 #include <fparticle\particle.h>
 
 
-double lossesBremss(double E, Particle& particle);
+double lossesBremss(double E, double density, Particle& particle);

@@ -14,8 +14,8 @@
 	"injector":"multiple",
 	"Lj": 1.0e44,
 	"openingAngle": 0.1,
-	"inc": 20,
-	"Gamma": 3.0,
+	"inc": 0,
+	"Gamma": 10.0,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
 
@@ -38,13 +38,13 @@
 					},
 					"radius":{
 						"min":1.0,
-						"max":5.0e3,
-						"samples":100
+						"max":3.0e3,
+						"samples":1000
 					},
 					"time":{
 						"min":1.0,
-						"max":5.0e3,
-						"samples":100
+						"max":3.0e3,
+						"samples":1000
 					}
 				}
 			},

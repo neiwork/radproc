@@ -13,9 +13,6 @@ double cIC(double u)   //limite inferior
 
 double dIC(double u, double E, double mass)   //limite superior     
 {
-	//DataLosses* data = (DataLosses*)voiddata;
-	//const double E = data->E;
-	//const double mass = data->mass;
 
 	double s = 4*u*E/P2(mass*cLight2);
 	return s*E/(1+s);
@@ -23,10 +20,6 @@ double dIC(double u, double E, double mass)   //limite superior
 
 double fIC(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
 {
-	//DataLosses* data = (DataLosses*)voiddata;
-	//const double E = data->E;
-	//const double mass = data->mass;
-	//fun1 targetPhotonField = data->tpf;
 
 	double Erep = mass*cLight2;
 	double r    = t*P2(Erep)/(4*u*E*(E-t));

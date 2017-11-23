@@ -17,12 +17,20 @@
 
 double stagnationPoint(double z)
 {
-	static const double E_0 = GlobalConfig.get<double>("E_0");
+	static const double Mc = GlobalConfig.get<double>("Mc")*solarMass;
 	static const double Lj = GlobalConfig.get<double>("Lj");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
-	double Rs = pow((E_0*cLight*P2(openingAngle*z) / (4.0*Lj)), 1.0 / 3.0);
+	double vel = 1.0e9;
+
+	double E_0 = Mc*P2(vel)/2.0;
+
+	double cte = (E_0*cLight*P2(openingAngle*z) / (4.0*Lj));
+
+	double Rs = pow(cte, 1.0 / 3.0);
 		
+	//double Rs = 1.0e16;
+
 	return Rs;
 
 }
@@ -62,7 +70,11 @@ double jetRadius(double z, double openingAngle)
 	return z*openingAngle;
 }
 
-
+double beta(double gamma)
+{
+	double b = sqrt(1.0 - 1.0 / P2(gamma));
+	return b;
+}
 
 
 
@@ -153,40 +165,3 @@ void initializeCrossingTimePoints(Vector& time, double rMin, double rMax)
 
 
 
-
-/*
-inline double computeModelB0(double Lj, double openingAngle) {
-return sqrt(4.0*Lj / cLight) / openingAngle;  //ojo que esto es Bo*z0
-}
-
-inline double fmagneticField(double z, double B_o)
-{
-static const double subEq = GlobalConfig.get<double>("subEq");
-return sqrt(subEq)*B_o / z;  //la equiparicion es respecto a Lj ~B^2
-}*/
-
-/*
-
-double vWind(double r, double starR) //x es la energia
-{
-	double vInfty = 2.0e8;
-	return vInfty*(1.0 - starR / r);
-}
-
-double nWindDensity(double r, double starR)
-{
-	double Mdot = 3.0e-6*solarMass;
-	return Mdot / (4.0*pi*P2(r)*vWind(r, starR)*protonMass);
-}*/
-
-
-
-//void derive_parameters_r(double E, double z, double t)
-//{
-//	double B0{ computeModelB0(parameters.Lj, parameters.openingAngle) };
-//	//parameters.radius = jetRadius(z, parameters.openingAngle);
-//	parameters.magneticField = fmagneticField(z, B0);
-//	//electronLogEmax = log10(eEmax(z, magneticField));
-//
-//	//Rsp = stagnationPoint(z);
-//}
