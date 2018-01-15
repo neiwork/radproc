@@ -11,6 +11,10 @@
 #include <fmath\physics.h>
 #include <fparameters/parameters.h>
 
+#include <string>
+#include <iostream>
+#include <fstream>
+
 #include <boost/property_tree/ptree.hpp>
 
 
@@ -59,9 +63,18 @@ void gammaC(State& st, Vector& Gc, Vector& Rc, Vector& tobs)
 	static const double z_peak = GlobalConfig.get<double>("z_peak")*pc;
 	static const double blobRadius = GlobalConfig.get<double>("blobRadius")
 		                             *(z_peak*theta);
-	
+
 	//static const double Mc = GlobalConfig.get<double>("Mc")*solarMass;
 	//static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
+
+
+	/*std::string archive = "L44_i60_short.txt";
+	
+	std::ifstream fileReaded;
+	fileReaded.open(archive.c_str(), std::ios::in);
+	double tobs_yr, t, z, g, Rc_Rj, rho, Q;
+	*/
+
 	
 	/*double mu = cos(inc);
 
@@ -74,6 +87,8 @@ void gammaC(State& st, Vector& Gc, Vector& Rc, Vector& tobs)
 	double R0 = stagnationPoint(z0);//aca dejo el R0, no el que se expande
 	*/
 
+	
+	
 	double beta_j = beta(Gj);
 
 	st.electron.ps.iterate([&](const SpaceIterator& i) {
@@ -81,12 +96,17 @@ void gammaC(State& st, Vector& Gc, Vector& Rc, Vector& tobs)
 		//const double z = i.val(DIM_R);		
 		int s = i.coord[DIM_R]; //posicion en la coordenada z
 
+		//fileReaded >> tobs_yr >> t >> z >> g >> Rc_Rj >> rho >> Q;
+
+		//z = z*pc;
+		//tobs[s] = tobs_yr*yr;
+		//Rc[s] = Rc_Rj*(z*theta);
 		Gc[s] = g*Gj;
-
 		Rc[s] = blobRadius;
-
 		tobs[s] = 0.0;
 
+	}, { 0, -1 }); //fijo cualquier energia
+	//fileReaded.close();
 
 
 	/*	double y = z / z0;
@@ -176,7 +196,9 @@ void gammaC(State& st, Vector& Gc, Vector& Rc, Vector& tobs)
 			tobs[s] = tobs[s - 1] + dt*cte;
 		}*/ 
 
-	}, { 0, -1 }); //fijo cualquier energia
+	//}, { 0, -1 }); //fijo cualquier energia
+
+	
 }
 
 
@@ -212,19 +234,19 @@ double eEmax(double z, double Gc, double B, double Reff)
 
 void fillMagnetic(State& st, Vector& Gc)
 {
-	static const double Gj = GlobalConfig.get<double>("Gamma");
+	//static const double Gj = GlobalConfig.get<double>("Gamma");
 	static const double z_peak = GlobalConfig.get<double>("z_peak")*pc;
 
 	st.magf.fill([&](const SpaceIterator& i) {
 		//double z = i.val(DIM_R);
 		int z_ix = i.coord[DIM_R];
 
-		double beta_c = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
-		double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
-		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
-		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+		//double beta_c = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
+		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+		//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+		//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
-		return computeMagField(z_peak, G_rel);  // 
+		return computeMagField(z_peak, Gc[z_ix]);  
 	});
 }
 

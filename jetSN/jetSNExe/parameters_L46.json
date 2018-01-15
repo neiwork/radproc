@@ -1,6 +1,7 @@
 {
 
-	"Mc":1.0,
+	"Mc":10.0,
+	"E_0":1.0e51,
 	
 	"h_d":50,
 	"R_d":300,
@@ -11,9 +12,13 @@
 
 	"subEq":1.0e-2,
 	
-	"Lj": 1.0e43,
+	"Lj": 1.0e46,
 	"openingAngle": 0.1,
-	"inc": 60,
+	"inc": 0,
+	"g":0.1039,
+	"blobRadius":1.0,
+	"z_peak":52.33,
+	
 	"Gamma": 10.0,
 	"accEfficiency": 0.1,
 	"primaryIndex": 2.0,
@@ -33,8 +38,8 @@
 					},
 					"radius":{
 						"min":50,
-						"max":1500,
-						"samples":100
+						"max":300,
+						"samples":2
 					}
 				}
 			},
@@ -42,7 +47,7 @@
 				"dim":{
 					"energy": {
 						"min":-6.0,
-						"max":16.0
+						"max":17.0
 					}
 				}
 			},
@@ -51,7 +56,7 @@
 				"dim":{
 					"energy": {
 						"min":6.0,
-						"max":15.0
+						"max":16.0
 					}
 				}
 			},

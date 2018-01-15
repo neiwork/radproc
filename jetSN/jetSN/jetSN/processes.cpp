@@ -43,7 +43,7 @@ void synL(State& st, ParamSpaceValues& Qsyn)
 		double eSyn = luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 
 		Qsyn.set(i, eSyn);
-	});
+	}, { -1, 0 });
 }
 
 void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
@@ -62,8 +62,8 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
 
-	//std::ofstream file2;
-	//file2.open(filename + "_peak_evol.txt", std::ios::out);
+	std::ofstream file2;
+	file2.open(filename + "peak_evol.txt", std::ios::out);
 
 	double EphminS = boltzmann*starT / 100.0;
 
@@ -96,17 +96,18 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 		double Dlorentz = computeDlorentz(gamma);
 		double r = z_peak; // st.photon.distribution.ps[DIM_R][z_ix];
 
-		/*double E_kn = P2(electronMass*cLight2) / (boltzmann*IRstarT) / gamma;
+		double E_kn = P2(electronMass*cLight2) / (boltzmann*IRstarT) / gamma;
 
 		SpaceCoord j(st.photon.ps);
 		j[DIM_R] = z_ix;
 
-		double L_kn = luminositySynchrotron(E_kn, st.electron, j, st.magf)
-			 + luminosityIC(E_kn, st.electron, j, [&E_kn, &r, &gamma](double E_kn) {
-			return starIR(E_kn, r, gamma); }, EphminAux);
-
-		file2 << t / yr << '\t' << safeLog10(Llab(L_kn, gamma)) << std::endl;
-		*/
+		double L_kn = //luminositySynchrotron(E_kn, st.electron, j, st.magf)
+			 + luminosityAnisotropicIC(E_kn, st.electron, r,
+			gamma, [&](double eval, double g, double eta) {
+			return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, j); 
+		
+		file2 << z_peak / pc << '\t' << (Llab(L_kn, gamma)) << std::endl;
+		
 
 		st.photon.ps.iterate([&](const SpaceIterator &i) {
 
@@ -122,25 +123,25 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 
 			double eSyn = Qsyn.get(i);// luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 
-			//double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
-			//	return starBlackBody(E, r, gamma); }, EphminS);
 
-			//double eIC_aux = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
-			//	return starIR(E, r, gamma); }, EphminAux);
-
-			double eICs = luminosityAnisotropicIC( E, st.electron,  r,
-				gamma, [&](double eval, double g, double eta) {
-				return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
+			double eICs = 0.0;// luminosityAnisotropicIC(E, st.electron, r,
+				//gamma, [&](double eval, double g, double eta) {
+				//return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
 
 			double eIC_aux = luminosityAnisotropicIC(E, st.electron, r,
 				gamma, [&](double eval, double g, double eta) {
 				return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, i.coord);
 
-			double eSSC = luminosityIC(E, st.electron, i,
-				[&Qsyn, &i, &r](double E) {return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
-			, st.photon.emin());
+			double eSSC = 0.0;// luminosityIC(E, st.electron, i,
+				//[&Qsyn, &i, &r, &st](double E) {
+				//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
+				//if(E < st.photon.emax() && E > st.photon.emin()){
+				//return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
+				//else { return 0.0; }; }
+			//, st.photon.emin());
 
-			double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
+			//double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
+			double Ltot1 = eIC_aux;
 			Ltot = Ltot + Ltot1;
 
 			double Lsyn = Llab(eSyn, gamma);
@@ -176,7 +177,8 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 			//<< "One zone power" << '\t' <<  Ltot
 			"oneZone/InjPower:" << '\t' << Ltot/Qinj 
 			<< std::endl;
-
+		file2 << z_peak / pc << '\t' << (Llab(Ltot, gamma)) << std::endl;
+		
 	}
 
 }
@@ -185,36 +187,8 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 
 
 
+//double eICs = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
+//	return starBlackBody(E, r, gamma); }, EphminS);
 
-
-///////////////////
-//#   pragma omp parallel for \
-	//		private(i, eSyn, eIC) \
-	//		shared(st, Qsyn, Qic) \
-	//		default(none) \
-	//		schedule(static, 1) \
-	//		num_threads(2)
-
-//#pragma omp parallel sections
-//{
-//#pragma omp section
-//	{
-//		Qsyn.fill([&st](const SpaceIterator &i){
-//			return luminositySynchrotron(i.val(DIM_E), st.electron); //estos devuelven erg/s/cm^3, integrar!
-//		});
-//	}
-
-//#pragma omp section
-//	{
-//		Qic.fill([&st](const SpaceIterator &i){
-//			return luminosityAnisotropicIC(i.val(DIM_E), st.electron, i.val(DIM_R));
-//		});
-//	}
-//}
-
-
-
-//double dz = z[i]*(z_int - 1);
-//volumen de la celda i
-//double vol_i = pi*P2(jetRadius(z[i], openingAngle))*dz;;
-//double E = pps[0][E_ix];
+//double eIC_aux = luminosityIC(E, st.electron, i.coord, [&E, &r, &gamma](double E) {
+//	return starIR(E, r, gamma); }, EphminAux);

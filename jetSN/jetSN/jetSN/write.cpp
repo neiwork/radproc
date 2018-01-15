@@ -138,22 +138,22 @@ void writeEvol(const std::string& filename, const ParamSpaceValues& data,
 		double Dlorentz = computeDlorentz(Gc[z_ix]); // 1.0 / (Gc[z_ix] * (1.0 - cos(inc)*beta));
 		double boost = pow(Dlorentz, 4) / P2(Gc[z_ix]);
 
-		double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
-		double beta_rel = (beta_j - beta) / (1.0 - beta_j*beta);
-		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+		//double beta_rel = (beta_j - beta) / (1.0 - beta_j*beta);
+		//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 		
 
 		double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gc[z_ix]; //IC
 		double Reff = Rc[z_ix];
 
-		double B = computeMagField(z, G_rel);
+		double B = computeMagField(z, Gc[z_ix]);
 		//double Emax = eEmax(z, Gc[z_ix], B, Reff);
 		//double Ega = 100.0e6*1.6e-12;
 		//double E = electronMass*cLight2*sqrt(Ega*4.0*pi*electronMass*cLight /
 			//(0.29*Dlorentz*3.0*electronCharge*planck*B)); //Esyn
 		
 		double Lnt = dLnt(z, Gc[z_ix], z_0, Reff);
-		double Q = Lnt*boost*frad(E, z, Gc[z_ix], G_rel);
+		double Q = Lnt*boost*frad(E, z, Gc[z_ix]);
 
 		L1 = L1 + Q;
 		

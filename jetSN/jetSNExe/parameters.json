@@ -1,6 +1,7 @@
 {
 
-	"Mc":1.0,
+	"Mc":10.0,
+	"E_0":1.0e51,
 	
 	"h_d":50,
 	"R_d":300,
@@ -11,12 +12,12 @@
 
 	"subEq":1.0e-2,
 	
-	"Lj": 1.0e46,
+	"Lj": 1.0e44,
 	"openingAngle": 0.1,
-	"inc": 0,
-	"g":0.1432,
-	"blobRadius":1.0,
-	"z_peak":55.1,
+	"inc": 60,
+	"g":0.1073,
+	"blobRadius":1.00,
+	"z_peak":264.55,
 	
 	"Gamma": 10.0,
 	"accEfficiency": 0.1,

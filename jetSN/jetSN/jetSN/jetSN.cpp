@@ -52,7 +52,7 @@ int jetSN()
 		
 		fillMagnetic(model, Gc);
 
-		radiativeLosses(model, folder + "\\electronLosses.txt", Gc, Rc, tobs);
+		//radiativeLosses(model, folder + "\\electronLosses.txt", Gc, Rc, tobs);
 		//protonLosses(model, folder + "\\protonLosses.txt", Gc, Rc, tobs);
 
 		injection(model.electron, model, Gc, Rc);

@@ -26,12 +26,12 @@ double losses(double E, double r, Particle& p, State& st, const SpaceCoord& i, d
 
 	//double r = i->par.R;
 	//static const double B{ st.magf.get(i) };
-	double beta_c = sqrt(1.0 - 1.0 / P2(gamma));
-	double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
-	double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
-	double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+	//double beta_c = sqrt(1.0 - 1.0 / P2(gamma));
+	//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+	//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+	//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
-	double B = computeMagField(r, G_rel);
+	double B = computeMagField(r, gamma);
 
 	double loss = lossesSyn(E, B, p)
 		+ adiabaticLosses(E, r, vel_lat, gamma);

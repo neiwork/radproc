@@ -21,15 +21,16 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 {
 	show_message(msgStart, Module_radLosses);
 
-	static const double Gj = GlobalConfig.get<double>("Gamma");
+	//static const double Gj = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double starT = GlobalConfig.get<double>("starT");
 	static const double starTIR = GlobalConfig.get<double>("IRstarT");
+	static const double z_peak = GlobalConfig.get<double>("z_peak")*pc;
 
 	double z_0 = st.electron.ps[DIM_R].first();
 	double t0 = z_0 / cLight;
-	double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+	//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
@@ -54,7 +55,7 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 		double vel_lat = cLight*openingAngle;
 
 		double E = i.val(DIM_E);
-		double z = i.val(DIM_R);
+		double z = z_peak;// i.val(DIM_R);
 
 		double gamma = Gc[i.coord[DIM_R]];
 
@@ -87,14 +88,14 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 		double beta_c = sqrt(1.0 - 1.0 / P2(gamma));
 		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
-		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+		//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
 
-		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+//		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
-		double v_rel = cLight*beta_rel;
-		double eEsc = escapeRate(Reff, v_rel);
+//		double v_rel = cLight*beta_rel;
+		double eEsc = escapeRate(Reff, cLight*beta_c);
 
-		double B = computeMagField(z, G_rel);
+		double B = computeMagField(z, gamma);
 		double eSyn = lossesSyn(i.val(DIM_E), B, st.electron) / i.val(DIM_E);
 
 		double eAcc = accelerationRate(E, B, accEfficiency);
@@ -127,7 +128,7 @@ void protonLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc
 {
 	show_message(msgStart, Module_radLosses);
 
-	static const double Gj = GlobalConfig.get<double>("Gamma");
+	//static const double Gj = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 	static const double starT = GlobalConfig.get<double>("starT");
@@ -135,7 +136,7 @@ void protonLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc
 
 	double z_0 = st.electron.ps[DIM_R].first();
 	double t0 = z_0 / cLight;
-	double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+	//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
 	std::ofstream file;
 	file.open(filename.c_str(), std::ios::out);
@@ -189,15 +190,13 @@ void protonLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc
 
 		double beta_c = sqrt(1.0 - 1.0 / P2(gamma));
 		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+		//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+		//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
-		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+		//double v_rel = cLight*beta_rel;
+		double eEsc = escapeRate(Reff, cLight*beta_c);
 
-		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
-
-		double v_rel = cLight*beta_rel;
-		double eEsc = escapeRate(Reff, v_rel);
-
-		double B = computeMagField(z, G_rel);
+		double B = computeMagField(z, gamma);
 		double eSyn = lossesSyn(i.val(DIM_E), B, st.proton) / i.val(DIM_E);
 
 		double eAcc = accelerationRate(E, B, accEfficiency);

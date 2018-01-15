@@ -21,20 +21,20 @@
 
 
 
-double frad(double E, double z, double Gc, double Grel) 
+double frad(double E, double z, double Gc) 
 {
 	
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	
 	double vel_lat = cLight*openingAngle;
 
-	double tad = adiabaticLosses(E, z, vel_lat, Grel) / E; //FF
+	double tad = adiabaticLosses(E, z, vel_lat, Gc) / E; //FF
 			
 	double wph = wphIR(z,"IR")*P2(Gc);
 
 	double tic = 4.0*cLight*thomson*wph*(E / P2(electronMass*cLight2)) / 3.0;
 
-	double wmag = P2(computeMagField(z, Grel)) / (8.0*pi);
+	double wmag = P2(computeMagField(z, Gc)) / (8.0*pi);
 	double tsyn = 4.0*cLight*thomson*wmag*(E / P2(electronMass*cLight2)) / 3.0;
 	
 	double frad = tic / (tad + tic + tsyn);

@@ -160,15 +160,6 @@ double nph_ICani(double Ep, double z, double r, double gamma, const char* id)
 	} else {
 		starT = GlobalConfig.get<double>("starT");
 	}
-
-	double Dlorentz = computeDlorentz(gamma);
-
-	double E = Ep*Dlorentz;  //esta seria E_lab
-
-	double Epeak = boltzmann*starT;
-	double Ephmin = Epeak / 100.0;
-	double Ephmax = Epeak*100.0;
-
 	//static const double int_E = RungeKuttaSimple(Ephmin, Ephmax, [&Ephmin, &Epeak](double E) {
 	//	return (P3(E)*exp(-Ephmin / E) / (exp(E / Epeak) - 1));
 	//});

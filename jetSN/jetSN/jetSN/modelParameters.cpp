@@ -17,20 +17,20 @@
 
 double stagnationPoint(double z)
 {
-	static const double Mc = GlobalConfig.get<double>("Mc")*solarMass;
+	//static const double Mc = GlobalConfig.get<double>("Mc")*solarMass;
 	static const double Lj = GlobalConfig.get<double>("Lj");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double E_0 = GlobalConfig.get<double>("E_0");
 
-	double vel = 1.0e9;
+	//double vel = 1.0e9;
 
-	double E_0 = Mc*P2(vel)/2.0;
+	//double E_0 = Mc*P2(vel)/2.0;
 
 	double cte = (E_0*cLight*P2(openingAngle*z) / (4.0*Lj));
 
 	double Rs = pow(cte, 1.0 / 3.0);
 		
-	//double Rs = 1.0e16;
-
+	
 	return Rs;
 
 }

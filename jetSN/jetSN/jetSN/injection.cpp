@@ -53,12 +53,12 @@ void injection(Particle& p, State& st, Vector& Gc, Vector& Rc)
 		//double dz = z*(R_int - 1);
 
 		//normalizacion afuera del iterate sobre E
-		double beta_c = beta(Gc[z_ix]);
-		double beta_j = beta(Gj);
-		double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
-		double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
+		//double beta_c = beta(Gc[z_ix]);
+		//double beta_j = beta(Gj);
+		//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+		//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
-		double B = computeMagField(z, G_rel);
+		double B = computeMagField(z, Gc[z_ix]);
 		double Rs = Rc[z_ix];
 
 		double Emax = eEmax(z, Gc[z_ix], B, Rs);

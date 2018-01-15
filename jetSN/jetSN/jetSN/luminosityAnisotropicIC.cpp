@@ -24,7 +24,7 @@
 
 double KNcrossSection(double eval)
 {
-	double cs = 3.0*thomson*(log(2.0*eval) + 0.5);
+	double cs = 3.0*thomson*(log(2.0*eval) + 0.5)/(8.0*eval);
 	return cs;
 }
 
@@ -66,6 +66,7 @@ double luminosityAnisotropicIC(double E, Particle& particle, double z,
 	double gamma, fun3 tpf, double starT, const SpaceCoord& psc)
 {
 	static const double R_d = GlobalConfig.get<double>("R_d") *pc;
+	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
 	static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
 	static const double logEmax = GlobalConfig.get<double>
 		("model.particle.photon.dim.energy.max", 1.0);
@@ -87,6 +88,11 @@ double luminosityAnisotropicIC(double E, Particle& particle, double z,
 	int nEta = 20;
 	double deta = (eta_max - eta_min) / nEta;
 
+	double phi_min = 0.0;
+	double phi_max = 2.0*pi;
+	int nPhi = 20;
+	double dphi = (phi_max - phi_min) / nPhi;
+
 	double suma = 0.0;
 
 	double eta = eta_min;
@@ -97,61 +103,49 @@ double luminosityAnisotropicIC(double E, Particle& particle, double z,
 
 	for (int i_eta = 0; i_eta < nEta + 1; ++i_eta)
 	{
-
-		//    integral 1, regimen thomson
-		double phi_min = 0.0;
-		double phi_max = 2.0*pi;
-		int nPhi = 10;
-		double dphi = (phi_max - phi_min) / nPhi;
-
-		double g_min = particle.emin() / Erest;
-		g_min = std::max(g_min, es);
-		double g_max = particle.emax() / Erest;
-		int n_g = 40;
-		double g_int = pow((g_max / g_min), (1.0 / n_g));
-
-		double suma_1 = 0.0;
-		double g = g_min;
-		for (int i_g = 0; i_g < n_g; ++i_g)
+		double phi = phi_min;
+		for (int i_phi = 0; i_phi < nPhi + 1; ++i_phi)
 		{
-			double eBeta = beta(g);  //g = factor lorentz electrones
-			double dg = g*(g_int - 1.0);
+			double mu = eta*eta_obs + sqrt(abs(1.0 - P2(eta))*abs(1.0 - P2(eta_obs)))*cos(phi);
+		//    integral 1, regimen thomson
 
-			double eval_e = g*Erest;
-			double Ne = ne_eval(particle, eval_e, psc);
+			double g_min = particle.emin() / Erest;
+			g_min = std::max(g_min, es);
+			double g_max = particle.emax() / Erest;
+			int n_g = 80;
+			double g_int = pow((g_max / g_min), (1.0 / n_g));
 
-			double f_g = Ne / P2(g); 
+			double suma_1 = 0.0;
+			double g = g_min;
+			for (int i_g = 0; i_g < n_g; ++i_g)
+			{
+				double eBeta = beta(g);  //g = factor lorentz electrones
+				double dg = g*(g_int - 1.0);
 
-			//double phi = phi_min;
-			//for (int i_phi = 0; i_phi < nPhi + 1; ++i_phi)
-			//{
+				double eval_e = g*Erest;
+				double Ne = ne_eval(particle, eval_e, psc);
 
-				double eval_ph = gamma*es*(1.0 + bG*eta) / (P2(g)*(1.0 - eta*eta_obs));
-				//double mu = eta*eta_obs + sqrt(abs(1.0 - P2(eta))*abs(1.0 - P2(eta_obs)))*cos(phi);
-				//double eval_ph = gamma*es*(1.0 + bG*eta) / (P2(g)*(1.0 - eBeta*mu));
+				double f_g = Ne / P2(g); 
+	
+				//double eval_ph = gamma*es*(1.0 + bG*eta) / (P2(g)*(1.0 - eta*eta_obs));
+				double eval_ph = gamma*es*(1.0 + bG*eta) / (P2(g)*(1.0 - eBeta*mu));
 
 				double nph = tpf(eval_ph, gamma, eta);// nph_ICani2(eval_ph, gamma, eta, 'IR') ; //falta dr
 
-				suma_1 += cLight*thomson*f_g*nph*dg;// *(1.0*eBeta*mu)*dphi;
+				suma_1 += cLight*thomson*f_g*nph*dg;
 
-				//phi = phi + dphi;
-		//	}
 
-			g = g*g_int;
-		}
+				g = g*g_int;
+			}
 
 		//    integral 2, sobre eps, regimen KN
-		double suma_2 = 0.0;
+			double suma_2 = 0.0;
 
-		//double phi = phi_min;
-		//for (int i_phi = 0; i_phi < nPhi + 1; ++i_phi)
-		//{
-			double e_min = std::max(1.0, 1.0 / (es*(1.0 - eta*eta_obs)));
-			//double eBeta = beta(es);
-			//double mu = eta*eta_obs + sqrt(abs(1.0 - P2(eta))*abs(1.0 - P2(eta_obs)))*cos(phi);
-			//double e_min = std::max(1.0, 1.0 / (es*(1.0 - eBeta*mu)));
+			//double e_min = std::max(1.0, 1.0 / (es*(1.0 - eta*eta_obs)));
+			double e_min = std::max(1.0, 1.0 / (es*(1.0 - mu)));
+			
 			double e_max = photonEmax / Erest;
-			int n_e = 40;
+			int n_e = 80;
 			double e_int = pow((e_max / e_min), (1.0 / n_e));
 
 			double eps = e_min;
@@ -161,32 +155,34 @@ double luminosityAnisotropicIC(double E, Particle& particle, double z,
 				double de = eps*(e_int - 1.0);
 
 				double eval_ph = gamma*eps*(1.0 + bG*eta);
-				double nph = tpf(eval_ph, gamma, eta);// nph_ICani2(eval_ph, gamma, eta, 'IR') ; //falta dr
-				//double nph = nph_ICani2(eval_ph, gamma, eta, 'IR'); //falta dr
+				double nph = tpf(eval_ph, gamma, eta);
+				// nph_ICani2(eval_ph, gamma, eta, 'IR') ; //falta dr
 
-				double eval_KN = es*eps*(1.0 - eta_obs*eta);
-				//double eval_KN = es*eps*(1.0 - eBeta*mu);
-				suma_2 += cLight*KNcrossSection(eval_KN)*nph*(de / eps);// *dphi;
+				//double eval_KN = es*eps*(1.0 - eta_obs*eta);
+				double eval_KN = es*eps*(1.0 - mu);
+				suma_2 += cLight*KNcrossSection(eval_KN)*nph*de;
 
 				eps = eps*e_int;
 			}
-			//phi = phi + dphi;
-		//}
 
-		double eval_e = es*Erest;
-		double Ne = ne_eval(particle, eval_e, psc);
+			double eval_e = es*Erest;
+			double Ne = ne_eval(particle, eval_e, psc);
 		
-		suma_2 = suma_2*Ne / es;
+			suma_2 = suma_2*Ne / es;
+	
+			//--------------------------
+			//continua la integral en eta
+			double r = r_eta(eta, z, bG);
+			double r2 = r_eta(eta - deta, z, bG);
+			double dr = abs(r - r2);
 
-		//--------------------------
-		//continua la integral en eta
-		double r = r_eta(eta, z, bG);
-		double r2 = r_eta(eta - deta, z, bG);
-		double dr = abs(r - r2);
+			double x = sqrt(P2(r) + P2(z));
+			double corr = P2(gamma*(x - bG*z))*x / (z*r);
+			double corr2 = 2.0*r*h_d/P2(x);
+			suma += (suma_1 + suma_2)*deta*(1.0 - mu)*dphi*corr*corr2; //dr
 
-		//double x = sqrt(P2(r) + P2(z));
-		//double corr = P2(gamma*(x - bG*z))*x / (z*r);
-		suma += (suma_1 + suma_2)*dr*deta; // *corr;
+			phi = phi + dphi;
+		}
 
 		eta = eta + deta;
 	}

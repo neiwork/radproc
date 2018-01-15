@@ -38,7 +38,7 @@ double lossesAnisotropicIC(double E, Particle& particle, double z,
 
 	double r_min = 1.0e15; //generalizar
 	double r_max = R_d;
-	int nR = 20;
+	int nR = 80;
 	double r_int = pow((r_max / r_min), (1.0 / nR));
 	
 	double suma = 0.0;
@@ -57,30 +57,35 @@ double lossesAnisotropicIC(double E, Particle& particle, double z,
 		double eta_ph = (z-bG*x)/(x-bG*z);
 		double u = 2.7*theta / (gamma*(1.0 + bG*eta_ph));  //<eps>
 
-		double f_r = z*r*pow(theta, 4.0)*P2(x - bG*z) / pow(x, 5.0);
-
+		//double f_r = z*r*pow(theta, 4.0)*P2(x - bG*z) / pow(x, 5.0);
+			
+		double deta = z*r*dr / (x*P2(x - bG*z));
+		
 		double phi = phi_min;
 		for (int i_phi = 0; i_phi < nPhi; ++i_phi)
 		{
-			double mu = sqrt(1.0 - P2(eta_ph))*cos(phi);
-			double f_phi = P2(1.0 - eBeta*mu);
+			double mu = sqrt(abs(1.0 - P2(eta_ph)))*cos(phi);
+			double f_phi = (1.0 - eBeta*mu);
 
 			double k = k_min;  //este k es en realidad k_prim
 			for (int i_k = 0; i_k < nK; ++i_k)
 			{
-				double a = eBeta*sqrt(1.0 - P2(eta_ph));
-				double F = 1.0 + u*eGamma*(1.0 - a*cos(phi))*(1 - k);
+				double F = 1.0 + u*eGamma*(1.0 - eBeta*mu)*(1 - k);
 
-				double f1 = 1 - k;
 				double f2 = 1.0 + F*(F - 1.0) + F*P2(k);
-				double f3 = pow(F, 4.0);
+				double f3 = P3(F);
 
-				double integral = f_r*f_phi*f1*(f2 / f3);
+				double f4 = P2(eGamma) * (1.0 - eBeta*mu + eBeta*k*(mu - eBeta));
 
-				double nph_norm = dr*tpf(u*Erest, z, r); // (u*Erest); 
-				// [nph_norm]= cm^-3, en el sist del disco
-						
-				suma += integral*nph_norm*dk*dphi*dr;
+				double integral = f_phi*(f2 / f3)*(f4 / F - 1.0);
+
+				double int_ph = pow((pi*theta / (gamma*(1.0 + bG*eta_ph))), 4) / 15.0;
+
+				double wph = tpf(u*Erest, z, r); // (u*Erest); 
+												 // [nph_norm]= cm^-3, en el sist del disco
+				double nph_norm = dr*wph;
+
+				suma += int_ph*integral*nph_norm*dk*dphi*deta;				
 
 				k = k +dk;
 			}  //cierro k
@@ -91,9 +96,11 @@ double lossesAnisotropicIC(double E, Particle& particle, double z,
 		r = r*r_int;
 	} //cierro r
 
-	double cte = pow(pi, 4.0)*thomson*P2(gamma*eGamma)*cLight / 40.0;
-	
-	return suma*cte*Erest;  //Erest porque paso de dG/dt a dE/dt
+	double cte = 2.0*(3.0*thomson*cLight / (16.0*P2(gamma)));  //el * 2 sale de la itegral en eta_e
+
+	double res = suma*cte*Erest;// / E; //suma*cte da dg / dt->*Erest paso a dE / dt -> * 1 / E paso a t^-1
+		
+	return res; 
 }
 
 
