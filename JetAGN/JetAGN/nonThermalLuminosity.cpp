@@ -35,17 +35,32 @@ double frad(double E, double z)
 
 	double tad_flow = adiabaticLosses(E, z, vel_lat, Gamma) / E; //ad esta en erg/s
 
-	double tad = tad_flow/Gamma; //en el lab
+	//double tad = tad_flow/ Gamma; //en el lab
 
 	//<<<<<<< HEAD
 
 	//double wph2 = Lj / (cLight*4.0*Sj);
-		
-	double tic = 4.0*cLight*thomson* wph(z)*(E / P2(electronMass*cLight2)) / 3.0;
-	
-	double trad = tic;
 
-	double frad = 1.0 / (1.0 + tad / trad);
+
+	//nuevo
+	double tad = tad_flow; // / Gamma; //en el lab
+
+	double tic = 4.0*cLight*thomson* (wph(z)*P2(Gamma))*(E / P2(electronMass*cLight2)) / 3.0/Gamma;
+
+	double B = computeMagField(z); 
+
+	double wmag = P2(B) / (8.0*pi);
+
+	double tsyn = 4.0*cLight*thomson*wmag*(E / P2(electronMass*cLight2)) / 3.0;
+
+	double frad = tic / (tad + tic + tsyn);
+
+		
+	//double tic = 4.0*cLight*thomson* wph(z)*(E / P2(electronMass*cLight2)) / 3.0;
+	
+	//double trad = tic;
+	//double frad = 1.0 / (1.0 + tad / trad);
+	
 	return frad;
 
 }
@@ -55,7 +70,7 @@ double dLntM87(double z)
 {	//esta es para M87
 
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
-	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  //pc
+	static const double h_d = GlobalConfig.get<double>("h_d")*pc;  
 	static const double MdotWind = GlobalConfig.get<double>("Mdot")*solarMass / yr;
 	static const double vWind = GlobalConfig.get<double>("vWind");
 

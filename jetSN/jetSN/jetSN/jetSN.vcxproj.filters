@@ -50,6 +50,9 @@
       <Filter>aniIC</Filter>
     </ClCompile>
     <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="sscLosses.cpp">
+      <Filter>losses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="luminosityAnisotropicIC.h">
       <Filter>aniIC</Filter>
+    </ClInclude>
+    <ClInclude Include="sscLosses.h">
+      <Filter>losses</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

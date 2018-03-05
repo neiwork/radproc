@@ -104,6 +104,8 @@ void radiativeLosses(State& st, const std::string& filename, Vector& Gc, Vector&
 		double tlab = (z / cLight - t0) / yr;
 		double t = tobs[i.coord[DIM_R]];
 
+		double frad = eIC_Aux / (eEsc + eIC_Aux + eSyn);
+
 				file << fmtE << '\t' << z / pc
 					<< '\t' << t/yr
 					<< "\t" << safeLog10(eSyn)
@@ -189,9 +191,6 @@ void protonLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc
 			
 
 		double beta_c = sqrt(1.0 - 1.0 / P2(gamma));
-		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
-		//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
-		//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
 
 		//double v_rel = cLight*beta_rel;
 		double eEsc = escapeRate(Reff, cLight*beta_c);

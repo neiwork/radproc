@@ -48,6 +48,7 @@ int jetSN()
 
 		gammaC(model, Gc, Rc, tobs);
 
+
 		//writeEvol(folder + "\\evol_frad", model.electron.ps, Gc, Rc, tobs);
 		
 		fillMagnetic(model, Gc);
@@ -60,7 +61,7 @@ int jetSN()
 		
 		//double totalL = computeInjectedPower(model.electron.injection, 0);
 
-		injection(model.proton, model, Gc, Rc);
+		//injection(model.proton, model, Gc, Rc);
 		//double totalL = computeInjectedPower(model.proton.injection, 0);
 
 		//std::cout << "checking injected power:" << '\t' << totalL << std::endl;		

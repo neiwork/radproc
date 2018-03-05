@@ -26,7 +26,7 @@ double stagnationPoint(double z)
 
 	//double E_0 = Mc*P2(vel)/2.0;
 
-	double cte = (E_0*cLight*P2(openingAngle*z) / (4.0*Lj));
+	double cte = (3.0*E_0*cLight*P2(openingAngle*z) / (10.0*Lj));
 
 	double Rs = pow(cte, 1.0 / 3.0);
 		

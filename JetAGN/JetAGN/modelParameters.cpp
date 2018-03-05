@@ -42,8 +42,8 @@ double computeMagField(double z) {
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 
 	double Blab = fmagneticField(z, computeModelB0(Lj, openingAngle));
-	//return Blab/ Gamma;  //este es el B en el sistema del jet
-	return Blab * (5.0e16/z);  //este es el B para m=2
+	return Blab/ Gamma;  //este es el B en el sistema del jet
+	//return Blab * (5.0e16/z);  //este es el B para m=2
 
 } //la densidad de energia (~B^2) transforma con Gamma^2, 
   //B transforma como Gamma

@@ -3,6 +3,7 @@
 
 #include "checkPower.h"
 //#include "SSC.h"
+#include "sscLosses.h"
 
 #include "targetFields.h"
 #include "write.h"
@@ -57,6 +58,8 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 	ParamSpaceValues Qsyn(st.photon.ps);
 	synL(st, Qsyn);
 
+	//sscLosses(st, "sscLosses.txt", Gc, tobs, Qsyn);
+
 	show_message(msgStart, Module_luminosities);
 
 	std::ofstream file;
@@ -96,7 +99,7 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 		double Dlorentz = computeDlorentz(gamma);
 		double r = z_peak; // st.photon.distribution.ps[DIM_R][z_ix];
 
-		double E_kn = P2(electronMass*cLight2) / (boltzmann*IRstarT) / gamma;
+		double E_kn = P2(electronMass*cLight2) / (2.7*boltzmann*IRstarT) / gamma;
 
 		SpaceCoord j(st.photon.ps);
 		j[DIM_R] = z_ix;
@@ -105,9 +108,28 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 			 + luminosityAnisotropicIC(E_kn, st.electron, r,
 			gamma, [&](double eval, double g, double eta) {
 			return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, j); 
+
+		double Ega = 100.0e6*1.6e-12;
+		double B = computeMagField(r, gamma); //= Blab(z, Lj) / Gc(z_ix)
+		double E_syn = electronMass*cLight2 * sqrt(Ega*4.0*pi*electronMass*cLight / (0.29*Dlorentz*3.0*electronCharge*planck*B));
+
+		double L_syn = luminositySynchrotron(Ega/gamma, st.electron, j, st.magf); //estos devuelven erg/s, sumar!
 		
-		file2 << z_peak / pc << '\t' << (Llab(L_kn, gamma)) << std::endl;
+		//luminosityIC(E_syn, st.electron, j,
+		//	[&Qsyn, &j, &r, &st](double E) {
+		//	//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
+		//	if (E < st.photon.emax() && E > st.photon.emin()) {
+		//		return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight);
+		//	}
+		//	else { return 0.0; }; }
+		//, st.photon.emin());
+
+		file2 << z_peak / pc << '\t' << (Llab(L_kn, gamma)) << '\t' << (Llab(L_syn, gamma)) << std::endl;
+
 		
+		
+		
+
 
 		st.photon.ps.iterate([&](const SpaceIterator &i) {
 
@@ -115,33 +137,31 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 		//		std::cout << "z: " << i.coord[DIM_R] << std::endl;
 		//	}
 			
-
 			const double E = i.val(DIM_E);
-			//const double r = i.val(DIM_R);
 
 			double Elab = E*Dlorentz; 
 
 			double eSyn = Qsyn.get(i);// luminositySynchrotron(E, st.electron, i.coord, st.magf); //estos devuelven erg/s, sumar!
 
 
-			double eICs = 0.0;// luminosityAnisotropicIC(E, st.electron, r,
-				//gamma, [&](double eval, double g, double eta) {
-				//return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
+			double eICs =  luminosityAnisotropicIC(E, st.electron, r,
+				gamma, [&](double eval, double g, double eta) {
+				return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
 
 			double eIC_aux = luminosityAnisotropicIC(E, st.electron, r,
 				gamma, [&](double eval, double g, double eta) {
 				return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, i.coord);
 
-			double eSSC = 0.0;// luminosityIC(E, st.electron, i,
-				//[&Qsyn, &i, &r, &st](double E) {
+ 			double eSSC = luminosityIC(E, st.electron, i,
+				[&Qsyn, &i, &r, &st](double E) {
 				//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
-				//if(E < st.photon.emax() && E > st.photon.emin()){
-				//return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
-				//else { return 0.0; }; }
-			//, st.photon.emin());
+				if(E < st.photon.emax() && E > st.photon.emin()){
+				return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
+				else { return 0.0; }; }
+			, st.photon.emin());
 
-			//double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
-			double Ltot1 = eIC_aux;
+			double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
+			//double Ltot1 = eIC_aux;
 			Ltot = Ltot + Ltot1;
 
 			double Lsyn = Llab(eSyn, gamma);

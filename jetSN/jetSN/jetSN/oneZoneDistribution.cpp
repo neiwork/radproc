@@ -15,7 +15,7 @@
 void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si, 
 	Vector& Gc, Vector& Rc)
 {
-	static const double Gj = GlobalConfig.get<double>("Gamma");
+	//static const double Gj = GlobalConfig.get<double>("Gamma");
 	static const double z_peak = GlobalConfig.get<double>("z_peak")*pc;
 
 	int z_ix = 0;// si.coord[DIM_R]; //posicion en la coordenada z
@@ -47,11 +47,11 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si,
 	matrixInit(a, Ee.size(), Ee.size() + 1, 0);
 
 	double beta_c = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
-	double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
+	//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
 
-	double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
+	//double beta_rel = (beta_j - beta_c) / (1.0 - beta_j*beta_c);
 
-	double v_rel = cLight*beta_rel;
+	//double v_rel = cLight*beta_rel;
 
 	double z_int = p.ps[DIM_R].first();
 	double Rs = z / Gc[z_ix]; // Rc[z_ix];
@@ -69,8 +69,8 @@ void oneZoneDistribution(Particle& p, State& st, const SpaceIterator& si,
 			double h = Ee[i + 1] - Ee[i];
 
 			for (int j = 0; j <= nE + 1; ++j) {
-				double tesc = 1.0 / escapeRate(Rs, v_rel);  //en [s]  
-				double frac = 0.5*h / 1.0e20;
+				double tesc = 1.0 / escapeRate(Rs, cLight*beta_c);  //en [s]  
+				//double frac = 0.5*h / 1.0e20;
 				if (j == i) {                               
 					double bE = losses(Ee[i], z, p, st, si, Gc[z_ix]);
 					
