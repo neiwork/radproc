@@ -12,12 +12,12 @@
 
 	"subEq":1.0e-2,
 	
-	"Lj": 1.0e44,
+	"Lj": 1.0e47,
 	"openingAngle": 0.1,
-	"inc": 60,
-	"g":0.11301,
+	"inc": 0,
+	"g":0.1435,
 	"blobRadius":1.0,
-	"z_peak":511.21,
+	"z_peak":55.24,
 	
 	"Gamma": 10.0,
 	"accEfficiency": 0.1,

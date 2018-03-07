@@ -136,6 +136,9 @@ double nph_ICani2(double E, double gamma, double eta, const char* id)
 	double wph = cte / K_1;
 	//esto va por dR, pero ese esta afuera [wph = cm-3]
 
+	//lo de abajo difiere del ic.f90,
+	//ya que en ese devuelvo wph
+	//el error es muy bajo, y solo se ve a altos z
 
 	double corr = gamma*(1.0 - beta(gamma)*eta);
 

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <map>
 
+#include "state.h"
 #include <fparticle\Particle.h>
 #include <fmath\physics.h>
 
@@ -52,8 +53,8 @@ public:
 
 void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& data, int r);
 
-void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
-	const Vector& Gc, const Vector& Rc, const Vector& tobs);
+void writeEvol(const std::string& archive, const std::string& filename,
+	State& st);
 
 
 /*It writes data for all param space*/

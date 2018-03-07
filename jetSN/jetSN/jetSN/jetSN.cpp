@@ -49,7 +49,8 @@ int jetSN()
 		gammaC(model, Gc, Rc, tobs);
 
 
-		//writeEvol(folder + "\\evol_frad", model.electron.ps, Gc, Rc, tobs);
+		//writeEvol("..\..\jetSNExe\Lj44i60.txt", "evol_frad", model);
+		//writeEvol("Lj47i0.txt", "evol_frad", model);
 		
 		fillMagnetic(model, Gc);
 

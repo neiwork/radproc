@@ -6,6 +6,12 @@
 #include "modelParameters.h"
 #include "nonThermalLuminosity.h"
 
+#include "targetFields.h"
+#include "lossesAnisotropicIC.h"
+#include <flosses\lossesSyn.h>
+#include <flosses\nonThermalLosses.h>
+
+
 #include <fparameters\SpaceIterator.h>
 #include <fparameters\Dimension.h>
 #include <fparameters\parameters.h>
@@ -87,120 +93,80 @@ void writeEnergyFunction(const std::string& filename, const ParamSpaceValues& da
 	generateViewScript(filename);
 }
 
-void writeEvol(const std::string& filename, const ParamSpaceValues& data, 
-	const Vector& Gc, const Vector& Rc, const Vector& tobs)
+void writeEvol(const std::string& archive, const std::string& filename, 
+	State& st)
 {
 
-	static const double Mc = GlobalConfig.get<double>("Mc")*solarMass;
 	static const double Gj = GlobalConfig.get<double>("Gamma");
-	static const double starT = GlobalConfig.get<double>("IRstarT");
+	static const double IRstarT = GlobalConfig.get<double>("IRstarT");
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
-	
+
+	std::ifstream fileReaded;
+	fileReaded.open(archive.c_str(), std::ios::in);
+
+	if (!fileReaded.is_open())
+	{
+		std::cout << "el archivo para leer no se puedo abrir";
+	}
+	/*
+	if (fileReaded.good()) {
+		std::cout << "el archivo esta good";
+	}*/
 
 	std::ofstream file;
 	file.open(dataName(filename).c_str(), std::ios::out);
 
-	const double z_0 = data.ps[DIM_R].first();
+	int j = 0;
 
-	file << "t_obs [yr]" 
-		<< '\t' << "z [pc] " 
-		<< '\t' << "t_lab [yr]"
-		<< '\t' << "Rc/Rj"		
-		<< '\t' << "g=Gc/Gj" 
-		<< '\t' << "rho_c"
-		<< '\t' << "rho_j"
-		<< '\t' << "Lnt"
-		//<< '\t' << "Fe" 
-		<< '\t' << "Lnt_obs" << std::endl;
-
-	//file << "t_obs [yr]"
-	//	<< '\t' << "z [pc] "
-	//	<< '\t' << "Rc"
-	//	<< '\t' << "Rj"
-	//	<< '\t' << "Gc"
-	//	<< '\t' << "rho_c"
-	//	//<< '\t' << "Fe" 
-	//	<< '\t' << "rho_j" << std::endl;
-
-	double L1 = 0.0;
-
-	data.ps.iterate([&](const SpaceIterator& i) {
-
-		const double z = i.val(DIM_R);
+	double tobs, t, z_norm, g, ratio, rho, Lnt;
 	
-		int z_ix = i.coord[DIM_R];
-		double g = Gc[z_ix] / Gj;
-		double y = z / z_0;
-			
+	
+	while (!fileReaded.eof())  //esto termina cuando llega al final
+		{
+			fileReaded >> tobs;
+			fileReaded >> t;
+			fileReaded >> z_norm;
+			fileReaded >> g;
+			fileReaded >> ratio;
+			fileReaded >> rho;
+			fileReaded >> Lnt;
 
-		double beta = sqrt(1.0 - 1.0 / P2(Gc[z_ix]));
+			if (j==0 || j % 100 == 0) {
+				double z = z_norm*pc;
+				double Gc = g*Gj;
+				double Rc = ratio*z*openingAngle;
 
-		double Dlorentz = computeDlorentz(Gc[z_ix]); // 1.0 / (Gc[z_ix] * (1.0 - cos(inc)*beta));
-		double boost = pow(Dlorentz, 4) / P2(Gc[z_ix]);
+				double E = P2(electronMass*cLight2) / (2.7*boltzmann*IRstarT) / Gc;
 
-		//double beta_j = sqrt(1.0 - 1.0 / P2(Gj));
-		//double beta_rel = (beta_j - beta) / (1.0 - beta_j*beta);
-		//double G_rel = 1.0 / sqrt(1.0 - P2(beta_rel));
-		
+				double vel_lat = cLight*openingAngle;
 
-		double E = P2(electronMass*cLight2) / (boltzmann*starT) / Gc[z_ix]; //IC
-		double Reff = Rc[z_ix];
+				double tad = adiabaticLosses(E, z, vel_lat, Gc) / E; //FF
 
-		double B = computeMagField(z, Gc[z_ix]);
-		//double Emax = eEmax(z, Gc[z_ix], B, Reff);
-		//double Ega = 100.0e6*1.6e-12;
-		//double E = electronMass*cLight2*sqrt(Ega*4.0*pi*electronMass*cLight /
-			//(0.29*Dlorentz*3.0*electronCharge*planck*B)); //Esyn
-		
-		double Lnt = dLnt(z, Gc[z_ix], z_0, Reff);
-		double Q = Lnt*boost*frad(E, z, Gc[z_ix]);
+				double B = computeMagField(z, Gc);
 
-		L1 = L1 + Q;
-		
-		double z_0 = data.ps[DIM_R].first();
-		
-		double t0 = z_0 / cLight;
-		double t = z / cLight - t0;
-		double t_obs = tobs[z_ix];
+				double eIC_Aux = lossesAnisotropicIC(E, st.electron, z, Gc,
+					[&](double E, double z, double r) {
+					return nph_ICani(E, z, r, Gc, "IR"); },
+					IRstarT) / E;
 
-		double rho_c = Gc[z_ix] * 3.0*Mc / (4.0*pi*P3(Reff));
-		double rho_j = jetRamPress(z) / (Gj*P2(cLight));
+				double eSyn = lossesSyn(E, B, st.electron) / E;
 
+				double frad = eIC_Aux / (tad + eIC_Aux + eSyn);
 
-		file << t_obs / yr
-				<< '\t' << z / pc  
-				<< '\t' << t / yr
-				<< '\t' << P2(Reff / jetRadius(z,0.1))
-				<< '\t' << g
-				//<< Fe(g, y) 
-				<< '\t' << rho_c
-				<< '\t' << rho_j
-				<< '\t' << Lnt*boost
-				<< '\t' << (Q) << std::endl;
+				file << z_norm
+					<< '\t' << frad
+					<< '\t' << eIC_Aux
+					<< '\t' << eSyn
+					<< '\t' << B << std::endl;
+			}
+			j += 1;
+		}
 
-		
-		/*file << t_obs / yr
-			<< '\t' << z/pc
-			<< '\t' << Reff  //<< t / yr << '\t'
-			<< '\t' << jetRadius(z, 0.1)
-			<< '\t' << Gc[z_ix]
-			//<< Fe(g, y) 
-			<< '\t' << rho_c
-			<< '\t' << rho_j 
-			<< '\t' << P2(Reff /jetRadius(z, 0.1))
-			<< std::endl;*/
-
-
-
-
-	}, { 0, -1 }); //fijo cualquier energia
-
-	file << "Lnt total" << '\t' << L1 << std::endl;
-
-	std::cout << "Lnt total" << '\t' << L1 << std::endl;
-
+	fileReaded.close();
+	
 	file.close();
-	generateViewScript(filename);
+
 }
 
 
