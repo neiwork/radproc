@@ -40,7 +40,6 @@ int jetSN()
 		State model(GlobalConfig.get_child("model"));
 		
 		int nR = model.electron.ps[DIM_R].size();// -1;
-		//int nR = model.particles.electron.ps[DIM_R].size();// -1;
 		
 		Vector Gc(nR, 0.0); 
 		Vector Rc(nR, 0.0);
@@ -48,14 +47,11 @@ int jetSN()
 
 		gammaC(model, Gc, Rc, tobs);
 
-
-		//writeEvol("..\..\jetSNExe\Lj44i60.txt", "evol_frad", model);
 		//writeEvol("Lj47i0.txt", "evol_frad", model);
 		
 		fillMagnetic(model, Gc);
 
 		//radiativeLosses(model, folder + "\\electronLosses.txt", Gc, Rc, tobs);
-		//protonLosses(model, folder + "\\protonLosses.txt", Gc, Rc, tobs);
 
 		injection(model.electron, model, Gc, Rc);
 		writeAllSpaceParam(folder + "\\eInj", model.electron.injection, Gc, tobs);

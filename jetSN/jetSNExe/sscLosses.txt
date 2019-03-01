@@ -1,0 +1,1 @@
+Log(E/eV)	z [pc]	tobs [yr]	IC-ssc

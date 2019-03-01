@@ -13,7 +13,8 @@ State::State(boost::property_tree::ptree& cfg) :
  photon{ "photon" },
  magf(photon.ps, false)
  {
-	 static const double zInt = GlobalConfig.get<double>("Rdiss");
+	static const double Mbh = GlobalConfig.get<double>("Mbh")*solarMass;
+	static const double zInt = GlobalConfig.get<double>("Rdiss");
 	 
 	 particles.push_back(&electron);
 	particles.push_back(&photon);

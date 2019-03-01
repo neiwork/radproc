@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="maximumEnergy.cpp" />
+    <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="radiativeLosses.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="targetFieldM87.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="maximumEnergy.h" />
+    <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="radiativeLosses.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="targetFieldM87.h" />
+  </ItemGroup>
+</Project>

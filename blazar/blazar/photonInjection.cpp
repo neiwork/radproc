@@ -13,9 +13,16 @@
 #include <fparameters/parameters.h>
 
 
-double tpf(double E, const ParamSpaceValues psv, const SpaceCoord& distCoord)
+//double tpf(double E, const ParamSpaceValues psv, const SpaceCoord& distCoord)
+double tpf(double E, Particle& photon, const SpaceCoord& distCoord)
 {
-	double result = psv.interpolate({ { 0, E } }, &distCoord);
+	const ParamSpaceValues psv = photon.injection;
+	double result = 0.0;
+	double emin = photon.emin();
+
+	if (E >= emin && E <= photon.emax()) {
+		result = psv.interpolate({ { 0, E } }, &distCoord);
+	}
 	return result;
 }
 
@@ -25,10 +32,7 @@ void photonTarget(Particle& p, State& st)
 {
 //	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double Mbh = GlobalConfig.get<double>("Mbh")*solarMass;
-
-	double rg = gravitationalConstant*Mbh / cLight2;
-	static const double zInt = GlobalConfig.get<double>("Rdiss")*rg;
+	static const double zInt = GlobalConfig.get<double>("Rdiss");
 	
 
 	double B = st.magf.get({ 0 });
@@ -55,9 +59,10 @@ void photonDistribution(Particle& p, State& st)
 {
 	//	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
 
-	double B = st.magf.get({ 0 });
+	//static const double Rdiss = GlobalConfig.get<double>("Rdiss");
+
+	//double B = st.magf.get({ 0 });
 	//double Emin = p.emin();
 	//double Emax = eEmax(Rdiss, B);
 
@@ -65,7 +70,7 @@ void photonDistribution(Particle& p, State& st)
 	//double vol = pi*P2(jetRadius(Rdiss, openingAngle))*Rdiss;
 	//no es necesario el volumen, [Q]= 1/ erg s
 
-	const ParamSpaceValues psv = st.photon.injection;
+	//const ParamSpaceValues psv = st.photon.injection;
 
 
 	p.distribution.fill([&](const SpaceIterator& i){
@@ -75,7 +80,7 @@ void photonDistribution(Particle& p, State& st)
 		double Qsyn = luminositySynchrotron(E, st.electron, i, st.magf);
 
 		double Qic = luminosityIC(E, st.electron, i,
-			[&psv, &i](double E){return tpf(E, psv, i); }
+			[&st, &i](double E){return tpf(E, st.photon, i); }
 		, st.photon.emin()/100.0);
 
 		double total = (Qsyn+Qic);

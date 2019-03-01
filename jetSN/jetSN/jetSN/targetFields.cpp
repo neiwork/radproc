@@ -114,7 +114,7 @@ double starIR(double Ep, double z, double gamma)
 
 }
 
-double nph_ICani2(double E, double gamma, double eta, const char* id)
+double nph_ICani2(double E, double gamma, double eta, const char* id)  //este es para losses
 {
 	static const double h_d = GlobalConfig.get<double>("h_d") *pc;
 	double starT;

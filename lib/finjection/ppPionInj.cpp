@@ -1,25 +1,13 @@
 #include "ppPionInj.h"
 
-#include "dataInjection.h"
 #include <fparameters\parameters.h>
 #include <fmath\RungeKutta.h>
 #include <flosses\crossSectionInel.h>
 #include <fmath\interpolation.h>
 	
 
-double fPP(double x, double E, Particle& creator )         //funcion a integrar   x=Eproton; E=Epion
-{
-	//DataInjection* data = (DataInjection*)voiddata;
-	//double E = data->E;    //esta E corresponde a la energia del foton emitido; E=Ega
-	//double mass   = data->mass;
-	//Vector& Ncreator = data->Ncreator;
-	//Vector& Ecreator = data->Ecreator;
-
-	//const double mass   = particle.mass;
-	//const Vector& Ncreator = creator.distribution.values;
-	//const Vector& Ecreator = creator.eDim()->values;
-
-
+double fPP(double x, double E, const Particle& creator, const SpaceCoord& psc)         //funcion a integrar   x=Eproton; E=Epion
+{ 
 	double L      = log(x/1.6); //el 1.6 son TeV en erg
 	double ap     = 3.67+0.83*L+0.075*P2(L);
 	double se     = crossSectionHadronic(x);
@@ -39,32 +27,24 @@ double fPP(double x, double E, Particle& creator )         //funcion a integrar 
 		f = 0.0;
 	}
 
-	//double distProton = interpol(x,Ecreator,Ncreator,Ncreator.size()-1);
-	double distProton = creator.dist(x);
+	double distProton = creator.distribution.interpolate({ { 0, x } }, &psc); // creator.dist(x);
 
 	return f*distProton*se/x;		//Q   = f(Ep,x,ap)*se*Np*dEp/Ep
 }
 
-double ppPionInj(double E, Particle& proton)
+//double ppPionInj(double E, Particle& proton
+double ppPionInj(double E, const Particle& creator,
+		const double density, const SpaceCoord& psc)
 {                                                                    //el proton es el creator del pion
-	double Emax = 1.6e-12*pow(10.0, proton.logEmax);
+	double Emax = 1.6e-12*pow(10.0, creator.logEmax);
 
-	//DataInjection data;
 
-	//data.E = E;
-	//data.mass = particle.mass;
-	//data.Ncreator = proton.distribution.values;
-	//data.Ecreator = proton.energyPoints;
-
-	double integralP = RungeKuttaSimple(E, Emax, [&E, &proton](double x){
-		return fPP(x, E, proton);
+	double integralP = RungeKuttaSimple(E, Emax, [&E, &creator, &psc](double x){
+		return fPP(x, E, creator, psc);
 	});
 
 	double injection = integralP*cLight*density;
 
-	return injection;   ///P2(Dlorentz);  
-	//Dlorentz es el factor que transforma las distribuciones en el caso de jets
-
-	// con /P2(Dlorentz) paso del sist de lab al sist comoving con el jet
-}   //lo comento porque ya lo estoy calculando en el comovil
+	return injection;   
+}
 

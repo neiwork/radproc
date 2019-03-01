@@ -15,9 +15,9 @@
 	"Lj": 1.0e47,
 	"openingAngle": 0.1,
 	"inc": 0,
-	"g":0.12109,
-	"blobRadius":0.793,
-	"z_peak":52.91,
+	"g":0.10001,
+	"blobRadius":0.061,
+	"z_peak":50.05,
 	
 	"Gamma": 10.0,
 	"accEfficiency": 0.1,

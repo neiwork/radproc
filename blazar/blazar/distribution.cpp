@@ -18,6 +18,7 @@ void distribution(Particle& p, State& st)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double zInt = GlobalConfig.get<double>("Rdiss");
+	static const double gamma = GlobalConfig.get<double>("Gamma");
 
 	const ParamSpace& ps{ p.ps };
 
@@ -31,8 +32,7 @@ void distribution(Particle& p, State& st)
 				
 			
 			double inj = p.injection.get(i);
-
-			double tad = E / adiabaticLosses(E, zInt, v_lat); //en [seg]
+			double tad = E / adiabaticLosses(E, zInt, v_lat, gamma); //en [seg]
 			double tsyn = E / lossesSyn(E, B, p);
 
 			double tcool = (tad + tsyn);

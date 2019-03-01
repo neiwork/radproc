@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blazar", "blazar\blazar.vcxproj", "{58F360E7-7216-4542-867A-4E9F391DD506}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fparticle", "..\lib\fparticle\fparticle.vcxproj", "{634888AE-9178-404D-8E22-8E1D5D6B4F3C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "runBlazar", "runBlazar\runBlazar.vcxproj", "{C9AA4A61-C056-474F-8670-310FC23F98AB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "finjection", "..\lib\finjection\finjection.vcxproj", "{8A249133-B6D6-4561-8C79-E889CAE5E634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Debug|Win32.Build.0 = Debug|Win32
 		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Release|Win32.ActiveCfg = Release|Win32
 		{C9AA4A61-C056-474F-8670-310FC23F98AB}.Release|Win32.Build.0 = Release|Win32
+		{8A249133-B6D6-4561-8C79-E889CAE5E634}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8A249133-B6D6-4561-8C79-E889CAE5E634}.Debug|Win32.Build.0 = Debug|Win32
+		{8A249133-B6D6-4561-8C79-E889CAE5E634}.Release|Win32.ActiveCfg = Release|Win32
+		{8A249133-B6D6-4561-8C79-E889CAE5E634}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

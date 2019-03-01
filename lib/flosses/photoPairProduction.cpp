@@ -1,7 +1,6 @@
 #include "photoPairProduction.h"
 
 #include "crossSectionInel.h"
-#include "DataLosses.h"
 #include <fparameters\parameters.h>
 #include <fmath\RungeKutta.h>
 #include <fmath\interpolation.h>
@@ -10,8 +9,6 @@
 
 double fSink(double e2, double E, fun1 tpf)         //funcion a integrar
 {
-	//DataLosses* data = (DataLosses*)voiddata;
-	//double E = data->E;                    //esta E corresponde a la energia del foton absorbido
 
 	double Erest = electronMass*cLight2;
 	
@@ -27,13 +24,8 @@ double fSink(double e2, double E, fun1 tpf)         //funcion a integrar
 }
 
 
-double photoPairProduction(double E, Particle& photon, fun1 tpf)
+double photoPairProduction(double E, const Particle& photon, fun1 tpf, double tpEmin, double tpEmax)
 {
-	//DataLosses data;
-
-	//data.E        = E;
-	//data.mass     = electronMass;
-	//data.tpf      = tpf;
 	//
 	double Erest = electronMass*cLight2;
 	
@@ -46,11 +38,11 @@ double photoPairProduction(double E, Particle& photon, fun1 tpf)
 
 	double uno  = 2.0/e1;     //esta es la condicion sobre las energias de los
 	                          //fotones para que puedan crear pares  
-	double dos  = targetPhotonEmin/Erest;
+	double dos  = tpEmin/Erest;
 
 	double inf = std::max(uno,dos);
 
-	double sup = targetPhotonEmax/Erest;  											
+	double sup = tpEmax/Erest;  											
 
 	if(inf < sup){
 		double integral = RungeKuttaSimple(inf, sup, [E,tpf](double e){

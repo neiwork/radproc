@@ -14,7 +14,7 @@ double cICemi(double u, double E, double mass, double phEmin)  //limite inferior
 {
 	double Erep = mass*cLight2;
 
-	double condition = E*u-P2(u);  //Ega*Ee-Ee^2
+	double condition = E*u-P2(u);  //Ega*Ee-Ee^2    E*u-P2(u);
 
 	double inf = E*P2(Erep) / (4.0*condition);
 
@@ -32,12 +32,12 @@ double dICemi(double u, double E)         //limite superior
 double fICemi(double u, double t, double E, const Particle& creator, const SpaceCoord& distCoord, fun1 tpf)   //funcion a integrar  u=Ee
 {    
 	double distCreator;
-	//if (u < creator.emin() || u> creator.emax()){
-	//	distCreator = 0.0;
-	//}
+
+	if (u < creator.emin() || u> creator.emax()){
+		distCreator = 0.0;
+	}else{
 		distCreator = creator.distribution.interpolate({ { 0, u } }, &distCoord); 
-	//else{
-	//}
+	}
 	//double distCreator = creator.dist(u);// interpol(u, Ecreator, Ncreator, Ncreator.size() - 1);
 
 	double Erep = creator.mass*cLight2;

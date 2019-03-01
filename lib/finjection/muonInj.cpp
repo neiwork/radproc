@@ -1,21 +1,16 @@
 #include "muonInj.h"
 
-#include "dataInjection.h"
+
 #include <fmath\RungeKutta.h>
 #include <fmath\physics.h>
 #include <fmath\interpolation.h>
 #include <algorithm>
 
 
-double fQ_L(double Epi, double E, Particle& p, Particle& c)         //funcion a integrar variable Epi
+double fQ_L(double Epi, double E, const Particle& p, const Particle& c, const SpaceCoord& psc)  //funcion a integrar variable Epi
 {
-	//DataInjection* data = (DataInjection*)voiddata;
-	//double E = data->E;      //E=Emu
-	//double mass   = data->mass;
-	//Vector& Ncreator = data->Ncreator;
-	//Vector& Ecreator = data->Ecreator;
-
-	double distPion = c.dist(Epi);// interpol(Epi, Ecreator, Ncreator, Ncreator.size() - 1);
+	
+	double distPion = c.distribution.interpolate({ { 0, Epi } }, &psc);  //c.dist(Epi);
 
 	double r = P2(p.mass/chargedPionMass);
 
@@ -34,15 +29,10 @@ double fQ_L(double Epi, double E, Particle& p, Particle& c)         //funcion a 
 	return Q_L;    //esto es muL-  y muR+
 }
 
-double fQ_R(double Epi, double E, Particle& p, Particle& c)         //funcion a integrar variable Epi
+double fQ_R(double Epi, double E, const Particle& p, const Particle& c, const SpaceCoord& psc)         //funcion a integrar variable Epi
 {
-	//DataInjection* data = (DataInjection*)voiddata;
-	//double E = data->E;      //E=Emu
-	//double mass   = data->mass;
-	//Vector& Ncreator = data->Ncreator;
-	//Vector& Ecreator = data->Ecreator;
 
-	double distPion = c.dist(Epi);// interpol(Epi, Ecreator, Ncreator, Ncreator.size() - 1);
+	double distPion = c.distribution.interpolate({ { 0, Epi } }, &psc); //dist(Epi);
 
 	double r = P2(p.mass/chargedPionMass);
 
@@ -63,33 +53,43 @@ double fQ_R(double Epi, double E, Particle& p, Particle& c)         //funcion a 
 
 
 
-double muonInj(double E, Particle& p, Particle& c)  
-{                                                                    //el proton es el creator del pion
+double muonInj(double E, const Particle& p, const Particle& c, const SpaceCoord& psc)  //el proton es el creator del pion
+{        
+	
+	std::string pName = p.id;
 
-	ParticleType particleName = p.type; 
-
-	//DataInjection data;
-
-	//data.E        = E;
-	//data.mass     = particle.mass;
-	//data.Ncreator = Ncreator;
-	//data.Ecreator = pion.energyPoints;
-
+	//ParticleType particleName = p.type; 
+		
 	double injection = 0.0;
 
 	double rpi = P2(muonMass/chargedPionMass);
 
 	double sup = std::min(c.emax(),E/rpi);  // transformo la condicion de la heaviside en un limite superior
 
-	fun1 rk_fQl = [&p,&c,E](double e){
-		return fQ_L(e, E, p, c);
+	fun1 rk_fQl = [&p,&c,E,&psc](double e){
+		return fQ_L(e, E, p, c, psc);
 	};
 
-	fun1 rk_fQr = [&p, &c, E](double e){
-		return fQ_R(e, E, p, c);
+	fun1 rk_fQr = [&p, &c, E,&psc](double e){
+		return fQ_R(e, E, p, c,psc);
 	};
 
-	switch (particleName)	{
+	if (pName == "muon") {
+		injection = RungeKuttaSimple(E, sup, rk_fQl);
+		injection += RungeKuttaSimple(E, sup, rk_fQr);//*2; 
+		//el dos es por las dos particulas para cada caso
+	}
+	else if (pName == "muon_L_minus" && pName == "muon_R_plus") {  //muon_L- y muon_R+
+		injection = RungeKuttaSimple(E, sup, rk_fQl);
+	}
+	else if (pName == "muon_R_minus" && pName == "muon_L_plus") {  //muon_L+ y muon_R-
+		injection = RungeKuttaSimple(E, sup, rk_fQr);
+	}
+	return injection;
+
+}
+
+	/*switch (particleName)	{
 		case PT_muon_L_minus:  //muon_L- y muon_R+
 		case PT_muon_R_plus:	
 			injection = RungeKuttaSimple(E, sup, rk_fQl);
@@ -102,8 +102,6 @@ double muonInj(double E, Particle& p, Particle& c)
 			injection = RungeKuttaSimple(E, sup, rk_fQl);
 			injection += RungeKuttaSimple(E, sup, rk_fQr);//*2; 
 			break;    //el dos es por las dos particulas para cada caso
-	}
+	}*/
 
-	return injection;
 
-}

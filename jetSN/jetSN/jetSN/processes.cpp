@@ -115,20 +115,46 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 
 		double L_syn = luminositySynchrotron(Ega/gamma, st.electron, j, st.magf); //estos devuelven erg/s, sumar!
 		
-		//luminosityIC(E_syn, st.electron, j,
-		//	[&Qsyn, &j, &r, &st](double E) {
-		//	//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
-		//	if (E < st.photon.emax() && E > st.photon.emin()) {
-		//		return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight);
-		//	}
-		//	else { return 0.0; }; }
-		//, st.photon.emin());
 
-		file2 << z_peak / pc << '\t' << (Llab(L_kn, gamma)) << '\t' << (Llab(L_syn, gamma)) << std::endl;
 
+		/*double Emin = E_kn / 5.0;
+		double Emax = E_kn * 5.0;
+		double nE = 100.0;
+		double E_int = (Emax - Emin) / nE; // pow(Emax / Emin, 1.0 / nE);
+		double Q = 0.0;
+
+		double eps = Emin;
 		
-		
-		
+		for (size_t h = 0; h < nE + 1; ++h)
+		{
+			double deps = E_int;// eps*(E_int - 1.0);
+
+			Q += luminosityAnisotropicIC(eps, st.electron, r,
+					gamma, [&](double eval, double g, double eta) {
+				return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, j)*deps / eps;
+			
+			eps = eps+E_int;
+
+		}*/
+
+		double Emin = Ega / gamma / 100.0;
+		double Emax = Ega * 10.0 / gamma ;
+		double nE = 100.0;
+		double E_int = pow(Emax / Emin, 1.0 / nE);
+		double Q = 0.0;
+
+		double eps = Emin;
+
+		for (size_t h = 0; h < nE + 1; ++h)
+		{
+			double deps = eps*(E_int - 1.0);
+			Q += luminositySynchrotron(eps, st.electron, j, st.magf)*deps / eps;
+
+			eps = eps * E_int;
+
+		}
+
+		file2 << z_peak / pc << '\t' << (Llab(L_kn, gamma)) << '\t' << (Llab(Q, gamma)) << std::endl;
 
 
 		st.photon.ps.iterate([&](const SpaceIterator &i) {
@@ -145,22 +171,22 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 
 
 			double eICs =  luminosityAnisotropicIC(E, st.electron, r,
-				gamma, [&](double eval, double g, double eta) {
-				return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
+							  gamma, [&](double eval, double g, double eta) {
+							  return nph_ICani2(eval, g, eta, "star"); }, starT, i.coord);
 
 			double eIC_aux = luminosityAnisotropicIC(E, st.electron, r,
 				gamma, [&](double eval, double g, double eta) {
 				return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, i.coord);
 
- 			double eSSC = luminosityIC(E, st.electron, i,
+			double eSSC = luminosityIC(E, st.electron, i,
 				[&Qsyn, &i, &r, &st](double E) {
 				//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 				if(E < st.photon.emax() && E > st.photon.emin()){
 				return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 				else { return 0.0; }; }
-			, st.photon.emin());
+				, st.photon.emin());
 
-			double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
+				double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
 			//double Ltot1 = eIC_aux;
 			Ltot = Ltot + Ltot1;
 

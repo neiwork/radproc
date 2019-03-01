@@ -1,6 +1,6 @@
 #include "pgammaPionInj.h"
 
-#include "dataInjection.h"
+
 #include <fmath\RungeKutta.h>
 #include <fparameters\parameters.h>
 #include <flosses\crossSectionInel.h>
@@ -10,9 +10,6 @@
 
 double fOmegaPHPion(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
 {
-	//DataInjection* data = (DataInjection*)voiddata;
-	//const double E = data->E;
-	//double mass = data->mass;
 
 	return (tpf(u))
 		     *crossSectionPHPion(t)*t/P2(u);
@@ -20,9 +17,6 @@ double fOmegaPHPion(double u,double t, double E, double mass, fun1 tpf)   //func
 
 double f_t_PHPion(double u,double t, fun1 tpf)   //funcion a integrar
 {
-	//DataInjection* data = (DataInjection*)voiddata;
-	//const double E = data->E;
-	//double mass = data->mass;
 
 	double pepe = tpf(u);
 	return (pepe)
@@ -30,19 +24,18 @@ double f_t_PHPion(double u,double t, fun1 tpf)   //funcion a integrar
 }
 
 
-
-double omegaPH(double E, Particle& particle, fun1 tpf)  //E=Ep
+double omegaPH(double E, const Particle& particle, fun1 tpf, double tpEmin, double tpEmax)  //E=Ep
 {
 	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 
 	double mass = particle.mass;
 	double cte	= 0.5*P2(mass*cLight2)*cLight;
 
-	double b   = 10.0*targetPhotonEmax;   //energia maxima de los fotones en erg
+	double b   = 10.0*tpEmax;   //energia maxima de los fotones en erg
 
 	double a1  = mass*P2(cLight)*pionThresholdPH/(2*E);
 
-	double a = std::max(a1,targetPhotonEmin);
+	double a = std::max(a1,tpEmin);
 
 	double integral = RungeKutta(a, b, &cPionPH, 
 		bind(dPH,_1, E, mass),
@@ -52,21 +45,17 @@ double omegaPH(double E, Particle& particle, fun1 tpf)  //E=Ep
 	return cte*integral/P2(E);
 }	
 
-double t_pion_PH(double E, Particle& particle, fun1 tpf)  //E=Ep
+double t_pion_PH(double E, const Particle& particle, fun1 tpf, double tpEmin, double tpEmax)  //E=Ep
 {
-	//DataInjection data;
-	//data.E = E;
-	//data.mass = particle.mass;
-	//data.tpf  = tpf;
 
 	double mass = particle.mass;
 	double cte	=	0.5*P2(mass*cLight2)*cLight;
 
-	double b   = 10*targetPhotonEmax;   //energia maxima de los fotones en erg
+	double b   = 10*tpEmax;   //energia maxima de los fotones en erg
 
 	double a1  = mass*P2(cLight)*pionThresholdPH/(2*E);
 
-	double a = std::max(a1,targetPhotonEmin);
+	double a = std::max(a1,tpEmin);
 
 	double integral = RungeKutta(a, b, &cPionPH, [E, mass](double u){return dPH(u, E, mass); }, [tpf](double u, double t){
 		return f_t_PHPion(u,t,tpf); 
@@ -76,14 +65,14 @@ double t_pion_PH(double E, Particle& particle, fun1 tpf)  //E=Ep
 }
 
 
-double pgammaPionInj(double E, Vector Nproton, Particle& particle, Particle& proton, fun1 tpf)  
+//double pgammaPionInj(double E, Vector Nproton, Particle& particle, Particle& proton, fun1 tpf)  
+double pgammaPionInj(double E, const Particle& creator,	const SpaceCoord& psc, fun1 tpf, double tpEmin, double tpEmax)
 {
 	double cincoE = 5.0*E;
-	double protonDist = proton.dist(cincoE);// interpol(cincoE, proton.energyPoints, Nproton, Nproton.size() - 1);
-	//double protonDist = 3;
+	double protonDist = creator.distribution.interpolate({ { 0, cincoE } }, &psc); //proton.dist(cincoE);
 
-	double t_1   = t_pion_PH(cincoE, proton, tpf);     //esto no es lossesPH porque son perdidas solo del canal de produccion de piones
-	double omega = omegaPH(cincoE, proton, tpf);
+	double t_1   = t_pion_PH(cincoE, creator, tpf, tpEmin, tpEmax);     //esto no es lossesPH porque son perdidas solo del canal de produccion de piones
+	double omega = omegaPH(cincoE, creator, tpf, tpEmin, tpEmax);
 	
 	double emissivity;
 

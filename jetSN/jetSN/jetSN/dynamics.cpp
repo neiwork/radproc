@@ -213,7 +213,7 @@ double Fe(double g, double y)
 double eEmax(double z, double Gc, double B, double Reff)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
+	static const double accEfficiency = 1.0;// GlobalConfig.get<double>("accEfficiency"); //CAMBIAR A 0.1
 
 	//double Reff = blobRadius(p, Gc, z_ix);
 	//double Reff = blobRadius(z0, z, Gc);

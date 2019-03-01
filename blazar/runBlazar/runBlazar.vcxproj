@@ -58,7 +58,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\blazar;..\..\external\boost_1_61_0\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\blazar;..\..\external\boost_1_61_0\stage\lib;..\..\boost_1_66_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,7 +78,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\blazar;..\..\external\boost_1_61_0\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\blazar;..\..\external\boost_1_61_0\stage\lib;..\..\boost_1_66_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

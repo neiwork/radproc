@@ -2,4 +2,4 @@
 
 #include <fparticle\particle.h>
 
-double muonInj(double E, Particle& particle, Particle& pion_creator);
+double muonInj(double E, const Particle& p, const Particle& c, const SpaceCoord& psc);

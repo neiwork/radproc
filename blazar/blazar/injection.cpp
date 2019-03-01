@@ -10,7 +10,7 @@
 #include <fmath\RungeKutta.h>
 #include <fmath\physics.h>
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost\property_tree\ptree.hpp>
 
 #include <iostream>
 
@@ -49,7 +49,6 @@ void injection(Particle& p, State& st)
 {
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-
 	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });

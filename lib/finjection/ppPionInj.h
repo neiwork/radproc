@@ -6,4 +6,5 @@
 
 
 /*pion injection due to pp interaction*/ 
-double ppPionInj(double E, Particle& proton);
+double ppPionInj(double E, const Particle& creator,
+	const double density, const SpaceCoord& psc);
