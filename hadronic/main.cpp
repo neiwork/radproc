@@ -2,10 +2,12 @@
 #include "state.h"
 #include "modelParameters.h"
 
-
-#include <ioutil.h>
+#include <fparameters\parameters.h>
+#include <inout\ioutil.h>
 
 #include <boost\property_tree\ptree.hpp>
+
+#include <iostream>
 
 int main() {
 

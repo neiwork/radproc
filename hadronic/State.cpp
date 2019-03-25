@@ -3,10 +3,10 @@
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost\property_tree\ptree.hpp>
 
 State::State(boost::property_tree::ptree& cfg) :
- electron{ "electron" },
+ proton{ "electron" },
  photon{ "photon" },
  magf(photon.ps, false)
  {

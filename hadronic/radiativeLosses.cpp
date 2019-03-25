@@ -1,7 +1,7 @@
 #include "radiativeLosses.h"
 
 
-#include "targetFieldsM87.h"
+#include "targetFieldM87.h"
 
 
 //#include "lossesAnisotropicIC.h"
@@ -47,7 +47,7 @@ void radiativeLosses(State& st, const std::string& filename)
 	EphminAux = boltzmann*cmbT / 100.0;
 
 
-	st.electron.ps.iterate([&](const SpaceIterator& i){
+	st.proton.ps.iterate([&](const SpaceIterator& i){
 
 		const double magf{ st.magf.get(i) };
 		double fmtE = log10(i.val(DIM_E) / 1.6e-12);
@@ -76,7 +76,7 @@ void radiativeLosses(State& st, const std::string& filename)
 			return starBlackBody(E,r);},   
 				Emin, 1.0e4*Emin ) / i.val(DIM_E);
 			
-		double eIC_Aux = lossesIC(i.val(DIM_E), st.electron,
+		double eIC_Aux = lossesIC(i.val(DIM_E), st.proton,
 				[&E, &r](double E) {
 				return cmbBlackBody(E, r); },
 				EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);

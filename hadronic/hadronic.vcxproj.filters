@@ -7,6 +7,7 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="targetFieldM87.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="maximumEnergy.h" />
@@ -14,5 +15,6 @@
     <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="targetFieldM87.h" />
+    <ClInclude Include="write.h" />
   </ItemGroup>
 </Project>
