@@ -2,8 +2,8 @@
 
 #include "State.h"
 
-#include <fmath\interpolation.h>
-#include <fmath\RungeKutta.h>
+//#include <fmath\interpolation.h>
+//#include <fmath\RungeKutta.h>
 
 #include <fparameters\parameters.h>
 #include <fmath\physics.h>
@@ -32,7 +32,7 @@ double stagnationPoint(double z)
 double jetRadius(double z)
 {
 	static const double Lj = GlobalConfig.get<double>("Lj");
-	static const double Gj = GlobalConfig.get<double>("Gamma");
+	static const double Gj = GlobalConfig.get<double>("Gj");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	double ismP = 1.0e-12;
@@ -61,7 +61,7 @@ inline double fmagneticField(double z)
 }
 
 double computeMagField(double z) {
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double Gamma = GlobalConfig.get<double>("Gb");
 
 	double Blab = fmagneticField(z);
 	return Blab/ Gamma;  //este es el B en el sistema del jet
@@ -75,26 +75,26 @@ double computeMagField(double z) {
 double eEmax(double z, double B)
 {
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
-	static const double Gamma = GlobalConfig.get<double>("Gamma");
+	static const double Gamma = GlobalConfig.get<double>("Gb");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
 
-	double Reff = 10.0*stagnationPoint(z);
+	//double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
-	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma); //
+	double Emax_ad = accEfficiency*3.0*jetRadius(z)*cLight*electronCharge*B / (vel_lat*Gamma); //
 	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 	
 	double ampl = Gamma; //factor de amplificaci'on de B en la zona del choque
-	double Emax_diff = electronCharge*B*Reff*sqrt(3.0*accEfficiency*ampl/2.0);
+	//double Emax_diff = electronCharge*B*Reff*sqrt(3.0*accEfficiency*ampl/2.0);
 	double min1 = std::min(Emax_syn, Emax_ad);
-	double min2 = std::min(min1, Emax_diff);
+	//double min2 = std::min(min1, Emax_diff);
 
 	//std::ofstream file;
 	//file.open("Emax.txt", std::ios::out);
 
 	//file << z << '\t' << Emax_ad << '\t' << Emax_syn  << '\t' << std::endl;
 
-	return min2;
+	return log10(min1/1.6e-12);
 		
 }
 
@@ -120,9 +120,9 @@ double computeDlorentz(double gamma) {
 
 void prepareGlobalCfg()
 {
-	static const double Gamma = GlobalConfig.get<double>("Gamma", 10);
+	static const double Gb = GlobalConfig.get<double>("Gb");
 
-	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gamma)));
+	GlobalConfig.put("Dlorentz", GlobalConfig.get<double>("Dlorentz", computeDlorentz(Gb)));
 
 
 	//magneticField = fmagneticField(z0,B0);  //el primero lo calculo en r = z0

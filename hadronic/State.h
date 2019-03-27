@@ -13,7 +13,7 @@ public:
 	Particle proton;
 	Particle photon;
 
-	ParamSpaceValues magf;
+	//ParamSpaceValues magf;
 
 	State(boost::property_tree::ptree& cfg);
 	

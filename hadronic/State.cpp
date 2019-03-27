@@ -6,9 +6,9 @@
 #include <boost\property_tree\ptree.hpp>
 
 State::State(boost::property_tree::ptree& cfg) :
- proton{ "electron" },
- photon{ "photon" },
- magf(photon.ps, false)
+ proton{ "proton" },
+ photon{ "photon" }
+ //magf(photon.ps, false)
  {
 	particles.push_back(&proton);
 	particles.push_back(&photon);
@@ -17,10 +17,10 @@ State::State(boost::property_tree::ptree& cfg) :
 		initializeParticle(*p,cfg);
 	}
 
-	magf.initialize();
-	magf.fill([&](const SpaceIterator& i){
-		return computeMagField(i.val(DIM_R));
-	});
+	//magf.initialize();
+	//magf.fill([&](const SpaceIterator& i){
+	//	return computeMagField(i.val(DIM_R));
+	//});
 }
 
 Dimension* State::createDimension(Particle& p, std::string dimid, std::function<void(Vector&,double,double)> initializer, boost::property_tree::ptree& cfg) {
@@ -41,16 +41,11 @@ void State::initializeParticle(Particle& p, boost::property_tree::ptree& cfg)
 
 	// we can't use createDimension because we're multiplying by pc before creating them
 	// add dimension for R
-	double rmin = p.getpar(cfg,"dim.radius.min", 1.0)*pc;
-	double rmax = p.getpar(cfg,"dim.radius.max", 1.0e3)*pc;
-	int nR = p.getpar(cfg,"dim.radius.samples", 5); // solo por ahora; y no deberia ser usado directamente desde otro lado
-	p.ps.add(new Dimension(nR, bind(initializeRPoints, std::placeholders::_1, rmin, rmax)));
+	//double rmin = p.getpar(cfg,"dim.radius.min", 1.0)*pc;
+	//double rmax = p.getpar(cfg,"dim.radius.max", 1.0e3)*pc;
+	//int nR = p.getpar(cfg,"dim.radius.samples", 5); // solo por ahora; y no deberia ser usado directamente desde otro lado
+	//p.ps.add(new Dimension(nR, bind(initializeRPoints, std::placeholders::_1, rmin, rmax)));
 
-	// add dimension for T
-	double tmin = p.getpar(cfg, "dim.time.min", 1.0)*pc;
-	double tmax = p.getpar(cfg, "dim.time.max", 1.0e3)*pc;
-	int tR = p.getpar(cfg, "dim.time.samples", 5); // solo por ahora; y no deberia ser usado directamente desde otro lado
-	p.ps.add(new Dimension(tR, bind(initializeCrossingTimePoints, std::placeholders::_1, tmin, tmax)));
 
 
 	//p.ps.addDerivation([](const SpaceIterator& i){

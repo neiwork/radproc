@@ -9,9 +9,11 @@
 
 #include <iostream>
 
+//#pragma comment(lib, "inout")
+
 int main() {
 
-
+	 
 
 	std::string folder{ prepareOutputfolder() };
 
@@ -21,7 +23,7 @@ int main() {
 		State model(GlobalConfig.get_child("model"));
 
 		radiativeLosses(model,folder+"\\protonLosses.txt");
-
+		//writeEmax(folder + "\\Emax.txt", model.proton)
 	}
 	catch (std::runtime_error& e)
 	{

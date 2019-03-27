@@ -2,7 +2,7 @@
 
 #include <fmath\mathematics.h>
 #include <fparticle\Particle.h>
-#include <boost/property_tree/ptree_fwd.hpp>
+#include <boost\property_tree\ptree_fwd.hpp>
 
 //
 //class Electron : public ParticleCfg<Electron> {};
@@ -29,7 +29,7 @@ void initializeEnergyPoints(Vector& v, double logEmin, double logEmax);
 
 double computeMagField(double z);
 
-double jetRadius(double z, double openingAngle);
+double jetRadius(double z);
 
 double eEmax(double z, double B);
 

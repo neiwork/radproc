@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fmath/interpolation.h>
+#include <fmath\interpolation.h>
 
 class ParamSpaceValues;
 class Dimension {

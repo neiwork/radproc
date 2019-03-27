@@ -5,7 +5,8 @@
 #include <fparameters\ParamSpaceValues.h>
 #include <fparameters\ParamSpace.h>
 
-#include <boost\property_tree\ptree_fwd.hpp>
+#include <boost\property_tree\ptree.hpp>
+//#include <boost\property_tree\ptree_fwd.hpp>
 
 /*
 	Particle State
