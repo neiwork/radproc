@@ -6,6 +6,7 @@
 
 //#include "lossesAnisotropicIC.h"
 #include <flosses\lossesSyn.h>
+#include <flosses\lossesHadronics.h>
 #include <flosses\lossesPhotoHadronic.h>
 #include <flosses\nonThermalLosses.h>
 #include <flosses\lossesIC.h>
@@ -33,6 +34,7 @@ void radiativeLosses(State& st, const std::string& filename)
 		<< "\t" << "pg"
 		<< "\t" << "IC"
 		<< "\t" << "IC-cmb"
+		<< "\t" << "pp"
 		<< "\t" << "Acc"
 		<< "\t" << "Ad" << std::endl;
 	
@@ -46,7 +48,10 @@ void radiativeLosses(State& st, const std::string& filename)
 
 	double B = computeMagField(z);
 
-	double Emax = eEmax(z, B);
+	double rhoC = 3.0*solarMass / (4.0*pi*P3(jetRadius(z)))*Gamma / protonMass;
+
+
+	double Emax = log10(eEmax(z, B)/1.6e-12);
 
 	st.proton.ps.iterate([&](const SpaceIterator& i){
 
@@ -80,17 +85,28 @@ void radiativeLosses(State& st, const std::string& filename)
 				return cmbBlackBody(E, z); },
 				EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);
 
+		double epp = lossesHadronics(i.val(DIM_E), rhoC, st.proton) / i.val(DIM_E);
+
 				
 		//double Reff = 10.0*stagnationPoint(i.val(DIM_R));
 		//double eDif  = diffusionRate(i.val(DIM_E), Reff, B);
 		double eAcc = accelerationRate(i.val(DIM_E), B, accEfficiency);
-		double eAdia = adiabaticLosses(i.val(DIM_E), z, vel_lat, Gamma) / i.val(DIM_E);
+		double zmax = 5.0e3*pc;
 		
+		double eAdia;
+		if (z > zRecol()) {
+			eAdia = Gamma*cLight / (zmax - z);   // adiabaticLosses(i.val(DIM_E), z, vel_lat, Gamma) / i.val(DIM_E);
+		}
+		else {
+			eAdia = adiabaticLosses(i.val(DIM_E), z, vel_lat, Gamma) / i.val(DIM_E);
+		}
+				
 		file << fmtE //<< "\t" << logR 
 							<< "\t" << safeLog10(eSyn)
 							<< "\t" << safeLog10(pGam)
 							<< "\t" << safeLog10(eIC2)
 							<< "\t" << safeLog10(eIC_Aux)
+							<< "\t" << safeLog10(epp)
 							//<< "\t" << safeLog10(eDif)
 							<< "\t" << safeLog10(eAcc)
 							<< "\t" << safeLog10(eAdia) 

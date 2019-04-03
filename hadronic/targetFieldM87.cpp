@@ -84,7 +84,9 @@ double wphM87(double z)
 
 	double Q = wph_int(Rb, z, pseda);
 
-	return Q*cte;
+	double result = Q*cte;
+
+	return result;
 
 }
 

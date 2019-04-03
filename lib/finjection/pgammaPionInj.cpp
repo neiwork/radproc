@@ -8,7 +8,7 @@
 #include <fmath\interpolation.h>
 #include <algorithm>
 
-double fOmegaPHPion(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
+double fOmegaPHPion(double u,double t, fun1 tpf)   //funcion a integrar
 {
 
 	return (tpf(u))
@@ -26,7 +26,7 @@ double f_t_PHPion(double u,double t, fun1 tpf)   //funcion a integrar
 
 double omegaPH(double E, const Particle& particle, fun1 tpf, double tpEmin, double tpEmax)  //E=Ep
 {
-	using std::bind; using namespace std::placeholders; // para _1, _2, etc.
+	//using std::bind; using namespace std::placeholders; // para _1, _2, etc.
 
 	double mass = particle.mass;
 	double cte	= 0.5*P2(mass*cLight2)*cLight;
@@ -37,10 +37,10 @@ double omegaPH(double E, const Particle& particle, fun1 tpf, double tpEmin, doub
 
 	double a = std::max(a1,tpEmin);
 
-	double integral = RungeKutta(a, b, &cPionPH, 
-		bind(dPH,_1, E, mass),
-		bind(fOmegaPHPion,_1,_2,E,mass,tpf)
-	);
+	double integral = RungeKutta(a, b, &cPionPH, [E, mass](double u) {return dPH(u, E, mass); },
+		[tpf](double u, double t) {	return fOmegaPHPion(u, t, tpf); });
+		//bind(dPH,_1, E, mass),
+		//bind(fOmegaPHPion,_1,_2,E,mass,tpf)
 
 	return cte*integral/P2(E);
 }	
@@ -57,9 +57,8 @@ double t_pion_PH(double E, const Particle& particle, fun1 tpf, double tpEmin, do
 
 	double a = std::max(a1,tpEmin);
 
-	double integral = RungeKutta(a, b, &cPionPH, [E, mass](double u){return dPH(u, E, mass); }, [tpf](double u, double t){
-		return f_t_PHPion(u,t,tpf); 
-	});
+ 	double integral = RungeKutta(a, b, &cPionPH, [E, mass](double u){return dPH(u, E, mass); }, 
+		[tpf](double u, double t){ return f_t_PHPion(u,t,tpf); });
 
 	return cte*integral/P2(E);
 }

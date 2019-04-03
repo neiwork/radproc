@@ -11,14 +11,14 @@
 	"subEq":1.0e-2,
 	"cmbT": 2.7,
 
-	"Lj": 1.0e47,
+	"Lj": 1.0e44,
 	"openingAngle": 0.1,
 	"inc": 0,
 	"Gj": 10.0,
 
-	"Gb":6.25,
+	"Gb":1.79,
 	"blobRadius":1.0,
-	"z_peak":1.55e3,
+	"z_peak":1.82e3,
 
 	"accFraction":0.1,
 	"accEfficiency": 1.0e-4,

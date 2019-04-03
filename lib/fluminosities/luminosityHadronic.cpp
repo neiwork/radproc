@@ -18,7 +18,15 @@ double fHadron(double x, const Particle& creator,
 
 	double Ekin = x/Kpi;
 
-	double distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
+	double distCreator; 
+	if (x < creator.emin() || x > creator.emax()) {
+		distCreator = 0.0;
+	}
+	else {
+		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
+	}
+
+	//double distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
 
 
 	double thr = 0.0016; //1GeV

@@ -12,6 +12,15 @@
 #include <algorithm>
 
 
+
+double beta(double gamma)
+{
+	double b = sqrt(1.0 - 1.0 / P2(gamma));
+	return b;
+}
+
+
+
 double stagnationPoint(double z)
 {
 	static const double E0 = GlobalConfig.get<double>("E0")*solarMass/yr;
@@ -26,18 +35,25 @@ double stagnationPoint(double z)
 }
 
 
-
-
-
-double jetRadius(double z)
+double zRecol()
 {
 	static const double Lj = GlobalConfig.get<double>("Lj");
 	static const double Gj = GlobalConfig.get<double>("Gj");
+	double ismP = 1.0e-12;
+
+	double z_recol = sqrt(Lj / (ismP*Gj*Gj*pi*cLight));
+	return z_recol;
+
+}
+
+double jetRadius(double z)
+{
+	
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 
 	double ismP = 1.0e-12;
 
-	double z_recol = sqrt(Lj / (ismP*Gj*Gj*pi*cLight));
+	double z_recol = zRecol();
 	
 	double radius;
 
@@ -81,8 +97,18 @@ double eEmax(double z, double B)
 	//double Reff = 10.0*stagnationPoint(z);
 	double vel_lat = cLight*openingAngle;
 
-	double Emax_ad = accEfficiency*3.0*jetRadius(z)*cLight*electronCharge*B / (vel_lat*Gamma); //
-	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
+	
+	double Emax_ad;
+	double eAdia;
+	if (z > zRecol()) {
+		double zmax = 5.0e3*pc;
+		Emax_ad = accEfficiency*electronCharge*B*(zmax - z) / (Gamma);  //accEfficiency*3.0*jetRadius(z)*cLight*electronCharge*B / (vel_lat*Gamma); //
+	}
+	else {
+		Emax_ad = accEfficiency*3.0*electronCharge*B*z / (2.0*Gamma);  
+	}
+
+	double Emax_syn = sqrt(electronMass*protonMass*P2(cLight2)*P3(protonMass/electronMass))*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 	
 	double ampl = Gamma; //factor de amplificaci'on de B en la zona del choque
 	//double Emax_diff = electronCharge*B*Reff*sqrt(3.0*accEfficiency*ampl/2.0);

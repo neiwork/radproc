@@ -78,7 +78,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>Debug;..\boost_1_66_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>inout.lib;fmath.lib;fparticle.lib;fparameters.lib;flosses.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>inout.lib;fmath.lib;fparticle.lib;fparameters.lib;flosses.lib;finjection.lib;fluminosities.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -101,7 +101,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>Release;..\boost_1_66_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>inout.lib;fmath.lib;fparticle.lib;fparameters.lib;flosses.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>inout.lib;fmath.lib;fparticle.lib;fparameters.lib;flosses.lib;finjection.lib;fluminosities.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,15 +118,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="checkPower.cpp" />
+    <ClCompile Include="injection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="modelParameters.cpp" />
+    <ClCompile Include="processes.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="targetFieldM87.cpp" />
     <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="checkPower.h" />
+    <ClInclude Include="injection.h" />
     <ClInclude Include="modelParameters.h" />
+    <ClInclude Include="processes.h" />
     <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="targetFieldM87.h" />

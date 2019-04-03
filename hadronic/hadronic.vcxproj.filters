@@ -7,6 +7,9 @@
     <ClCompile Include="targetFieldM87.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="write.cpp" />
+    <ClCompile Include="injection.cpp" />
+    <ClCompile Include="processes.cpp" />
+    <ClCompile Include="checkPower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modelParameters.h" />
@@ -14,5 +17,8 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="targetFieldM87.h" />
     <ClInclude Include="write.h" />
+    <ClInclude Include="injection.h" />
+    <ClInclude Include="processes.h" />
+    <ClInclude Include="checkPower.h" />
   </ItemGroup>
 </Project>

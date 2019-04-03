@@ -1,3 +1,6 @@
+#include "processes.h"
+#include "injection.h"
+
 #include "radiativeLosses.h"
 #include "state.h"
 #include "modelParameters.h"
@@ -24,6 +27,12 @@ int main() {
 
 		radiativeLosses(model,folder+"\\protonLosses.txt");
 		//writeEmax(folder + "\\Emax.txt", model.proton)
+
+		injection(model.proton, model);
+		distribution(model.proton, model);
+
+		processes(model, folder + "\\luminosity.txt");
+
 	}
 	catch (std::runtime_error& e)
 	{

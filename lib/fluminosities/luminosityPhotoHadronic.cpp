@@ -12,8 +12,16 @@
 double luminosityPhotoHadronic(double E, const Particle& creator, fun1 tpf, const SpaceCoord& psc, double tpEmin, double tpEmax)
 {
 	double diezE = 10.0*E;
-	
-	double distCreator = creator.distribution.interpolate({ { 0, diezE } }, &psc);
+	double distCreator;
+
+	if (diezE < creator.emin() || diezE > creator.emax()) {
+		distCreator = 0.0;
+	}
+	else {
+		distCreator = creator.distribution.interpolate({ { 0, diezE } }, &psc);
+	}
+
+	//double distCreator = creator.distribution.interpolate({ { 0, diezE } }, &psc);
 
 	double t_1   = t_pion_PH(diezE, creator, tpf, tpEmin, tpEmax);     //esto no es lossesPH porque son perdidas solo del canal de produccion de piones
 	double omega = omegaPH(diezE, creator, tpf, tpEmin, tpEmax);

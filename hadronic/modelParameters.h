@@ -27,7 +27,11 @@ void initializeEnergyPoints(Vector& v, double logEmin, double logEmax);
 
 //double stagnationPoint(double z);
 
+double beta(double gamma);
+
 double computeMagField(double z);
+
+double zRecol();
 
 double jetRadius(double z);
 
