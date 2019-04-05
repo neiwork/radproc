@@ -10,7 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+boost_1_67_0/
 boost_1_66_0/
+external/
 
 # Build results
 [Dd]ebug/

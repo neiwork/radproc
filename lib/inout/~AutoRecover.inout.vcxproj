@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67</AdditionalIncludeDirectories>
       <BrowseInformation />
     </ClCompile>
   </ItemDefinitionGroup>
@@ -95,7 +95,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67</AdditionalIncludeDirectories>
       <BrowseInformation />
     </ClCompile>
     <Link>
