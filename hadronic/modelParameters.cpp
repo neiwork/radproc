@@ -99,7 +99,7 @@ double eEmax(double z, double B)
 
 	
 	double Emax_ad;
-	double eAdia;
+	
 	if (z > zRecol()) {
 		double zmax = 5.0e3*pc;
 		Emax_ad = accEfficiency*electronCharge*B*(zmax - z) / (Gamma);  //accEfficiency*3.0*jetRadius(z)*cLight*electronCharge*B / (vel_lat*Gamma); //
