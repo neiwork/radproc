@@ -2,19 +2,21 @@
 	"height":102,
 	"width":3,
 	
-	"Mbh": 1.0E+7,
-	"Lj": 1.0E+45,
+	"Mbh": 1.0E+9,
+	"Lj": 1.0E+43,
 	"openingAngle": 0.1,
 	"inc":0.0,
-	"Gamma": 5,
-	"Rdiss_rg": 1000.0,
-	"accEfficiency": 0.1,
-	"primaryIndex": 2.0,
+	"Gamma": 10,
+	"Rdiss_rg": 500.0,
+	"accEfficiency": 0.01,
+	"etaEfficiency": 0.01,
+	"primaryIndex":  1.5,
 
-	"subEq":1.0e-2,
+	"subEq":1.0e-4,
 	
 	"file": {
-		"SED": "SED",
+		"SED": "SED.txt",
+		"electronInj": "electronInj",
 		"electronDist": "electronDist"
 	},
 	"model": {
@@ -31,7 +33,7 @@
 				"dim": {
 					"energy": {
 						"min": -8.0,
-						"max": 16.0
+						"max": 15.0
 					}
 				}
 			},
@@ -41,6 +43,15 @@
 					"energy": {
 						"min": 6.0,
 						"max": 13.0
+					}
+				}
+			},
+			"proton": {
+				"mass": 1.6726E-24,
+				"dim": {
+					"energy": {
+						"min": 9.0,
+						"max": 14.0
 					}
 				}
 			}

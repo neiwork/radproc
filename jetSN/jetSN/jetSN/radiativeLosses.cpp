@@ -174,17 +174,17 @@ void protonLosses(State& st, const std::string& filename, Vector& Gc, Vector& Rc
 
 		double fmtE = log10(E / 1.6e-12);
 
-		double eIC = lossesIC(i.val(DIM_E), st.proton,
+		double eIC = lossesIC_old(i.val(DIM_E), st.proton,
 			[&E, &z, &gamma](double E) {
 			return starBlackBody(E, z, gamma); },
 			Emin, 1.0e4*Emin) / i.val(DIM_E);
 
-		double eIC_Aux = lossesIC(i.val(DIM_E), st.proton,
+		double eIC_Aux = lossesIC_old(i.val(DIM_E), st.proton,
 			[&E, &z, &gamma](double E) {
 			return starIR(E, z, gamma); },
 			EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);
 
-		double ePgamma = lossesPhotoHadronic(i.val(DIM_E), st.proton,
+		double ePgamma = lossesPhotoHadronic_old(i.val(DIM_E), st.proton,
 			[&E, &z, &gamma](double E) {
 			return starIR(E, z, gamma); },
 			EphminAux, 1.0e4*EphminAux) / i.val(DIM_E);

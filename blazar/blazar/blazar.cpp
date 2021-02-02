@@ -1,6 +1,7 @@
 #include "blazar.h"
 #include "ioutil.h"
 
+#include "radiativeLosses.h"
 #include "chiSquare.h"
 #include "write.h"
 #include "photonInjection.h"
@@ -9,6 +10,7 @@
 #include "injection.h"
 #include "State.h"
 #include "modelParameters.h"
+#include "tpf.h"
 
 #include <fparameters/parameters.h>
 #include <fparticle/Particle.h>
@@ -28,40 +30,45 @@ void blazar() {
 	prepareGlobalCfg();
 	
 	State model(GlobalConfig.get_child("model"));
-
-
-	//	model.photon.injection.ps.iterate([&model](const SpaceIterator& i){
-	//	double nph = blackBody(i.val(DIM_E), i.val(DIM_R));
-	//model.nph.set(i, nph);
-	//});
-
-
-	//	radiativeLosses(model);
+	
 
 	injection(model.electron, model);
+	injection(model.proton, model);
+
+	writeAllSpaceParam(getFileName(folder, "electronInj"), model.electron.injection);
 
 	distribution(model.electron, model);
+	
+	//ParamSpaceValues Qsyn(model.photon.ps);
+	synL(model, model.tpf);
 
-	photonTarget(model.photon, model);
+	radiativeLosses(model);
 
-	distribution(model.electron, model);
-
-	photonDistribution(model.photon, model);
+	//distribution(model.electron, model);
+	distribution(model.proton, model);
 
 	writeAllSpaceParam(getFileName(folder, "electronDist"), model.electron.distribution);
-	dopplerBoost(getFileName(folder, "SED"), model.photon.distribution);
+	writeAllSpaceParam(getFileName(folder, "protonDist"), model.proton.distribution);
+	
+	//photonDistribution(model.photon, model);
+
+	processes(model, getFileName(folder, "SED"));
+
+	
+	
+	//dopplerBoost(getFileName(folder, "SED"), model.photon.distribution);
 	//writeAllSpaceParam(getFileName(folder, "SED"), model.photon.distribution);
 
 
-	static const int height = GlobalConfig.get<int>("height");
-	static const int width = GlobalConfig.get<int>("width");
+//	static const int height = GlobalConfig.get<int>("height");
+//	static const int width = GlobalConfig.get<int>("width");
 	
-	Matrix obs;
-	matrixInit(obs, height, width, 0.0);
-	readData("PKS0048-097_lum.txt", obs);
-	double dof = height;
-	double chi = chiSquareFit(model.photon.distribution, obs, dof);
+//	Matrix obs;
+//	matrixInit(obs, height, width, 0.0);
+//	readData("PKS0048-097_lum.txt", obs);
+//	double dof = height;
+//	double chi = chiSquareFit(model.photon.distribution, obs, dof);
 
-	std::cout << chi;
+//	std::cout << chi;
 
 }

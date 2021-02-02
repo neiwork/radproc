@@ -11,7 +11,7 @@
 ///Fundamental constants
 
 const double cLight    = 2.9979e10;                   //speed of light (cm/s)
-const double cLight2   = P2(cLight); 
+const double cLight2   = 8.9875518e20; 
 
 const double planck    = 6.6261e-27;                  //Planck's constant (erg s)
 
@@ -53,12 +53,13 @@ const double electronRadius			=  2.8179e-13;             //Electron classical   
 //Particle rest mass energy (erg) mc^2
 																
 const double electronMass			= 9.1094e-28;   //(0.511e6);    
+const double electronRestEnergy		= 8.1871e-7;
 const double muonMass				= 1.8817e-25;   //(105.7e6);  
 const double protonMass				= 1.6726e-24;   //(938.3e6);
 const double chargedPionMass		= 2.4852e-25;   //(139.6e6);
 const double neutralPionMass		= 2.4034e-25;   //(135.0e6);
 const double neutronMass	     	= 1.6749e-24;   //(939.6e6);
-const double atomicMassUnit			= 1.6605e-24;
+const double atomicMassUnit	     	= 1.6605e-24;  
 
 //Particle mean life  (s)
                 
@@ -68,7 +69,7 @@ const double neutronMeanLife        =  881.5;  //s
 
 //Threshold energy
 
-const double pionThresholdPH	=  200.0e6*1.6e-12;	 //145  pongo 200 y no 145 porque a partir de esta 
+const double pionThresholdPH	=  200.0e6*1.602e-12;	 //145  pongo 200 y no 145 porque a partir de esta 
                                                      // energia esta parametrizada la seccion eficaz
 const double pairThresholdPH	=  2.0*electronMass*cLight2;
-const double pionThresholdH	    =  1.22e9*1.6e-12;
+const double pionThresholdH	    =  1.21793e9*1.602e-12;

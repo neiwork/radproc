@@ -30,6 +30,8 @@ public:
 		return cfg.get<T>("particle." + id + "." + path, cfg.get<T>("particle.default." + path, def));
 	}
 
+	//template<typename T> T getpar(boost::property_tree::ptree& cfg, const std::string &path, const T& def = T{});  //version linux
+
 	Particle(const std::string& id);
 	
 	Particle(Particle&& other);

@@ -8,38 +8,27 @@
 #include <fmath\physics.h>
 #include <algorithm>
 
-double fHadron(double x, const Particle& creator,
-	const double density, const SpaceCoord& psc) //funcion a integrar   x=Ecreator; L=L(Ega)
+double fHadron(double x, const Particle& p, const double density, const SpaceCoord& psc) //funcion a integrar   x=Ecreator; L=L(Ega)
 {	
-
 	double Kpi = 0.17;
-
-	double eval = creator.mass*cLight2+x/Kpi;
-
-	double Ekin = x/Kpi;
-
-	double distCreator; 
-	if (x < creator.emin() || x > creator.emax()) {
-		distCreator = 0.0;
+	double eval = p.mass*cLight2+x/Kpi;
+	
+	//double Ekin = Ep/Kpi;
+	
+	double distCreator=0.0;
+	if (eval < p.emax() && eval >= p.emin()) {
+		distCreator = p.distribution.interpolate({ { 0, eval } }, &psc);
 	}
-	else {
-		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
-	}
-
-	//double distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
-
-
-	double thr = 0.0016; //1GeV
-
-	double sigma = 30e-27*(0.95+0.06*log(Ekin/thr));
-
-	//const double density = denfdensity.get(psc);
-
+	
+	//double thr = 0.0016; //1GeV
+	//double sigma = 30e-27*(0.95+0.06*log(Ekin/thr));
+	
+	double l = log10((protonMass*cLight2+x/Kpi)/1.6); //evaluada en eval
+	double sigma = 1.e-27 * (34.3+1.88*l+0.25*l*l);
 	double pionEmiss = cLight*density*sigma*distCreator/Kpi;  //sigma = crossSectionHadronicDelta(Ekin)
 															  //lo saco asi pongo la condicion Ekin > Ethr en el limite de la int
-
-	double result = pionEmiss/(pow(P2(x)-P2(chargedPionMass*cLight2),0.5));
-
+	
+	double result = 2.0*pionEmiss/(pow(P2(x)-P2(chargedPionMass*cLight2),0.5));
 	return result;
 }
 
@@ -57,11 +46,8 @@ double luminosityHadronic(double E, const Particle& creator,
 		[&](double x) {return fHadron(x, creator, density, psc); }
 	);    //integra entre Emin y Emax
 
-	double luminosity = integral*P2(E); // [erg s^-1 cm^-3 ]
+	double luminosity = integral*E*E; // [erg s^-1 cm^-3 ]
 
-	return luminosity; //P2(Dlorentz);  
-
-	//Dlorentz es el factor que transforma las distribuciones en el caso de jets
-	// con /P2(Dlorentz) paso del sist de lab al sist comoving con el jet ;   
+	return luminosity; 
 }
 

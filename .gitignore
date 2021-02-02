@@ -11,6 +11,7 @@
 *.userprefs
 
 boost_1_66_0/
+boost_1_75_0/
 
 # Build results
 [Dd]ebug/

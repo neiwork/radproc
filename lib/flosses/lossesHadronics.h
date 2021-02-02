@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fparticle\particle.h>
+#include <fparticle/Particle.h>
 
 
 double lossesHadronics(double E, double density, Particle& particle);

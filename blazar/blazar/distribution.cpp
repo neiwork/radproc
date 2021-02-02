@@ -9,10 +9,11 @@
 #include <fmath\physics.h>
 #include <flosses\lossesSyn.h>
 #include <flosses\nonThermalLosses.h>
+#include <fmath\RungeKutta.h>
 #include <fparameters\Dimension.h>
 #include <fparameters\SpaceIterator.h>
 #include <fparameters\parameters.h>
-#include <boost/property_tree/ptree.hpp>
+#include <boost\property_tree\ptree.hpp>
 
 void distribution(Particle& p, State& st)
 {
@@ -32,11 +33,23 @@ void distribution(Particle& p, State& st)
 				
 			
 			double inj = p.injection.get(i);
-			double tad = E / adiabaticLosses(E, zInt, v_lat, gamma); //en [seg]
+			//double tad = E / adiabaticLosses(E, zInt, v_lat, gamma); //en [seg]
+
+			double tad =   (3.0*zInt)/ (2.0*cLight);
+
 			double tsyn = E / lossesSyn(E, B, p);
 
-			double tcool = (tad + tsyn);
-			p.distribution.set(i,inj*tcool); 
+			double tcross = zInt / cLight;
+
+			double tcool = 1.0/(1.0/tad + 1.0/tsyn);
+
+			double integral = RungeKuttaSimple(E, Emax, [&](double e) {
+				return p.injection.interpolate({ { DIM_E, E } });
+			});
+
+			double Ne = integral/(lossesSyn(E, B, p)+adiabaticLosses(E, zInt, v_lat, gamma));
+			double Qt = inj*tcool;
+			p.distribution.set(i,Ne); 
 				
 		} );
 

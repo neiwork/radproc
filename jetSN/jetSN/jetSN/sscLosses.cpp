@@ -57,8 +57,7 @@ void sscLosses(State& st, const std::string& filename, Vector& Gc, Vector& tobs,
 
 		double fmtE = log10(E / 1.6e-12);
 
-
-		double eIC =	lossesIC(i.val(DIM_E), st.electron,
+		double eIC =	lossesIC_old(i.val(DIM_E), st.electron,
 			[&Qsyn, &i, &z, &st](double E) {
 			//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 			if (E < st.photon.emax() && E > st.photon.emin()) {

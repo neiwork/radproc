@@ -1,8 +1,20 @@
 #pragma once
 
-#include <fparticle\particle.h>
+#include <fparticle/Particle.h>
+#include <fmath/physics.h>
 
+#include <iostream>
 
-/*erg/s/cm^3 si [Ne] = erg^-1 cm^-3 */
+/*erg/s/cm^3 */
 
-double luminosityIC(double E, const Particle& creator, const SpaceCoord& distCoord, fun1 tpf, double phEmin);
+double luminosityIC_old(double E, const Particle& creator, const SpaceCoord& distCoord, fun1 tpf, double phEmin, double phEmax);
+
+double luminosityIC(double E, const Particle& creator, const SpaceCoord& distCoord, const ParamSpaceValues& tpf,
+					double tpEmin, double tpEmax);
+
+/*
+// Moderski et al. (2005):
+double luminosityIC_2(double E, const Particle& creator, const SpaceCoord& distCoord, const ParamSpaceValues& tpf,
+					double tpEmin, double tpEmax);
+					
+double luminositySyKN(double Eph, const Particle& creator, const SpaceCoord& distCoord, double magf);*/

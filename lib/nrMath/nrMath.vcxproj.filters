@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="bessel.cpp" />
+    <ClCompile Include="bisection.cpp" />
+    <ClCompile Include="brent.cpp" />
+    <ClCompile Include="broydn.cpp" />
+    <ClCompile Include="erff.cpp" />
+    <ClCompile Include="integrators.cpp" />
+    <ClCompile Include="interpol.cpp" />
+    <ClCompile Include="laguerre.cpp" />
+    <ClCompile Include="lnsrch.cpp" />
+    <ClCompile Include="lubksb.cpp" />
+    <ClCompile Include="ludcmp.cpp" />
+    <ClCompile Include="newt.cpp" />
+    <ClCompile Include="nrutil.cpp" />
+    <ClCompile Include="ran1.cpp" />
+    <ClCompile Include="zbrac.cpp" />
+    <ClCompile Include="zbrent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bessel.h" />
+    <ClInclude Include="bisection.h" />
+    <ClInclude Include="brent.h" />
+    <ClInclude Include="integrators.h" />
+    <ClInclude Include="laguerre.h" />
+    <ClInclude Include="mathematics.h" />
+    <ClInclude Include="nr.h" />
+    <ClInclude Include="nrutil.h" />
+    <ClInclude Include="ran1.h" />
+    <ClInclude Include="random.h" />
+  </ItemGroup>
+</Project>

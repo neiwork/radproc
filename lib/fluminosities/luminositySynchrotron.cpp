@@ -7,6 +7,39 @@
 #include <fmath\physics.h>
 
 
+double fSyn2(double x, double E, const Particle& creator, double magf, const SpaceCoord& psc)         //funcion a integrar   x=Ee; L=L(Ega)
+{
+	double distCreator = 0.0;
+	if (x >= creator.emin() && x <= creator.emax()){
+		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
+	}
+	
+	double Erest = creator.mass*cLight2;
+	double cte = sqrt(3.0)*P3(electronCharge)*magf / (planck*Erest);
+	double Echar = 3.0*electronCharge*planck*magf*P2(x/Erest) / 
+					(4.0*pi*creator.mass*cLight);
+	
+	double aux = E/Echar;  //aca el aux es el x real
+
+	double result = cte*1.85*distCreator*pow(aux,1.0/3.0)*exp(-aux);
+
+	return result;
+}
+
+double luminositySynchrotron2(double E, const Particle& c, const SpaceCoord& psc, double magf)
+{
+	double integralS = RungeKuttaSimple(c.emin(), c.emax(), [&](double e){
+		return fSyn2(e, E, c, magf, psc);
+	});
+
+	double luminosityS = integralS*E; //multiplico por E asi obtengo luminosidad
+
+	if (luminosityS > 0.0){ return luminosityS; }
+	else { return 0.0; }
+	
+}
+
+
 
 double fSyn(double x, double E, const Particle& creator, const ParamSpaceValues& magf, const SpaceCoord& psc)         //funcion a integrar   x=Ee; L=L(Ega)
 {
@@ -14,18 +47,20 @@ double fSyn(double x, double E, const Particle& creator, const ParamSpaceValues&
 	//double t = creator.ps.current->par.T;
 
 	const double magneticField = magf.get(psc);
+
+	//double distCreator = 0.0;
+	//if (x >= creator.emin() && x <= creator.emax()){
+	//distCreator = creator.distribution.interpolate({ { 0, x } }, &psc);
+	//}
+
 	double distCreator;
 	if (x < creator.emin() || x> creator.emax()){
 		distCreator = 0.0;
-	}
-	else{
-		distCreator = creator.distribution.interpolate({ { 0, x } }, &psc	); 
-	}
-//	double distCreator = creator.dist(x);// interpol(x, Ecreator, Ncreator, Ncreator.size() - 1);
+	}	else{ distCreator = creator.distribution.interpolate({ { 0, x } }, &psc); 	}
 
-	double cte = pow(3.0, 0.5)*P3(electronCharge)*magneticField / (planck*creator.mass*cLight2);
+	double cte = sqrt(3.0)*P3(electronCharge)*magneticField / (planck*creator.mass*cLight2);
 
-	double Echar = 3 * electronCharge*planck*magneticField*P2(x) / (4 * pi*P3(creator.mass)*cLight*P2(cLight2));
+	double Echar = 3.0 * electronCharge*planck*magneticField*P2(x) / (4.0 * pi*P3(creator.mass)*cLight*P2(cLight2));
 	
 	double aux = E/Echar;  //aca el aux es el x real
 
@@ -48,7 +83,7 @@ double luminositySynchrotron(double E, const Particle& c, const SpaceCoord& psc,
 	else { return 0.0; }
 
 }
-
+ 
 
 
 

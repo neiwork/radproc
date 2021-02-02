@@ -1,65 +1,68 @@
 #include "neutronPgamma.h"
 
-#include "dataInjection.h"
-#include "pgammaPionInj.h"
-#include <fmath\RungeKutta.h>
-#include <fparameters\parameters.h>
-#include <flosses\crossSectionInel.h>
-#include <flosses\lossesPhotoHadronic.h>
-#include <fmath\interpolation.h>
 
+#include "pgammaPionInj.h"
+
+#include <fparameters/parameters.h>
 
 //con incluir #include "pgammaPionInj.h" ya incluyo las siguientes funciones
 
 //double t_pion_PH(double E, Particle& particle, fun1 tpf);   
-
 //double omegaPH(double E, Particle& particle, fun1 tpf);
 
-//double fOmegaPHPion(double u,double t, void* voiddata);
-
-//double f_t_PHPion(double u,double t, void* voiddata);
 
 
-double tauEsc(double E, Particle& particle, fun1 tpf)  //E=Ep
+double psiEsc(double E, Particle& neutron, const ParamSpaceValues& tpf, const SpaceCoord& distCoord,
+				double tpEmin, double tpEmax)  //E=Ep
 {
 
-	double mass = particle.mass;
-
-	double psi_pn = 0.5;  //probabilidad de que el n se convierta en proton psi_np = 1-psi_nn
+	double seda_pn = 0.5;  //probabilidad de que el n se convierta en proton psi_np = 1-psi_nn
 
 	double tauDec = neutronMeanLife*E/(neutronMass*cLight2);
 
-	double tcross = radius / cLight; //VER
+	double L = 0.0;
 
-	double psiEsc = exp(-tcross*(psi_pn*omegaPH(E,particle,tpf)+1.0/tauDec));
+	int nT = 10;
+	
+	double tcross = 0.0;
+	double dt = tcross/nT;
+	double t = 0.0;
 
-	return psiEsc*psi_pn*omegaPH(E,particle,tpf);
+	for (size_t i=0; i < nT; ++i){
+
+		L += tcross*(seda_pn*omegaPH(E,neutron,tpf,distCoord,tpEmin,tpEmax)+1.0/tauDec)*dt;
+
+		t += dt;
+
+	}
+
+	double result = exp(-L);
+
+	return result; //psiEsc*psi_pn*omegaPH(E, particle, tpf, distCoord, tpEmin, tpEmax);
 }
 
 
-double neutronPgamma(double E, Vector Nproton, Particle& particle, Particle& proton, fun1 tpf)  
+double neutronPgamma(double En, Particle& neutron, Particle& proton, const ParamSpaceValues& tpf,
+						const SpaceCoord& distCoord, double tpEmin, double tpEmax)  
 {
-	
-	double protonDist = proton.dist(E);// interpol(E, proton.energyPoints, Nproton, Nproton.size() - 1);
+	//double protonDist = proton.dist(E);// interpol(E, proton.energyPoints, Nproton, Nproton.size() - 1);
+	//double t_1 = t_pion_PH(E,proton,tpf,distCoord,tpEmin,tpEmax);     //esto no es lossesPH porque son perdidas solo del canal de produccion de piones
+	//double omega_pg = omegaPH(E,proton,tpf,distCoord,tpEmin,tpEmax);
+	//double averageInel = t_1/omega;
+	double averageInel = 0.3;
+	double Ep = En/(1.0-averageInel);
 
-	double t_1   = t_pion_PH(E, proton, tpf);     //esto no es lossesPH porque son perdidas solo del canal de produccion de piones
-	double omega = omegaPH(E, proton, tpf);
-	
-	double emissivity;
+	double xi_pn = 0.5;
+	double protonDist = (Ep > proton.emin() && Ep < proton.emax()) ?
+						proton.distribution.interpolate({{0,Ep}},&distCoord) : 0.0;
 
-	if (t_1 > 0.0 && omega > 0.0)	{
-		double averageInel = t_1/omega;
-
-		double seda_pn = 0.5;
 //		double k2 = 0.6;
 //		double p1 = (k2-averageInel)/(k2-k1);	
 //		double nChargedPion = 2.0-1.5*p1;
 
-		emissivity = seda_pn*protonDist*omega/(1-averageInel);
-	}
-	else	{
-		emissivity = 0;
-	}
-	
+		//double pEsc = psiEsc(Ep, tcross, neutron, tpf, distCoord, tpEmin, tpEmax);
+		//double tauEsc = 1.0/(pEsc*seda_pn*omega);
+	double omega_pg = omegaPH(Ep,proton,tpf,distCoord,tpEmin,tpEmax);
+	double emissivity = xi_pn * protonDist / (1.0-averageInel) * omega_pg; // /tauEsc;
 	return emissivity;
 }

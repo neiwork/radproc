@@ -3,7 +3,9 @@
 #include <fparticle\particle.h>
 
 
-/* this is the Synchrotron luminosity without Synchrotron self absorption; erg/s/cm^3*/ 
+/* this is the Synchrotron luminosity without Synchrotron self absorption; [L] = erg^2/s * [N]*/ 
+double luminositySynchrotron2(double E, const Particle& c, const SpaceCoord& psc, double magf);
+
 double luminositySynchrotron(double E, const Particle& c, const SpaceCoord& distCoord, const ParamSpaceValues& magf);
 
 /* this is the Synchrotron luminosity with Synchrotron self absorption*/ 

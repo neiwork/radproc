@@ -82,8 +82,7 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 				}
 				lower[d] = l;
 				upper[d] = u;
-			}
-			else {
+			} else {
 				std::ostringstream errormsg;
 				errormsg << "Interpolation value " << id.value << " is not in range [ " << dimv.front() << " .. " << dimv.back() << " ] of dimension " << d << "." << std::endl;
  				throw std::runtime_error(errormsg.str());
@@ -97,12 +96,7 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 		auto& dimv = ps[d].values; // get the array of values defined for this particular Dimension
 		int l = lower[d];
 		int u = upper[d];
-		if (u != l) {
-			values_idx[d] = (values[d] - dimv[l]) / (dimv[u] - dimv[l]) + l; // values in 'index space'
-		}
-		else {
-			values_idx[d] = l; // values in 'index space'
-		}
+		values_idx[d] = ps[d].interpolateIndex(values[d], l, u); // dim values in 'index space'
 	}
 
 	// DEBUG: print upper and lower bounds (indexes)
@@ -113,16 +107,20 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 	//}
 	double value = 0.0;
 	
+	const auto &to_linear = ps[(*(dimValues.begin())).dim].to_linear;
+	const auto &from_linear = ps[(*(dimValues.begin())).dim].from_linear;
+	
 	// iterate all possible hyperquadrants defined by values, compute area(weight) and add to value
 	double dbg_total_area = 0;
-	for (DimensionCoord d = 0; d < std::pow(2, D); ++d) {
+	for (unsigned int quadrant = 0; quadrant < std::pow(2, D); ++quadrant) {
 		SpaceCoord corner(ps), opposite(ps);
 		//std::cout << "quadrant ";
-		DimensionCoord quads = d;
-		for (DimensionCoord j = 0; j < D; ++j, quads /= 2) {
+		// bits determine orientation in each dimension
+		unsigned int orientation = quadrant; 
+		for (DimensionCoord j = 0; j < D; ++j, orientation /= 2) {
 			//std::cout << quads % 2;
-			corner[j] = quads % 2 ? lower[j] : upper[j];
-			opposite[j] = quads % 2 ? upper[j] : lower[j];
+			corner[j]   = orientation % 2 ? lower[j] : upper[j];
+			opposite[j] = orientation % 2 ? upper[j] : lower[j];
 		}
 		// {corner now is the space coordinate corresponding to the current corner of the hypercube}
 
@@ -136,14 +134,14 @@ double ParamSpaceValues::interpolate(std::initializer_list<InterpolateDim> dimVa
 			}
 		}
 		dbg_total_area += area;
-		value += area * get(corner);
+		value += area * to_linear(get(corner));
 		//std::cout << " w:" << area << ", v:" << get(corner) << std::endl;
 	}
 
 	//std::cout << "dbgarea:" << dbg_total_area << std::endl;
 	//std::cout << "value:" << value << std::endl;
 
-	return value;
+	return from_linear(value);
 }
 
 ParamSpaceValues::ParamSpaceValues(const ParamSpaceValues& psv):ps(psv.ps),values(psv.values) {

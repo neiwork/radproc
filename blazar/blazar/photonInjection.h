@@ -10,4 +10,6 @@
 /*This function generates the targetPhotonField, necessary to luminosityIC*/
 void photonTarget(Particle& p, State& st);
 
-void photonDistribution(Particle& p, State& st);
+//void photonDistribution(Particle& p, State& st);
+
+void processes(State& st, const std::string& filename);

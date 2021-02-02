@@ -22,7 +22,7 @@ double dPH(double u, double E, double mass)   //limite superior
 	return 2 * u*E / (mass*cLight2);   //d1 = 2*u*ep/(masa*cluz**2)
 }
 
-/*
+
 //double fPHPion(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
 double fPHPion(double u, double t, double E, double mass, const ParamSpaceValues& tpf, const SpaceCoord& psc)   //funcion a integrar
 {
@@ -70,25 +70,24 @@ double lossesPhotoHadronic(double E, Particle& particle, const ParamSpaceValues&
 
 	return cte*integral / E;
 }
-*/
 
 
 
 
 
-double fPHPion(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
+double fPHPion_old(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
 {
 	return tpf(u)*crossSectionPHPion(t)*inelasticityPHPion(t)*t/P2(u);
 }
 
-double fPHPair(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
+double fPHPair_old(double u,double t, double E, double mass, fun1 tpf)   //funcion a integrar
 {
 	double pepe = tpf(u);
 	return (pepe)
 		   *crossSectionBetheHeitler(t)*inelasticityBetheHeitler(t)*t/P2(u);
 }
 
-double lossesPhotoHadronic(double E, Particle& particle, fun1 tpf, double phEmin, double phEmax)  //E=Ep
+double lossesPhotoHadronic_old(double E, Particle& particle, fun1 tpf, double phEmin, double phEmax)  //E=Ep
 {
 
 	double mass = particle.mass;
@@ -107,14 +106,14 @@ double lossesPhotoHadronic(double E, Particle& particle, fun1 tpf, double phEmin
 	[E,mass](double u){
 		return dPH(u,E,mass); 
 	}, [E, mass, tpf](double u, double t){
-		return fPHPion(u,t,E,mass,tpf);
+		return fPHPion_old(u,t,E,mass,tpf);
 	});
 
 	integral += RungeKutta(a_pa, b, &cPairPH,
 		[E, mass](double u){
 		return dPH(u, E, mass);
 	}, [E, mass, tpf](double u, double t){
-		return fPHPair(u, t, E, mass, tpf);
+		return fPHPair_old(u, t, E, mass, tpf);
 	});
 
 	return cte*integral/E;

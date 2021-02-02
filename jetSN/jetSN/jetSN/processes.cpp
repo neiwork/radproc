@@ -178,13 +178,13 @@ void processes(State& st, const std::string& filename, Vector& Gc, Vector& tobs)
 				gamma, [&](double eval, double g, double eta) {
 				return nph_ICani2(eval, g, eta, "IR"); }, IRstarT, i.coord);
 
-			double eSSC = luminosityIC(E, st.electron, i,
+			double eSSC = luminosityIC_old(E, st.electron, i,
 				[&Qsyn, &i, &r, &st](double E) {
 				//return Qsyn.interpolate({ { DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 				if(E < st.photon.emax() && E > st.photon.emin()){
 				return Qsyn.interpolate({ {DIM_E, E },{ DIM_R, r } }) / (P2(E) *4.0*pi*P2(jetRadius(r, openingAngle))*cLight); }
 				else { return 0.0; }; }
-				, st.photon.emin());
+				, st.photon.emin(), st.photon.emax());
 
 				double Ltot1 = eSyn + eICs + eIC_aux + eSSC;
 			//double Ltot1 = eIC_aux;

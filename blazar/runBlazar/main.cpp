@@ -1,4 +1,4 @@
-#include <blazar/blazar.h>
+#include <blazar\blazar.h>
 
 int main() {
 	blazar();

@@ -1,9 +1,10 @@
 #include "lossesHadronics.h"
 
-
-#include <fparameters\parameters.h>
 #include "crossSectionInel.h"
-#include <fmath\physics.h>
+
+#include <fparameters/parameters.h>
+
+#include <fmath/physics.h>
 
 
 

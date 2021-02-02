@@ -10,6 +10,10 @@
     <ClCompile Include="photonInjection.cpp" />
     <ClCompile Include="write.cpp" />
     <ClCompile Include="chiSquare.cpp" />
+    <ClCompile Include="ebl_absorption.cpp" />
+    <ClCompile Include="losses.cpp" />
+    <ClCompile Include="radiativeLosses.cpp" />
+    <ClCompile Include="tpf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blazar.h" />
@@ -21,5 +25,13 @@
     <ClInclude Include="photonInjection.h" />
     <ClInclude Include="write.h" />
     <ClInclude Include="chiSquare.h" />
+    <ClInclude Include="ebl_absorption.h" />
+    <ClInclude Include="losses.h" />
+    <ClInclude Include="radiativeLosses.h" />
+    <ClInclude Include="tpf.h" />
+    <ClInclude Include="..\..\lib\finjection\pgammaPionInj.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

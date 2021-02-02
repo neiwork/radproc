@@ -1,11 +1,84 @@
-#include "neutrinoInjection.h"
+#include "neutrinoInj.h"
 
-
-#include <fparameters\parameters.h>
-#include <fmath\RungeKutta.h>
-#include <fmath\interpolation.h>
-#include <fmath\physics.h>
+//#include "dataInjection.h"
+#include <fparameters/parameters.h>
+#include <fmath/RungeKutta.h>
+#include <fmath/interpolation.h>
+#include <fmath/physics.h>
 #include <algorithm>
+
+
+//// las que usan muonNeuInj y muonAntiNeuInj son:
+//
+//double fQ_pion(double Ec, void* voiddata);          // esta es para inyectar neutinos muonicos a partir de los pi+
+//double fQ_muon_L(double Ec, void* voiddata);   // esta es para inyectar neutinos muonicos a partir de los mu-L
+//                                              //y antineutrinos muonicos a partir de los mu+L
+//
+//
+//double fQ_muon_R(double Ec, void* voiddata);   // esta es para inyectar neutinos muonicos a partir de los mu-R
+//                                              //y antineutrinos muonicos a partir de los mu+R
+//
+//// las que usan electronNeuInj y electronAntiNeuInj son:
+//double fQ_elecNeu_L(double Ec, void* voiddata);  // esta es para inyectar neutinos electronicos a partir de los mu+L
+//                                                 //y antineutrinos electronicos a partir de los mu-L
+//
+//double fQ_elecNeu_R(double Ec, void* voiddata); // esta es para inyectar neutinos electronicos a partir de los mu+R
+//                                                 //y antineutrinos electronicos a partir de los mu-R
+//
+//
+//
+
+double Fmu_1(double x)
+{
+	return 5.0/3.0-3*x*x+4.0/3.0*x*x*x + (-1.0/3.0+3*x*x-8.0/3.0*x*x*x);
+}
+
+double Fmu_2(double x)
+{
+	return 5.0/3.0-3*x*x+4.0/3.0*x*x*x - (-1.0/3.0+3*x*x-8.0/3.0*x*x*x);
+}
+
+double Fmu_e1(double x)
+{
+	return 2.0-6*x*x+4*x*x*x + (2.0-12*x+18*x*x-8*x*x*x);
+}
+
+double Fmu_e2(double x)
+{
+	return 2.0-6*x*x+4*x*x*x - (2.0-12*x+18*x*x-8*x*x*x);
+}
+
+double muonNeutrinoInjection(double Enu, Particle& nu, Particle& mu, Particle& pi, const SpaceCoord& psc)
+{
+	double rpi = P2(muonMass/chargedPionMass);
+	double inf = max(pi.emin(),Enu/(1.0-rpi));
+	double injTau_Neutrino = integSimpsonLog(inf,pi.emax(),[Enu,rpi,&pi,&psc](double Epi)
+								{
+									double Npi = pi.distribution.interpolate({{0,Epi}},&psc);
+									double tDecay = chargedPionMeanLife*(Epi/(chargedPionMass*cLight2));
+									return Npi/tDecay/(Epi*(1.0-rpi));
+								},30);
+	inf = max(mu.emin(),Enu);
+	double injMuon_Neutrino = 0.5*integSimpsonLog(inf,mu.emax(),[Enu,&mu,&psc](double Emu)
+								{
+									double Nmu = mu.distribution.interpolate({{0,Emu}},&psc);
+									double tDecay = muonMeanLife*(Emu/(muonMass*cLight2));
+									return Nmu/tDecay * (Fmu_1(Enu/Emu)+Fmu_2(Enu/Emu)) / Emu;
+								},30);
+	return injTau_Neutrino + injMuon_Neutrino;
+}
+
+double electronNeutrinoInjection(double Enu, Particle& nu, Particle& mu, const SpaceCoord& psc)
+{
+	double inf = max(mu.emin(),Enu);
+	return 0.5*integSimpsonLog(inf,mu.emax(),[Enu,&mu,&psc](double Emu)
+								{
+									double Nmu = mu.distribution.interpolate({{0,Emu}},&psc);
+									double tDecay = muonMeanLife*(Emu/(muonMass*cLight2));
+									return Nmu/tDecay * (Fmu_e1(Enu/Emu)+Fmu_e2(Enu/Emu)) / Emu;
+								},30);
+}
+
 
 
 //// las que usan muonNeuInj y muonAntiNeuInj son:

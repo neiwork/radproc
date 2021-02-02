@@ -9,3 +9,6 @@ double pairInjection(double E, Vector Nphoton, Particle& particle, Particle& pho
 
 /*este es el que uso para las acopladas*/ 
 double pairInjectionFlor(double E, Particle& particle, Particle& photon, fun1 tpf);
+
+
+//esta funcion esta calculada en pairgg

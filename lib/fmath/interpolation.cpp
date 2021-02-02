@@ -1,7 +1,31 @@
 #include "interpolation.h"
-
-
 #include <iostream>
+
+
+void locate(Vector xx, size_t n, double x, size_t& j)
+{
+	// Given an array xx[0..n-1] , and given a value x , returns a value j such that x is 
+	//between xx[j] and xx[j+1] . xx must be monotonic, either increasing or decreasing. 
+	// j=-1 or j=n-1 is returned to indicate that x is out of range.
+	
+	size_t ju,jm,jl;
+	int ascnd;
+	
+	jl=-1;             // Initialize lower
+	ju=n;           // and upper limits.
+
+	ascnd = (xx[n-1] >= xx[0]);
+	while (ju-jl > 1) {            // If we are not yet done,
+		jm = (ju+jl) >> 1;         // compute a midpoint,
+		if (x >= xx[jm] == ascnd)
+			jl=jm;                 // and replace either the lower limit
+		else
+			ju=jm;                 // or the upper limit, as appropriate.
+	}                              // Repeat until the test condition is satisfied.
+	if (x == xx[0]) j=0;           // Then set the output
+	else if(x == xx[n-1]) j=n-2;
+	else j=jl;
+}
 
 double interpolMod(double& E, const Vector& ener, const Vector& lum, const int last)
 {
@@ -55,6 +79,48 @@ int binarySearch(const Vector& array, int lowerbound, int upperbound, double key
 	else std::cout << "error";*/ 
 
 }
+
+
+int fbinarySearch(float *array, int lowerbound, int upperbound, double key)
+{                               
+	/*array es el arreglo de la dimension en la que interpolo
+	key es el valor en el que interpolo
+	*/
+
+	int position = 0;
+	int comparisonCount = 1;    //count the number of comparisons (optional)
+
+	// To start, find the subscript of the middle position.
+	
+//  i=0
+//	while (E > key[i] && i < (size - 1))
+	//	i = i + 1;
+
+	if (position < upperbound-1) {
+		while (!(array[position] < key && array[position + 1] > key))
+		{
+			cout << position << "\t" << array[position] << "\t" << array[position+1] << "\t" << key << endl;
+			cout << lowerbound << "\t" << upperbound << endl;	
+			position = (lowerbound + upperbound) / 2;
+			if (array[position] > key){
+				upperbound = position;
+			}
+			else{
+				lowerbound = position;
+			}
+		}
+		return position;
+	} else {
+		cout << "ERROR RETURN -1" << endl;
+		return -1;
+	}
+	
+	/*if (array[position] < key) return position;
+	else if (array[position] > key) return position-1; //me quedo con el anterior al valor de la key
+	else std::cout << "error";*/ 
+}
+
+
 
 //double interpol(double& E, const Vector& ener, const Vector& lum, const int last, const int first=0);
 double interpol(double& E, const Vector& key, const Vector& val, const int size, const int base) //const int first=0)

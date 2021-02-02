@@ -45,7 +45,7 @@ double eEmax(double z, double B)
 	//VER agregar tcross = size/cLight;
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
-	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
+	static const double accEfficiency = GlobalConfig.get<double>("etaEfficiency");
 
 	double size = openingAngle*z;
 
@@ -59,6 +59,7 @@ double eEmax(double z, double B)
 	double Emax_diff = electronCharge*B*size*sqrt(3.0*accEfficiency / 2.0);
 	double min2 = std::min(min1, Emax_diff);
 	
+	double Emin_eV = log10(min2 / 1.6e-12);
 	return min2;
 			
 }

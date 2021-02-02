@@ -1,6 +1,6 @@
 #include "lossesPairAnnihilation.h"
 
-#include "dataLosses.h"
+
 #include <fparameters\parameters.h>
 #include <flosses\crossSectionInel.h>
 #include <fmath\interpolation.h>

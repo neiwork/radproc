@@ -1,5 +1,5 @@
 #pragma once
 
-typedef int DimensionCoord;
+typedef int DimensionCoord;    // 'DimensionCoord' is an alias for 'int'
 
 

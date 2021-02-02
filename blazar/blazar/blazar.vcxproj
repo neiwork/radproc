@@ -14,22 +14,31 @@
     <ClCompile Include="blazar.cpp" />
     <ClCompile Include="chiSquare.cpp" />
     <ClCompile Include="distribution.cpp" />
+    <ClCompile Include="ebl_absorption.cpp" />
     <ClCompile Include="injection.cpp" />
     <ClCompile Include="ioutil.cpp" />
+    <ClCompile Include="losses.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="photonInjection.cpp" />
+    <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="tpf.cpp" />
     <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\lib\finjection\pgammaPionInj.h" />
     <ClInclude Include="blazar.h" />
     <ClInclude Include="chiSquare.h" />
     <ClInclude Include="distribution.h" />
+    <ClInclude Include="ebl_absorption.h" />
     <ClInclude Include="injection.h" />
     <ClInclude Include="ioutil.h" />
+    <ClInclude Include="losses.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="photonInjection.h" />
+    <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="tpf.h" />
     <ClInclude Include="write.h" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +57,9 @@
     <ProjectReference Include="..\..\lib\fparticle\fparticle.vcxproj">
       <Project>{634888ae-9178-404d-8e22-8e1d5d6b4f3c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{58F360E7-7216-4542-867A-4E9F391DD506}</ProjectGuid>
@@ -87,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\external\boost_1_61_0;..\..\lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\boost_1_75_0;..\..\lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -55,14 +55,27 @@ void injection(Particle& p, State& st)
 	double Emin = p.emin();
 	double Emax = eEmax(Rdiss, B);
 
+
+	//volumen 
+	double vol = 4.0*pi*P3(Rdiss) / 3.0; // pi*P2(jetRadius(Rdiss, openingAngle))*0.1*Rdiss;
+	//no es necesario el volumen, [Q]= 1/ erg s ??
+
 	double Q0 = normalization(p, Rdiss, B);
 	
+	double sum = 0.0;
+
 	p.injection.fill([&](const SpaceIterator& i){
 		
-		double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0;// *vol;
+		double total = powerLaw(i.val(DIM_E), Emin, Emax)*Q0;/// *vol;// *vol;
+
+		sum = sum + total*i.val(DIM_E);
 
 		return total;
 	});
+
+	double Pi = sum;
+
+	std::cout << Pi;
 
 
 }

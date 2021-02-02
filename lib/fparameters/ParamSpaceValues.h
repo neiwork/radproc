@@ -2,7 +2,7 @@
 
 
 #include "DimensionCoord.h"
-#include <fmath\interpolation.h>
+#include <fmath/interpolation.h>
 
 #include <functional>
 
