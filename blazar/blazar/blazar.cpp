@@ -40,9 +40,9 @@ void blazar() {
 	distribution(model.electron, model);
 	
 	//ParamSpaceValues Qsyn(model.photon.ps);
-	synL(model, model.tpf);
+	synL(model, model.tpf);  //[tpf]= erg-1 cm-3
 
-	radiativeLosses(model);
+	//radiativeLosses(model, folder);
 
 	//distribution(model.electron, model);
 	distribution(model.proton, model);

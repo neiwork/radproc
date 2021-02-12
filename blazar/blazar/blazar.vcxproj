@@ -18,6 +18,7 @@
     <ClCompile Include="injection.cpp" />
     <ClCompile Include="ioutil.cpp" />
     <ClCompile Include="losses.cpp" />
+    <ClCompile Include="messages.cpp" />
     <ClCompile Include="modelParameters.cpp" />
     <ClCompile Include="photonInjection.cpp" />
     <ClCompile Include="radiativeLosses.cpp" />
@@ -26,7 +27,6 @@
     <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\lib\finjection\pgammaPionInj.h" />
     <ClInclude Include="blazar.h" />
     <ClInclude Include="chiSquare.h" />
     <ClInclude Include="distribution.h" />
@@ -34,6 +34,7 @@
     <ClInclude Include="injection.h" />
     <ClInclude Include="ioutil.h" />
     <ClInclude Include="losses.h" />
+    <ClInclude Include="messages.h" />
     <ClInclude Include="modelParameters.h" />
     <ClInclude Include="photonInjection.h" />
     <ClInclude Include="radiativeLosses.h" />
@@ -116,7 +117,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\external\boost_1_61_0;..\..\lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\boost_1_75_0;;..\..\lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -5,33 +5,55 @@
     <ClCompile Include="ioutil.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="modelParameters.cpp" />
-    <ClCompile Include="injection.cpp" />
-    <ClCompile Include="distribution.cpp" />
     <ClCompile Include="photonInjection.cpp" />
     <ClCompile Include="write.cpp" />
     <ClCompile Include="chiSquare.cpp" />
     <ClCompile Include="ebl_absorption.cpp" />
-    <ClCompile Include="losses.cpp" />
-    <ClCompile Include="radiativeLosses.cpp" />
     <ClCompile Include="tpf.cpp" />
+    <ClCompile Include="messages.cpp" />
+    <ClCompile Include="distribution.cpp">
+      <Filter>massiveParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="losses.cpp">
+      <Filter>massiveParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="injection.cpp">
+      <Filter>massiveParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="radiativeLosses.cpp">
+      <Filter>massiveParticles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blazar.h" />
     <ClInclude Include="ioutil.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="modelParameters.h" />
-    <ClInclude Include="injection.h" />
-    <ClInclude Include="distribution.h" />
     <ClInclude Include="photonInjection.h" />
     <ClInclude Include="write.h" />
     <ClInclude Include="chiSquare.h" />
     <ClInclude Include="ebl_absorption.h" />
-    <ClInclude Include="losses.h" />
-    <ClInclude Include="radiativeLosses.h" />
     <ClInclude Include="tpf.h" />
-    <ClInclude Include="..\..\lib\finjection\pgammaPionInj.h" />
+    <ClInclude Include="messages.h" />
+    <ClInclude Include="distribution.h">
+      <Filter>massiveParticles</Filter>
+    </ClInclude>
+    <ClInclude Include="losses.h">
+      <Filter>massiveParticles</Filter>
+    </ClInclude>
+    <ClInclude Include="injection.h">
+      <Filter>massiveParticles</Filter>
+    </ClInclude>
+    <ClInclude Include="radiativeLosses.h">
+      <Filter>massiveParticles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="massiveParticles">
+      <UniqueIdentifier>{d5644089-d044-4ac3-83d2-243f7a6f8bb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

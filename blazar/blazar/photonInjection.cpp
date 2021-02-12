@@ -2,6 +2,7 @@
 
 #include "modelParameters.h"
 #include "ebl_absorption.h"
+#include "messages.h"
 
 #include <fparameters\parameters.h>
 #include <fparameters\SpaceIterator.h>
@@ -9,8 +10,8 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-#include <finjection\neutronPgamma.h>
-#include <finjection\pgammaPionInj.h>
+//#include <finjection\neutronPgamma.h>
+//#include <finjection\pgammaPionInj.h>
 #include <fluminosities\luminositySynchrotron.h>
 #include <fluminosities\luminosityIC.h>
 #include <fluminosities\luminosityPhotoHadronic.h>
@@ -49,10 +50,8 @@ double Llab(double Lint, double Dlorentz)
 //{
 void processes(State& st, const std::string& filename)
 {
+	show_message(msgStart, Module_luminosities);
 
-	//static const double inc = GlobalConfig.get<double>("inc")*pi / 180;  //degree
-	//static const double Gamma = GlobalConfig.get<double>("Gamma");
-	//static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double Dlorentz = GlobalConfig.get<double>("Dlorentz");
 	static const double density = GlobalConfig.get<double>("density");
 
@@ -72,7 +71,13 @@ void processes(State& st, const std::string& filename)
 	
 	file << "log(E/eV)"
 		<< '\t' << "Synchr"
-		<< '\t' << "SSC";
+		<< '\t' << "SSC"
+		<< '\t' << "pSynchr" 
+		<< '\t' << "pp"
+		<< '\t' << "pgamma"
+		<< '\t' << "total"
+		<< '\t' << "z=0.2" 
+		<< '\t' << "z=1";
 
 	file << std::endl;
 		
@@ -96,9 +101,6 @@ void processes(State& st, const std::string& filename)
 
 		double E = i.val(DIM_E);
 		double Elab = E*Dlorentz;
-		
-		pgammaPionInj(E, st.proton, st.tpf, i, st.photon.emin(), st.photon.emax());
-		neutronPgamma(E, st.proton, st.proton, st.tpf, i, st.photon.emin(), st.photon.emax());
 
 		double eSyn2 = luminositySynchrotron2(E, st.electron, i, st.magf.get(i));
 		//double eSyn = luminositySynchrotron(E, st.electron, i, st.magf);
@@ -111,15 +113,20 @@ void processes(State& st, const std::string& filename)
 			else { return 0.0; }; }
 			, st.photon.emin(), st.photon.emax());
 
+		double pSyn = luminositySynchrotron2(E, st.proton, i, st.magf.get(i));
+
 		double pPP = luminosityHadronic(E, st.proton, density, i);
 
 		double pPG = luminosityPhotoHadronic(E, st.proton, st.tpf, i, st.photon.emin(), st.photon.emax());
 
-		double Ltot_int = eSyn2 + eSSC;
+		double Ltot_int = eSyn2 + eSSC + pSyn + pPP + pPG;
 
 
 		double Lsyn = Llab(eSyn2, Dlorentz);
 		double Lssc = Llab(eSSC, Dlorentz);
+		double Lpsyn = Llab(pSyn, Dlorentz); 
+		double Lpp = Llab(pPP, Dlorentz);
+		double Lpg = Llab(pPG, Dlorentz);
 		double Ltot = Llab(Ltot_int, Dlorentz);
 
 		double fmtE = log10(Elab / 1.6e-12);
@@ -140,6 +147,9 @@ void processes(State& st, const std::string& filename)
 			//	<< '\t' << t/yr
 			<< '\t' << safeLog10((Lsyn))
 			<< '\t' << safeLog10((Lssc))
+			<< '\t' << safeLog10((Lpsyn))
+			<< '\t' << safeLog10((Lpp))
+			<< '\t' << safeLog10((Lpg))
 			<< '\t' << safeLog10(Ltot)
 			<< '\t' << safeLog10(Ltot*e_tau02)
 			<< '\t' << safeLog10(Ltot*e_tau1)

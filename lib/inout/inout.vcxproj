@@ -74,15 +74,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-<<<<<<< HEAD
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\boost_1_75_0;..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <SDLCheck>
-      </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BrowseInformation />
->>>>>>> 8359ab03bcf09a2c068fa44051905f5ffebef9b4
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,15 +92,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-<<<<<<< HEAD
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\boost_1_75_0;..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <SDLCheck>
-      </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BrowseInformation />
->>>>>>> 8359ab03bcf09a2c068fa44051905f5ffebef9b4
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

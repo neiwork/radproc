@@ -3,7 +3,8 @@
 
 #include "write.h"
 
-//#include "lossesAnisotropicIC.h"
+#include "ioutil.h"
+#include "messages.h"
 #include <flosses\lossesSyn.h>
 #include <flosses\lossesIC.h>
 #include <flosses\lossesHadronics.h>
@@ -16,8 +17,10 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-void radiativeLosses(State& st) //, const std::string& filename)
+void radiativeLosses(State& st, const std::string& folder)
 {
+	show_message(msgStart, Module_radiativeLosses);
+
 	//static const std::string id = GlobalConfig.get<std::string>("id");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double accEfficiency = GlobalConfig.get<double>("accEfficiency");
@@ -28,12 +31,13 @@ void radiativeLosses(State& st) //, const std::string& filename)
 	std::vector<File*> files;
 	OFM out;
 
-	File electronLosses(files, out, std::string("electronLosses"));	
+	File electronLosses(files, out, getFileName(folder, "electronLosses")); // std::string("electronLosses"));
 
 	//std::ofstream file;
 	//file.open(filename.c_str(), std::ios::out);
 
-	out["electronLosses"]->file << "Log(E/eV)" 
+	//out["electronLosses"]->file << "Log(E/eV)" 
+	electronLosses.file << "Log(E/eV)"
 		<< "\t" << "Synchr"
 		<< "\t" << "IC"
 		<< "\t" << "Diff"
@@ -61,7 +65,8 @@ void radiativeLosses(State& st) //, const std::string& filename)
 		double eAcc = accelerationRate(E, B, accEfficiency);
 		double eAdia = adiabaticLosses(E, zInt, vel_lat, Gamma) / E;
 		
-		out["electronLosses"]->file << fmtE 
+		//out["electronLosses"]->file << fmtE 
+			electronLosses.file << fmtE
 							<< "\t" << safeLog10(eSyn) 
 							<< "\t" << safeLog10(eIC)
 							<< "\t" << safeLog10(eDif)
@@ -74,14 +79,16 @@ void radiativeLosses(State& st) //, const std::string& filename)
 	
 	//file.close();
 	
-	File protonLosses(files, out, std::string("protonLosses"));
+	File protonLosses(files, out, getFileName(folder, "protonLosses"));
 
-	out["protonLosses"]->file << "Log(E/eV)"
-	<< "\t" << "pp"
-	<< "\t" << "pgamma"
-	<< "\t" << "Diff"
-	<< "\t" << "Acc"
-	<< "\t" << "Ad" << std::endl;
+	//out["protonLosses"]->file 
+		protonLosses.file << "Log(E/eV)"
+						<< "\t" << "Synchr" 
+						<< "\t" << "pp"
+						<< "\t" << "pgamma"
+						<< "\t" << "Diff"
+						<< "\t" << "Acc"
+						<< "\t" << "Ad" << std::endl;
 
 	st.proton.ps.iterate([&](const SpaceIterator& i){
 
@@ -89,18 +96,19 @@ void radiativeLosses(State& st) //, const std::string& filename)
 		double fmtE = log10(E / 1.6e-12);
 		double B = st.magf.get(i);
 
-		//double pSyn   = lossesSyn(E, st.proton) / E;
+		double pSyn   = lossesSyn(E, B, st.proton) / E;
 		double pp     = lossesHadronics(E, density, st.proton)/E;
 		double pgamma = lossesPhotoHadronic(E, st.proton, st.tpf, i, st.photon.emin(), st.photon.emax()) / E;
 		double pDif   = diffusionRate(E, zInt, B);
 		double pAcc   = accelerationRate(E, B, accEfficiency);
 		double pAdia = adiabaticLosses(E, zInt, vel_lat, Gamma) / E;
 
-		out["protonLosses"]->file << fmtE	//<< "\t" << safeLog10(pSyn)
+		//out["protonLosses"]->file 
+			protonLosses.file << fmtE	<< "\t" << safeLog10(pSyn)
 											<< "\t" << safeLog10(pgamma)
 											<< "\t" << safeLog10(pp)
-											<< "\t" << safeLog10(pAcc)
 											<< "\t" << safeLog10(pDif)
+											<< "\t" << safeLog10(pAcc)
 											<< "\t" << safeLog10(pAdia) 
 											<< std::endl;
 

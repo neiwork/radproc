@@ -10,14 +10,18 @@
 	"Rdiss_rg": 500.0,
 	"accEfficiency": 0.01,
 	"etaEfficiency": 0.01,
-	"primaryIndex":  1.5,
+	"primaryIndex":  2.0,
 
-	"subEq":1.0e-4,
+	"subEq":1.0e-2,
 	
 	"file": {
 		"SED": "SED.txt",
 		"electronInj": "electronInj",
-		"electronDist": "electronDist"
+		"electronDist": "electronDist",
+		"electronLosses": "electronLosses",
+		"protonLosses": "protonLosses",
+		"protonInj": "protonInj",
+		"protonDist": "protonDist"
 	},
 	"model": {
 		"particle": {
@@ -33,7 +37,7 @@
 				"dim": {
 					"energy": {
 						"min": -8.0,
-						"max": 15.0
+						"max": 16.0
 					}
 				}
 			},
@@ -51,7 +55,7 @@
 				"dim": {
 					"energy": {
 						"min": 9.0,
-						"max": 14.0
+						"max": 15.0
 					}
 				}
 			}

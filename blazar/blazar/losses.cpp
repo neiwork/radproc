@@ -37,14 +37,11 @@ double losses(double E, Particle& p, State& st, const SpaceCoord& i)
 		double syn = lossesSyn(E, B, p);
 
 		loss = syn 
+			//+ lossesIC(E, p,
+			//	[&E, &r](double E) {
+			//return starIR(E, r); }, phEmin, phEmax);
 			+ adiabaticLosses(E, zInt, vel_lat, Gamma);
-
-		/*if 
-			loss = loss + lossesIC(E, p,
-				[&E, &r](double E) {
-				return starIR(E, r); }, phEmin, phEmax);
-		}*/ 
-
+			
 	}
 	else if (p.id == "proton") {
 

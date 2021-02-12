@@ -35,12 +35,22 @@ double computeMagField(double z) {
 	return fmagneticField(z, computeModelB0(Lj, openingAngle));
 }
 
+double computeDens(double z) {
+	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
+	static const double Lj = GlobalConfig.get<double>("Lj"); 
+	static const double Gamma = GlobalConfig.get<double>("Gamma");
+
+	double n = Lj / (pi*P2(z*openingAngle)* (Gamma - 1.0)*electronMass*cLight*cLight2);
+	return n;
+}
+
+
 double jetRadius(double z, double openingAngle)
 {
 	return z*openingAngle;
 }
 
-double eEmax(double z, double B)
+double eEmax(double mass, double z, double B)
 {
 	//VER agregar tcross = size/cLight;
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
@@ -52,7 +62,7 @@ double eEmax(double z, double B)
 	double vel_lat = cLight*openingAngle;
 
 	double Emax_ad = accEfficiency*3.0*jetRadius(z, openingAngle)*cLight*electronCharge*B / (vel_lat*Gamma);
-	double Emax_syn = electronMass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
+	double Emax_syn = mass*cLight2*sqrt(accEfficiency*6.0*pi*electronCharge / (thomson*B));
 //	double Emax_hillas = electronCharge*B*size;
 	double min1 = std::min(Emax_syn, Emax_ad);
 
@@ -105,6 +115,10 @@ void prepareGlobalCfg()
 	GlobalConfig.put("Dlorentz", computeDlorentz(Gamma));
 
 	GlobalConfig.put("Rdiss", computezInt(Mbh, Rdiss_rg));
+
+	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
+
+	GlobalConfig.put("density", computeDens(Rdiss));
 
 	
 	//DefOpt_IntLosses.samples_x = GlobalConfig.get<int>("integrate-losses.samples.x", DefOpt_IntLosses.samples_x);

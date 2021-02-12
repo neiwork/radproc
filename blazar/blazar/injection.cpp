@@ -2,6 +2,7 @@
 
 
 #include "modelParameters.h"
+#include "messages.h"
 
 #include <fparameters\parameters.h>
 #include <fparameters\SpaceIterator.h>
@@ -33,7 +34,7 @@ double normalization(Particle& p, double z, double magf)
 	double Lj = GlobalConfig.get<double>("Lj");
 
 	double Emin = p.emin();
-	double Emax = eEmax(z, magf);
+	double Emax = eEmax(p.mass, z, magf);
 
 	double int_E = RungeKuttaSimple(Emin, Emax, [&Emax, &Emin](double E){
 		return E*powerLaw(E, Emin, Emax);
@@ -47,13 +48,15 @@ double normalization(Particle& p, double z, double magf)
 
 void injection(Particle& p, State& st)
 {
+	show_message(msgStart, Module_Injection);
+
 	static const double Gamma = GlobalConfig.get<double>("Gamma");
 	static const double openingAngle = GlobalConfig.get<double>("openingAngle");
 	static const double Rdiss = GlobalConfig.get<double>("Rdiss");
 
 	double B = st.magf.get({ 0 });
 	double Emin = p.emin();
-	double Emax = eEmax(Rdiss, B);
+	double Emax = eEmax(p.mass, Rdiss, B);
 
 
 	//volumen 
@@ -75,7 +78,7 @@ void injection(Particle& p, State& st)
 
 	double Pi = sum;
 
-	std::cout << Pi;
+	std::cout << "power injected in " << p.id << Pi << std::endl;
 
 
 }

@@ -76,11 +76,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-<<<<<<< HEAD
       <AdditionalIncludeDirectories>..\..\boost_1_75_0;..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> 8359ab03bcf09a2c068fa44051905f5ffebef9b4
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -102,11 +98,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-<<<<<<< HEAD
       <AdditionalIncludeDirectories>..\..\boost_1_75_0;..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <AdditionalIncludeDirectories>..\..\boost_1_66_0;..\..\lib;..\..\external\include\boost-1_67;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> 8359ab03bcf09a2c068fa44051905f5ffebef9b4
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>
@@ -131,6 +123,7 @@
     <ClCompile Include="lossesIC.cpp" />
     <ClCompile Include="lossesPhotoHadronic.cpp" />
     <ClCompile Include="lossesSyn.cpp" />
+    <ClCompile Include="nonThermalLosses.cpp" />
     <ClCompile Include="photoPairProduction.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +134,7 @@
     <ClInclude Include="lossesIC.h" />
     <ClInclude Include="lossesPhotoHadronic.h" />
     <ClInclude Include="lossesSyn.h" />
+    <ClInclude Include="nonThermalLosses.h" />
     <ClInclude Include="photoPairProduction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
