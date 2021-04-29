@@ -7,10 +7,10 @@
 	"openingAngle": 0.1,
 	"inc":0.0,
 	"Gamma": 10,
-	"Rdiss_rg": 500.0,
+	"Rdiss_rg": 100.0,
 	"accEfficiency": 0.01,
-	"etaEfficiency": 0.01,
-	"primaryIndex":  2.0,
+	"etaEfficiency": 0.1,
+	"primaryIndex":  1.0,
 
 	"subEq":1.0e-2,
 	

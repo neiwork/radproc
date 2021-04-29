@@ -119,7 +119,7 @@ void processes(State& st, const std::string& filename)
 
 		double pPG = luminosityPhotoHadronic(E, st.proton, st.tpf, i, st.photon.emin(), st.photon.emax());
 
-		double Ltot_int = eSyn2 + eSSC + pSyn + pPP + pPG;
+		double Ltot_int = eSyn2 + eSSC + pSyn + pPG + pPP;
 
 
 		double Lsyn = Llab(eSyn2, Dlorentz);
@@ -131,7 +131,7 @@ void processes(State& st, const std::string& filename)
 
 		double fmtE = log10(Elab / 1.6e-12);
 
-		st.photon.injection.set(i,Lsyn+Lssc);
+		st.photon.injection.set(i,Ltot);
 
 		double e_tau02 = 1.0;
 		double e_tau1 = 1.0;

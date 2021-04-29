@@ -54,6 +54,9 @@ void blazar() {
 
 	processes(model, getFileName(folder, "SED"));
 
+	double E1 = 1.4*5.7899e-6*1.6e-12; //1.4GHz to erg
+	double E2 = 2.8178*1.6e-12; //4400 A to erg
+	double R = model.photon.injection.interpolate({ { DIM_E, E1 } })*E2/ model.photon.injection.interpolate({ { DIM_E, E2 } })/E1;
 	
 	
 	//dopplerBoost(getFileName(folder, "SED"), model.photon.distribution);
